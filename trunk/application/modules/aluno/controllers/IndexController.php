@@ -1,11 +1,11 @@
 <?php
 
-class IndexController extends Zend_Controller_Action
+class Aluno_IndexController extends Zend_Controller_Action
 {
 
     public function init()
     {
-        /* Initialize action controller here */
+$this->view->titulo = "modulo aluno";
     }
 
     public function indexAction()

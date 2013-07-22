@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Gerenciador de Certificados - Modulo Aluno</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" media="screen" href="<?php echo $this->baseUrl('css/bootstrap.css'); ?>" />
+
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li>
+                                <a href="/clientes/index" onclick="">Clientes</a>
+                            </li>
+                            <li>
+                                <a href="" onclick="">Cursos</a>
+                            </li>
+                            <li>
+                                <a href="" onclick="">Usuários</a>
+                            </li>
+                            <li>
+                                <a href="/turmas/index" onclick="">Turmas</a>
+                            </li>
+                            <li>
+                                <a href="" onclick="">Certificados</a>
+                            </li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li>
+                                <?php
+                                $auth = Zend_Auth::getInstance();
+                                if ($auth->hasIdentity()):
+                                    ?>
+
+
+                                    <a>Logado como: 
+                                        <?php
+                                        $usuario = Zend_Auth::getInstance()->getIdentity();
+                                        echo $usuario->tx_nome;
+                                        ?>
+                                    </a>
+                                <li>
+                                    <a id="botao_sair" href="/index/sair">Sair</a>
+                                </li>
+                            <?php endif; ?>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+
+            <!-- menu  -->
+
+            <span style="color: red" id="divMsg">
+                <?php if ($this->msg): ?>
+                    <?php if (is_array($this->msg)): ?>
+
+                        <?php echo implode("; ", $this->msg); ?>
+                    <?php else: ?>
+                        <?php echo $this->msg ?>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </span>
+            <h1><?php echo $this->titlePage ?></h1>
+            <?php echo $this->layout()->content; ?>
+        </div>
+    </body>
+</html>
+<script>
+    //$(document).ready(function() {
+    //Melhora aparência dos botões
+    //$("#botao_sair").button(); 
+    //});
+</script>
