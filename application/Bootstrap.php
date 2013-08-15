@@ -13,6 +13,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         Zend_Registry::set("config", $this->_config);
     }
 
+    protected function _initAutoLoad() {
+        $autoloader = new Zend_Application_Module_Autoloader(array(
+                    'namespace' => '',
+                    'basePath' => APPLICATION_PATH . '/modules/default'
+                ));
+        
+        Zend_Controller_Action_HelperBroker::addPrefix('Helper_Action');
+        Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/Helper/Action', 'Helper_Action');
+        
+        //print_r($autoloader); die;
+        return $autoloader;
+    }
+    
     protected function _initFrontController() {
 
         $this->_frontController = Zend_Controller_Front::getInstance();
@@ -34,16 +47,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         //$this->_frontController->setParam('noErrorHandler', true);
     }
 
-    protected function _initAutoLoad() {
-        $autoloader = new Zend_Application_Module_Autoloader(array(
-                    'namespace' => '',
-                    'basePath' => APPLICATION_PATH . '/modules/default'
-                ));
+    /*protected function _initActionHelpers(){
         
-        //print_r($autoloader); die;
-        return $autoloader;
-    }
-
+        Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/Helper/Action');
+        
+        Zend_Controller_Action_HelperBroker::addHelper(new Helper_Action_Util());
+    }*/
+           
+    
     public function _initConstants() {
         
         /* Define os valores para campo tipo_usuario */
