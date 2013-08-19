@@ -1,0 +1,93 @@
+<div class="container" style="margin-top: 50px">
+    <form id="form_usuario" class="form-horizontal well" action="<?php echo $this->baseUrl('/admin/usuario/salvar/'); ?>" method="post">
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>
+            <div class="control-group">
+                <label class="control-label" for="tx_login">Login</label>
+                <div class="controls">
+                    <input class="input-xlarge" type="text" name="tx_login" id="tx_login" value=""/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="tx_senha">Senha</label>
+                <div class="controls">
+                    <input class="input-xlarge" type="text" name="tx_senha" id="tx_senha" value=""/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="tx_tipo_usuario">Tipo do usuário</label>
+                <div class="controls">
+                    <?php
+                    /*if (!empty($this->locacao)) :
+                        $forma_pagamento = $this->locacao->getForma_pagamento();
+                    else:
+                        $forma_pagamento = null;
+                    endif;*/
+                    echo $this->formSelect('u[tx_tipo_usuario]', null/*$forma_pagamento*/, array('class' => 'required'), array('' => "Selecione...", '1' => "Administrador", '2' => "Aluno"));
+                    ?>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input class="btn btn-primary" id="btEnviar" type="submit" value="Salvar"/>
+                <input class="btn" id="btVoltar" onclick="window.back()" type="button" value="Voltar"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div id="sucessoUsu">
+    <p>Sucesso</p>
+</div>
+
+<div id="erroUsu">
+    <p>erro</p>
+</div>
+
+
+<script>
+    //var dataForm = <?php //echo Zend_Json::encode($this->usuario); ?>;
+    
+//    $( "#erroUsu" ).dialog({
+//        autoOpen: false
+//    });
+//        
+//    $( "#sucessoUsu" ).dialog({
+//        autoOpen: false
+//    });
+//    
+//    $('#formUsu').populate(dataForm);
+//        
+//    $('#formUsu').validate({
+//        submitHandler: function(form) {
+//            jQuery(form).ajaxSubmit({
+//                dataType:  'json', 
+//                success: function(r){
+//                    if(r.tipo == 'sucesso'){                    
+//                        $('#sucessoUsu').html(r.msg);
+//                        $('#sucessoUsu').dialog("open");
+//                        $("#sucessoUsu").dialog({
+//                            modal: true,
+//                            buttons: {
+//                                Ok: function() {
+//                                    $(this).dialog("close");
+//                                    window.location = r.url;
+//                                }
+//                            }
+//                        });
+//                    } else {
+//                        $('#erroUsu').html(r.msg);
+//                        $('#erroUsu').dialog("open");
+//                        $('#erroUsu').dialog({
+//                            buttons: {
+//                                Ok: function() {
+//                                    $( this ).dialog( "close" );
+//                                }
+//                            }
+//                        });
+//                    }
+//                } 
+//            });
+//        }
+    //});
+        
+</script>
