@@ -47,14 +47,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         //$this->_frontController->setParam('noErrorHandler', true);
     }
 
-    /*protected function _initActionHelpers(){
-        
-        Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH . '/Helper/Action');
-        
-        Zend_Controller_Action_HelperBroker::addHelper(new Helper_Action_Util());
-    }*/
-           
-    
     public function _initConstants() {
         
         /* Define os valores para campo tipo_usuario */
