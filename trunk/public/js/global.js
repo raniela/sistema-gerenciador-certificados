@@ -16,10 +16,12 @@ $(function(){
         monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
         nextText: 'Próximo',
         prevText: 'Anterior'
-    });
-    
+    });       
 
-    
+    $(".telefone").mask('(00) 0000-0000');
+    $(".cnpj").mask("99.999.999/9999-99");
+    $(".cpf").mask("999.999.999-99");
+    $(".cep").mask("99.999-999");
 });
 
 $.fn.populateSelectJson = function(data)
@@ -287,6 +289,60 @@ function lpad(tam, n, v){
     return n;
 }
 
+function validarCNPJ(cnpj) {
+
+	cnpj = cnpj.replace(/[^\d]+/g,'');
+
+	if(cnpj == '') return false;
+	
+	if (cnpj.length != 14)
+		return false;
+
+	// Elimina CNPJs invalidos conhecidos
+	if (cnpj == "00000000000000" || 
+		cnpj == "11111111111111" || 
+		cnpj == "22222222222222" || 
+		cnpj == "33333333333333" || 
+		cnpj == "44444444444444" || 
+		cnpj == "55555555555555" || 
+		cnpj == "66666666666666" || 
+		cnpj == "77777777777777" || 
+		cnpj == "88888888888888" || 
+		cnpj == "99999999999999")
+		return false;
+		
+	// Valida DVs
+	tamanho = cnpj.length - 2
+	numeros = cnpj.substring(0,tamanho);
+	digitos = cnpj.substring(tamanho);
+	soma = 0;
+	pos = tamanho - 7;
+	for (i = tamanho; i >= 1; i--) {
+	  soma += numeros.charAt(tamanho - i) * pos--;
+	  if (pos < 2)
+			pos = 9;
+	}
+	resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+	if (resultado != digitos.charAt(0))
+		return false;
+		
+	tamanho = tamanho + 1;
+	numeros = cnpj.substring(0,tamanho);
+	soma = 0;
+	pos = tamanho - 7;
+	for (i = tamanho; i >= 1; i--) {
+	  soma += numeros.charAt(tamanho - i) * pos--;
+	  if (pos < 2)
+			pos = 9;
+	}
+	resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+	if (resultado != digitos.charAt(1))
+		  return false;
+		  
+	return true;
+   
+}
+
 function validarCPF(cpf) {
  
     cpf = cpf.replace(/[^\d]+/g,'');
@@ -343,6 +399,11 @@ jQuery.validator.addMethod("soNum", function(value, element) {
 jQuery.validator.addMethod("validarCPF", function(value, element) {
     return this.optional(element) || validarCPF(value);
 }, "Forneça um CPF válido");
+
+jQuery.validator.addMethod("validarCNPJ", function(value, element) {
+    return this.optional(element) || validarCNPJ(value);
+}, "Forneça um CNPJ válido");
+
 
 function str_replace (search, replace, subject, count) {
     var i = 0,

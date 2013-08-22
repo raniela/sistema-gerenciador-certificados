@@ -8,7 +8,7 @@ class Admin_IndexController extends Zend_Controller_Action {
 
     public function indexAction() {
 
-        $this->view->titulo = "modulo admin";
+        $this->view->titulo = "Módulo Administrativo do Sistema de Certificados";
 
         /*$date = "1111/22/33";
 
