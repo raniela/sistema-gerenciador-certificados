@@ -1,0 +1,98 @@
+<div class="container" style="margin-top: 50px">
+    <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
+    <form class="form-horizontal well" action="#" method="post">        
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>
+            
+            <!-- Botão novo alinhado a direita -->
+            <input class="btn btn-primary" id="novo_cliente" type="button" value="Novo Cliente" style="float: right"/>
+            <div style="clear: both;"></div>
+            
+            <!-- INICIO dos campos de busca -->
+            <div class="form-actions" style="padding-left: 20px!important">
+                <div class="control-group dados_pessoa_juridica">
+                    <label class="control-label" for="cliente-tx_razao_social">Razão Social</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="cliente[tx_razao_social]" id="cliente-tx_razao_social" maxlength="60"/>
+                    </div>
+                </div>
+                
+                <div class="control-group dados_pessoa_juridica">
+                    <label class="control-label" for="cliente-tx_cnpj">CNPJ</label>
+                    <div class="controls">
+                        <input class="input-xlarge cnpj validarCNPJ required" type="text" name="cliente[tx_cnpj]" id="cliente-tx_cnpj" maxlength="18"/>
+                    </div>
+                </div>
+                
+                <div class="control-group dados_pessoa_fisica">
+                    <label class="control-label" for="cliente-tx_nome">Nome</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="cliente[tx_nome]" id="cliente-tx_nome" maxlength="45"/>
+                    </div>
+                </div>
+                
+                <div class="control-group dados_pessoa_fisica">
+                    <label class="control-label" for="cliente-tx_cpf">CPF</label>
+                    <div class="controls">
+                        <input class="input-xlarge required cpf validarCPF" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="tx_tipo_cliente">Tipo </label>
+                    <div class="controls">
+                        <select id="cliente-tx_tipo_cliente" name="cliente[tx_tipo_cliente]">                            
+                            <option selected value="F">Pessoa Física</option>
+                            <option value="J">Pessoa Jurídica</option>            
+                        </select>
+                    </div>
+                </div>
+                                
+                <input class="btn btn-primary" id="btBuscarCliente" type="button" value="Buscar"/>
+            </div>
+            <!-- FIM dos campos de busca -->            
+        </fieldset>
+        
+        <div id="divResCliente"></div>
+    </form>
+
+
+</div>
+
+<script>
+    $(function(){             
+        //$('#div_usuario').load('/usuario/grid/'); 
+        
+        $('.dados_pessoa_juridica').hide();
+        //Altera a exibição dos campos no formulario conforme o tipo de cliente
+        $('#cliente-tx_tipo_cliente').change(function(){
+            if($('#cliente-tx_tipo_cliente').val() == 'F') {
+                $('.dados_pessoa_fisica').show();
+                $('.dados_pessoa_juridica').hide();
+            }
+            
+            if($('#cliente-tx_tipo_cliente').val() == 'J') {
+                $('.dados_pessoa_fisica').hide();
+                $('.dados_pessoa_juridica').show();
+            }                       
+        });
+        
+        $('#divResCliente').load('<?php echo $this->baseUrl('admin/cliente/grid'); ?>');
+        $('#btBuscarCliente').click(function(){            
+            tx_razao_social = urlencodeGet($('#cliente-tx_razao_social').val());
+            tx_cnpj = urlencodeGet($('#cliente-tx_cnpj').val());
+            tx_nome = urlencodeGet($('#cliente-tx_nome').val());
+            tx_cpf = urlencodeGet($('#cliente-tx_cpf').val());
+            tx_tipo_cliente = $('#cliente-tx_tipo_cliente').val();
+            
+            
+            $('#divResCliente').load('<?php echo $this->baseUrl('admin/cliente/grid'); ?>'+'/tx_razao_social/' + tx_razao_social + '/tx_cnpj/' + tx_cnpj + '/tx_nome/' + tx_nome + '/tx_cpf/' + tx_cpf + '/tx_tipo_cliente/' + tx_tipo_cliente);
+        });
+        
+        //Carrega formulario de novo cliente com jquery
+        $('#novo_cliente').click(function(){
+            window.location = '/admin/cliente/form';
+        });
+    }); 
+    
+</script>
