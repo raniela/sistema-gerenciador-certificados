@@ -1,0 +1,141 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome / Razão Social</th>
+        <th>CPF / CNPJ</th>
+        <th>Telefones</th>
+        <th>Email</th>
+        <th>Tipo</th>
+        <th>Ações</th>
+    </tr>
+
+    <tr class="alt" >
+        <?php foreach ($this->paginator as $k => $cliente): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php 
+                    if(!empty($cliente['tx_nome'])) {
+                        echo $cliente['tx_nome'];
+                    } else {
+                        echo $cliente['tx_razao_social'];
+                    }
+                ?>
+            </td>
+            <td>
+                <?php 
+                    if(!empty($cliente['tx_cpf'])) {
+                        echo $cliente['tx_cpf'];
+                    } else {
+                        echo $cliente['tx_cnpj'];
+                    }
+                ?>
+            </td>
+            <td>
+                <?php echo $cliente['tx_telefone_fixo'] . "<br/>" . $cliente['tx_telefone_celular']; ?>
+            </td>
+            <td><?php echo $cliente['tx_email']; ?></td>
+            <td>
+                <?php 
+                    if($cliente['tx_tipo_cliente'] == 'F') {
+                        echo "Pesssoa Física";
+                    } else {
+                        echo "Pesssoa Jurídica";
+                    }
+                ?>
+            </td>
+            <td>
+                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/cliente/form')?>/id/<?php echo $cliente['id_cliente'] ?>">
+                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                </a>
+                <a class="btExcluir" href="./cliente/excluir/id/<?php echo $cliente['id_cliente'] ?>">
+                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                </a>
+            </td>
+        </tr>    
+    <?php endforeach; ?>
+
+</table>
+
+<div id="confirmacao">
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse cliente?
+</div>
+
+<div id="erroCli">
+    Erro    
+</div>
+
+<div id="sucessoCli">
+    Sucesso    
+</div>
+
+<script>        
+    $(function(){       
+                
+        $( "#sucessoCli" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+        
+        $( "#erroCli" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+                
+        $('.btExcluir').click(function(){
+            
+            url = $(this).attr('href');
+            $("#confirmacao").dialog("open");
+            
+            return false;
+        });
+                
+        $("#confirmacao").dialog({
+            resizable: false,
+            height:250,
+            width:500,
+            modal: true,
+            autoOpen: false,
+                
+            buttons: {
+                "Ok": function() {
+                    $.get(url, null, function(retorno){
+                        if(retorno.tipo == 'sucesso'){
+                            $('#sucessoCli').html(retorno.msg);
+                            
+                            $('#sucessoCli').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#sucessoCli').dialog("open");    
+                            $('#divResCliente').load('<?php echo $this->baseUrl('admin/cliente/grid'); ?>');                                
+                        } else {
+                            $('#erroCli').html(retorno.msg);                            
+                            $('#erroCli').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#erroCli').dialog("open");
+                            $('#divResCliente').load('<?php echo $this->baseUrl('admin/cliente/grid'); ?>');
+                        }                    
+                    }, 'json');
+                    $( this ).dialog("close");
+                    
+                },
+                "Cancel": function() {
+                    $('#divResCliente').load('<?php echo $this->baseUrl('admin/cliente/grid'); ?>');
+                    $( this ).dialog( "close" );
+                        
+                }
+                    
+            }
+                
+        });
+        
+    })
+    
+</script>

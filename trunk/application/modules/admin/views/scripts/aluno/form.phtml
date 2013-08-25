@@ -1,0 +1,143 @@
+<div class="container" style="margin-top: 50px">
+    <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
+    <form id="form_aluno" class="form-horizontal well" action="<?php echo $this->baseUrl('/admin/aluno/salvar'); ?>" method="post">
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>
+            <input type="hidden" name="aluno[id_aluno]" id="aluno-id_aluno"/>
+            <input type="hidden" name="aluno[id_cliente]" id="aluno-id_cliente"/>
+            
+            <fieldset>
+                <legend>Dados do Cliente</legend>
+                
+                <div class="control-group">
+                    <input class="btn" id="btModalCliente" type="button" value="Buscar"/>
+                    <input class="btn" id="btLimparCliente" type="button" value="Limpar"/>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="">Nome/Razão Social</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-cliente_tx_nome_razao_social"></span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="">CPF/CNPJ</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-cliente_tx_cpf_cnpj"></span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="">Tipo</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-cliente_tx_tipo"></span>
+                    </div>
+                </div>
+            </fieldset>                                                   
+            
+            <fieldset>
+                <legend>Dados do Aluno</legend>                
+                <div class="control-group">
+                    <label class="control-label" for="aluno-tx_nome_aluno">Nome</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="aluno[tx_nome_aluno]" id="aluno-tx_nome_aluno" maxlength="45"/>
+                    </div>
+                </div> 
+                
+                <div class="control-group">
+                    <label class="control-label" for="aluno-tx_rg">RG</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="aluno[tx_rg]" id="aluno-tx_rg" maxlength="9"/>
+                    </div>
+                </div>
+            
+                <div class="control-group">
+                    <label class="control-label" for="aluno-tx_cpf">CPF</label>
+                    <div class="controls">
+                        <input class="input-xlarge required cpf validarCPF" type="text" name="aluno[tx_cpf]" id="aluno-tx_cpf" maxlength="14"/>
+                    </div>
+                </div>
+            
+                <div class="control-group">
+                    <label class="control-label" for="aluno-tx_cargo">Profissão</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="aluno[tx_cargo]" id="aluno-tx_cargo" maxlength="45"/>
+                    </div>
+                </div>                                               
+            </fieldset>             
+                                        
+            
+            <div class="form-actions">
+                <input class="btn btn-primary" id="btEnviar" type="submit" value="Salvar"/>
+                <input class="btn" id="btVoltar" onclick="window.back()" type="button" value="Voltar"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<?php    
+    echo $this->render('partials/modal-pesquisa-cliente.phtml');
+?>
+
+<div id="mensagemCliente">    
+</div>
+
+<script>    
+    var dataForm = <?php echo Zend_Json::encode(array('aluno' => $this->aluno)); ?>;      
+    
+    function callBackPesquisarCliente(dataCliente) {        
+        $('#aluno-id_cliente').val(dataCliente.id_cliente);
+        if(dataCliente.tx_tipo_cliente == 'F') {
+            $('#dados-cliente_tx_tipo').html('Pessoa Física');
+            $('#dados-cliente_tx_nome_razao_social').html(dataCliente.tx_nome);
+            $('#dados-cliente_tx_cpf_cnpj').html(dataCliente.tx_cpf);            
+        } else {
+            $('#dados-cliente_tx_tipo').html('Pessoa Jurídica');
+            $('#dados-cliente_tx_nome_razao_social').html(dataCliente.tx_razao_social);
+            $('#dados-cliente_tx_cpf_cnpj').html(dataCliente.tx_cnpj);
+        }
+    }
+    
+    $(function(){   
+        $('#form_aluno').populate(dataForm);
+                
+        $('#btLimparCliente').click(function() {
+            $('.help-block').html('');
+        });
+        
+        $('#btModalCliente').click(function() {
+            openModalPesquisaCliente();
+        });
+        
+        $('#mensagemCliente').dialog({
+            autoOpen: false
+        });                  
+        
+        $('#form_cliente').validate({
+            submitHandler: function(form) {
+                jQuery(form).ajaxSubmit({
+                    dataType:  'json', 
+                    success: function(r){
+                        if(r.tipo == 'sucesso'){
+                            //$('#div_mensagem').html(r.msg);
+                            window.location = r.url;
+                        } else {
+                            $('#mensagemCliente').html(r.msg);                            
+                            $("#mensagemCliente").dialog({
+                                modal: true,
+                                buttons: {
+                                    Ok: function() {
+                                        $(this).dialog("close");                                        
+                                    }
+                                }
+                            });
+                            $('#mensagemCliente').dialog("open");                            
+                        }
+                    } 
+                });
+            } 
+        });
+    });
+        
+</script>
