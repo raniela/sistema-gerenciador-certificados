@@ -1,0 +1,136 @@
+<div id="dialog-pesquisa-cliente" title="PESQUISA DE CLIENTE" style="display:none; padding:0px;">            
+        <!-- INICIO dos campos de busca -->
+        <div class="form-actions" style="padding-left: 20px!important">
+            <div class="control-group dados_pessoa_juridica">
+                <label class="control-label" for="selecionar-cliente-tx_razao_social">Razão Social</label>
+                <div class="controls">
+                    <input class="input-xlarge" type="text" name="selecionar-cliente[tx_razao_social]" id="selecionar-cliente-tx_razao_social" maxlength="60"/>
+                </div>
+            </div>
+
+            <div class="control-group dados_pessoa_juridica">
+                <label class="control-label" for="selecionar-cliente-tx_cnpj">CNPJ</label>
+                <div class="controls">
+                    <input class="input-xlarge cnpj" type="text" name="selecionar-cliente[tx_cnpj]" id="selecionar-cliente-tx_cnpj" maxlength="18"/>
+                </div>
+            </div>
+
+            <div class="control-group dados_pessoa_fisica">
+                <label class="control-label" for="selecionar-cliente-tx_nome">Nome</label>
+                <div class="controls">
+                    <input class="input-xlarge" type="text" name="selecionar-cliente[tx_nome]" id="selecionar-cliente-tx_nome" maxlength="45"/>
+                </div>
+            </div>
+
+            <div class="control-group dados_pessoa_fisica">
+                <label class="control-label" for="selecionar-cliente-tx_cpf">CPF</label>
+                <div class="controls">
+                    <input class="input-xlarge cpf" type="text" name="selecionar-cliente[tx_cpf]" id="selecionar-cliente-tx_cpf" maxlength="14"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="selecionar-cliente-tx_tipo_cliente">Tipo </label>
+                <div class="controls">
+                    <select id="selecionar-cliente-tx_tipo_cliente" name="selecionar-cliente[tx_tipo_cliente]">                            
+                        <option selected value="F">Pessoa Física</option>
+                        <option value="J">Pessoa Jurídica</option>            
+                    </select>
+                </div>
+            </div>
+
+            <input class="btn btn-primary" id="btLocalizarCliente" onclick="localizarCliente()" type="button" value="Localizar"/>
+        </div>
+        <!-- FIM dos campos de busca -->                  
+    <fieldset style="min-height:425px">
+        <div id='div-grid-pesquisar-cliente'></div>
+    </fieldset>
+</div>
+
+<div id="avisoPesquisaCliente" title="ATENÇÃO">    
+</div>            
+            
+<script>
+    function configModalPesquisaCliente(){                
+        /** configura a modal */
+        $("#dialog-pesquisa-cliente").dialog({
+            autoOpen: false,
+            height: '600',
+            width: '800',
+            modal: true,
+            resizable: false,
+            closeOnEscape: true,
+            position: ['top', 'center']
+        });
+    }
+    
+    function closeModalPesquisaCliente(){			
+        /** elimina a modal da memória */
+        $("#dialog-pesquisa-cliente").dialog("close");
+        /** fecha a modal ativando o click do botão de fechar */
+        $('#dialog-pesquisa-cliente').prev('.ui-dialog-titlebar-close').click();               
+    }
+
+    function openModalPesquisaCliente(){
+        configModalPesquisaCliente();
+        $("#dialog-pesquisa-cliente").dialog("open");
+    }
+    function localizarCliente() {                
+        tx_razao_social = urlencodeGet($.trim($('#selecionar-cliente-tx_razao_social').val()));
+        tx_cnpj = urlencodeGet($.trim($('#selecionar-cliente-tx_cnpj').val()));                
+        tx_nome = urlencodeGet($.trim($('#selecionar-cliente-tx_nome').val()));
+        tx_cpf = urlencodeGet($.trim($('#selecionar-cliente-tx_cpf').val()));
+        tx_tipo_cliente = urlencodeGet($.trim($('#selecionar-cliente-tx_tipo_cliente').val()));
+        
+        if((tx_tipo_cliente == 'F' && (tx_cpf != '' || tx_nome.length > 3)) || (tx_tipo_cliente == 'J' && (tx_cnpj != '' || tx_razao_social.length > 3))) {            
+            $(this).attr('disabled',true);
+            url = '<?php echo $this->baseUrl('/admin/cliente'); ?>/pesquisar-cliente/tx_tipo_cliente/'+tx_tipo_cliente+'/tx_cpf/'+tx_cpf+'/tx_nome/'+tx_nome+'/tx_cnpj/'+tx_cnpj+'/tx_razao_social/'+tx_razao_social;
+            ShowMsgAguarde();
+            $('#div-grid-pesquisar-cliente').load(url, function(data){
+                $('#btLocalizarCliente').attr('disabled',false);
+                CloseMsgAguarde();
+            });
+        } else {
+            $('#avisoPesquisaCliente').html('Insira no mínimo 3 caracteres no Nome/Razão Social, ou preencha o CPF/CNPJ para realizar a busca!');                
+            $('#avisoPesquisaCliente').dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $(this).dialog("close");                            
+                    }
+                }
+            });                                
+            $('#avisoPesquisaCliente').dialog("open");
+        }
+    }
+    
+    
+    
+    $(document).ready(function(){
+        $('#avisoPesquisaCliente').dialog({
+            autoOpen: false
+        });                      
+        
+        $('.dados_pessoa_juridica').hide();
+        
+        //Altera a exibição dos campos no formulario conforme o tipo de cliente
+        $('#selecionar-cliente-tx_tipo_cliente').change(function(){
+            if($('#selecionar-cliente-tx_tipo_cliente').val() == 'F') {
+                $('.dados_pessoa_fisica').show();
+                $('.dados_pessoa_juridica').hide();
+            }
+            
+            if($('#selecionar-cliente-tx_tipo_cliente').val() == 'J') {
+                $('.dados_pessoa_fisica').hide();
+                $('.dados_pessoa_juridica').show();
+            }                       
+        });
+        
+        //para todos os inputs da modal de selecionar o orientador, caso pressionado o enter deve ativar a pesquisa
+        $('#dialog-pesquisa-cliente input').keypress(function(event){
+            if(event.which == 13){				
+                $('#btLocalizarCliente').click();
+            }
+        });               
+    });
+</script>

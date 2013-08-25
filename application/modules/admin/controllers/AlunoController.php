@@ -2,29 +2,27 @@
 /*
  * 
  * @author Cesar Augusto Vieira Giovani
- * @date 16/08/2013
+ * @date 25/08/2013
  * 
  */
-class Admin_ClienteController extends Zend_Controller_Action {
+class Admin_AlunoController extends Zend_Controller_Action {
     
     public function init() {
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->msg = $this->flashMessenger->getMessages();
         
         $this->adpter = Zend_Db_Table_Abstract::getDefaultAdapter();        
-        
-        $this->estadoDbTable = new Application_Model_DbTable_Estado();
+                
         $this->clienteDbTable = new Application_Model_DbTable_Cliente();        
-        $this->usuarioDbTable = new Application_Model_DbTable_Usuario();        
-        $this->enderecoDbTable = new Application_Model_DbTable_Endereco();
+        $this->usuarioDbTable = new Application_Model_DbTable_Usuario();                
         $this->alunoDbTable = new Application_Model_DbTable_Aluno();
         
-        $this->view->menu = 'cliente';
+        $this->view->menu = 'aluno';
     }
 
 
     public function indexAction() {
-        $this->view->titulo = "Listagem de Clientes";
+        $this->view->titulo = "Listagem de Alunos";
     }
     
     public function gridAction() {
@@ -77,12 +75,8 @@ class Admin_ClienteController extends Zend_Controller_Action {
              * Cadastro do registro
              */
             //se for cadastro é só enviar o titulo
-            $this->view->titulo = "Cadastro de Cliente";
-        }
-        
-        
-        $dataComboEstados = $this->estadoDbTable->getDataCombo();
-        $this->view->dataComboEstados = $this->_helper->util->utf8Encode($dataComboEstados);
+            $this->view->titulo = "Cadastro de Aluno";
+        }                        
     }
     
     public function salvarAction() {
@@ -274,34 +268,6 @@ class Admin_ClienteController extends Zend_Controller_Action {
                     'msg' => $exc->getMessage() 
                 ));
             }            
-        }
-    }
-    
-    //Utilizada para buscar os clientes em tela modal 
-    public function pesquisarClienteAction() {
-        try {
-            $this->getHelper('layout')->disableLayout();
-            
-            $params = $this->_getAllParams();
-            $params = $this->_helper->util->urldecodeGet($params);            
-            $params = $this->_helper->util->utf8Decode($params);                                                                        
-            $params['limit'] = 5;
-            
-            if($params['tx_tipo_cliente'] == 'F') {
-                $params['tx_razao_social'] = null;        
-                $params['tx_cnpj'] = null;                
-            } else {
-                $params['tx_nome'] = null;
-                $params['tx_cpf'] = null;
-            }
-            
-            $this->view->dataGrid = $this->_helper->util->utf8Encode($this->clienteDbTable->getDataGrid($params)); 
-            
-            //print_r($this->view->dataGrid);
-            //die();
-        } catch (Exception $e) {  
-            echo $e->getMessage();
-            die('ERRO|Ocorreu um erro ao tentar executar a operação. Tente novamente. Caso persista, contate o administrador do sistema.');
         }
     }
     
