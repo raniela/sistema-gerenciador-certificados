@@ -9,6 +9,7 @@
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.ui.core.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.ui.widget.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.ui.button.js'); ?>"></script>
+        <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/bootstrap-dropdown.js'); ?>"></script>
         
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.form.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.alphanumeric.js'); ?>"></script>
@@ -31,13 +32,20 @@
         
     </head>
     <body>
-        <div class="navbar navbar-fixed-top">
+        <div class="navbar navbar-fixed-top navbar-default">
             <div class="navbar-inner">
                 <div class="container">
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
+                    <div class="navbar-collapse nav-collapse collapse" id="navbar-main">
+                        <ul class="nav navbar-nav">
                             <li>
                                 <a href="<?php echo $this->baseUrl('admin/cliente');?>" onclick="">Clientes</a>
+                            </li>
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Alunos<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                  <li><a href="#">Manutençao de Alunos</a></li>
+                                  <li><a href="#">Importar Alunos</a></li>                             
+                                </ul>
                             </li>
                             <li>
                                 <a href="" onclick="">Cursos</a>
