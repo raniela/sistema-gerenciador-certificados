@@ -4,7 +4,7 @@
         <fieldset>
             <legend><?php echo $this->titulo; ?></legend>
             <input type="hidden" name="aluno[id_aluno]" id="aluno-id_aluno"/>
-            <input type="hidden" name="aluno[id_cliente]" id="aluno-id_cliente"/>
+            <input type="hidden" class="required" name="aluno[id_cliente]" id="aluno-id_cliente"/>
             
             <fieldset>
                 <legend>Dados do Cliente</legend>
@@ -48,7 +48,7 @@
                 <div class="control-group">
                     <label class="control-label" for="aluno-tx_rg">RG</label>
                     <div class="controls">
-                        <input class="input-xlarge required" type="text" name="aluno[tx_rg]" id="aluno-tx_rg" maxlength="9"/>
+                        <input class="input-xlarge" type="text" name="aluno[tx_rg]" id="aluno-tx_rg" maxlength="9"/>
                     </div>
                 </div>
             
@@ -80,7 +80,7 @@
     echo $this->render('partials/modal-pesquisa-cliente.phtml');
 ?>
 
-<div id="mensagemCliente">    
+<div id="mensagemAluno">    
 </div>
 
 <script>    
@@ -114,28 +114,45 @@
             autoOpen: false
         });                  
         
-        $('#form_cliente').validate({
+        <?php if(!empty($this->cliente)) { ?>
+            callBackPesquisarCliente(<?php echo Zend_Json::encode($this->cliente) ?>);
+        <?php } ?>
+            
+        $('#form_aluno').validate({
             submitHandler: function(form) {
-                jQuery(form).ajaxSubmit({
-                    dataType:  'json', 
-                    success: function(r){
-                        if(r.tipo == 'sucesso'){
-                            //$('#div_mensagem').html(r.msg);
-                            window.location = r.url;
-                        } else {
-                            $('#mensagemCliente').html(r.msg);                            
-                            $("#mensagemCliente").dialog({
-                                modal: true,
-                                buttons: {
-                                    Ok: function() {
-                                        $(this).dialog("close");                                        
-                                    }
-                                }
-                            });
-                            $('#mensagemCliente').dialog("open");                            
+                if($('#aluno-id_cliente').val() == '') {
+                    $('#mensagemAluno').html("Selecione o Cliente responsável por esse Aluno");                            
+                    $("#mensagemAluno").dialog({
+                        modal: true,
+                        buttons: {
+                            Ok: function() {
+                                $(this).dialog("close");                                        
+                            }
                         }
-                    } 
-                });
+                    });
+                    $('#mensagemAluno').dialog("open");
+                } else {
+                    jQuery(form).ajaxSubmit({
+                        dataType:  'json', 
+                        success: function(r){
+                            if(r.tipo == 'sucesso'){
+                                //$('#div_mensagem').html(r.msg);
+                                window.location = r.url;
+                            } else {
+                                $('#mensagemAluno').html(r.msg);                            
+                                $("#mensagemAluno").dialog({
+                                    modal: true,
+                                    buttons: {
+                                        Ok: function() {
+                                            $(this).dialog("close");                                        
+                                        }
+                                    }
+                                });
+                                $('#mensagemAluno').dialog("open");                            
+                            }
+                        } 
+                    });
+                }
             } 
         });
     });

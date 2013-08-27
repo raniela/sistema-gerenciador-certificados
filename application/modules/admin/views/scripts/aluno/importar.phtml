@@ -1,0 +1,162 @@
+<div class="container" style="margin-top: 50px">
+    <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
+    <form id="form_importar_alunos" enctype="multipart/form-data" class="form-horizontal well" action="<?php echo $this->baseUrl('/admin/aluno/salvar-importacao'); ?>" method="post">
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>            
+            <input type="hidden" class="required" name="aluno[id_cliente]" id="aluno-id_cliente"/>
+            <input type="hidden" class="required" name="aluno[url_planilha]" id="aluno-url_planilha"/>
+            
+            <fieldset>
+                <legend>Dados do Cliente</legend>
+                
+                <div class="control-group">
+                    <input class="btn" id="btModalCliente" type="button" value="Buscar"/>
+                    <input class="btn" id="btLimparCliente" type="button" value="Limpar"/>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="">Nome/Razão Social</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-cliente_tx_nome_razao_social"></span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="">CPF/CNPJ</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-cliente_tx_cpf_cnpj"></span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="">Tipo</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-cliente_tx_tipo"></span>
+                    </div>
+                </div>
+            </fieldset>                                                   
+            
+            <fieldset>
+                <legend>Dados do Alunos</legend>                
+                <div class="control-group">
+                    <label class="control-label" for="aluno-tx_nome_aluno">Planilha</label>
+                    <div class="controls">                        
+                        <input class="input-xlarge required" type="file" name="fileUploadAlunos" id="fileUploadAlunos"/>
+                    </div>
+                </div> 
+                                                                               
+            </fieldset>             
+                                                    
+            <div class="form-actions">
+                <input class="btn btn-primary" id="btLerPLanilha" type="button" value="Ler Planilha"/>                                
+            </div>
+            
+            <div id="divResAlunosImportados"></div>
+        </fieldset>
+    </form>
+</div>
+
+<?php    
+    echo $this->render('partials/modal-pesquisa-cliente.phtml');
+?>
+
+<div id="mensagemAluno">    
+</div>
+
+<script>            
+    function callBackPesquisarCliente(dataCliente) {        
+        $('#aluno-id_cliente').val(dataCliente.id_cliente);
+        if(dataCliente.tx_tipo_cliente == 'F') {
+            $('#dados-cliente_tx_tipo').html('Pessoa Física');
+            $('#dados-cliente_tx_nome_razao_social').html(dataCliente.tx_nome);
+            $('#dados-cliente_tx_cpf_cnpj').html(dataCliente.tx_cpf);            
+        } else {
+            $('#dados-cliente_tx_tipo').html('Pessoa Jurídica');
+            $('#dados-cliente_tx_nome_razao_social').html(dataCliente.tx_razao_social);
+            $('#dados-cliente_tx_cpf_cnpj').html(dataCliente.tx_cnpj);
+        }
+    }
+    
+    $(function(){                           
+        $('#btLimparCliente').click(function() {
+            $('.help-block').html('');
+        });
+        
+        $('#btModalCliente').click(function() {
+            openModalPesquisaCliente();
+        });
+        
+        $('#mensagemCliente').dialog({
+            autoOpen: false
+        });                  
+        
+        $('#fileUploadAlunos').change(function(){
+            url_original = $('#form_importar_alunos').attr('action');
+            ShowMsgAguarde();
+            $('#form_importar_alunos').ajaxSubmit({
+                url: '<?php echo $this->baseUrl('/admin/aluno/upload-aluno'); ?>',
+                success: function(data){                
+                    $('#form_importar_alunos').attr('action', url_original);
+                    $('#form_importar_alunos').removeAttr('target');                    
+                    $('#mensagemAluno').html(data.msg);                            
+                    $('#mensagemAluno').dialog({
+                        modal: true,
+                        title: "ATENÇÃO",
+                        buttons: {
+                            "Ok": function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    $('#mensagemAluno').dialog("open");
+                    
+                    if(data.tipo == 'sucesso') {
+                        $('#aluno-url_planilha').val(data.urlArquivo);
+                    } else {
+                        $('#fileUploadAlunos').val('');
+                    }
+                }
+            });
+            CloseMsgAguarde();
+        });
+            
+        $('#form_importar_alunos').validate({
+            submitHandler: function(form) {
+                if($('#aluno-id_cliente').val() == '') {
+                    $('#mensagemAluno').html("Selecione o Cliente responsável por esse Aluno");                            
+                    $("#mensagemAluno").dialog({
+                        modal: true,
+                        buttons: {
+                            Ok: function() {
+                                $(this).dialog("close");                                        
+                            }
+                        }
+                    });
+                    $('#mensagemAluno').dialog("open");
+                } else {
+                    jQuery(form).ajaxSubmit({
+                        dataType:  'json', 
+                        success: function(r){
+                            if(r.tipo == 'sucesso'){
+                                //$('#div_mensagem').html(r.msg);
+                                window.location = r.url;
+                            } else {
+                                $('#mensagemAluno').html(r.msg);                            
+                                $("#mensagemAluno").dialog({
+                                    modal: true,
+                                    buttons: {
+                                        Ok: function() {
+                                            $(this).dialog("close");                                        
+                                        }
+                                    }
+                                });
+                                $('#mensagemAluno').dialog("open");                            
+                            }
+                        } 
+                    });
+                }
+            } 
+        });
+    });
+        
+</script>
