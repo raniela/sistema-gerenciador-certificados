@@ -44,7 +44,7 @@
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Alunos<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                   <li><a href="<?php echo $this->baseUrl('admin/aluno');?>">Manutençao de Alunos</a></li>
-                                  <li><a href="#">Importar Alunos</a></li>                             
+                                  <li><a href="<?php echo $this->baseUrl('admin/aluno/importar');?>">Importar Alunos</a></li>                             
                                 </ul>
                             </li>
                             <li>
@@ -106,7 +106,9 @@
 <script>
     $(document).ready(function() {
         $('.active').removeClass('active');
+        <?php if(!empty($this->menu)) { ?>
         $('.<?= $this->menu ?>').addClass('active');
+        <?php } ?>
     });
 </script>
 

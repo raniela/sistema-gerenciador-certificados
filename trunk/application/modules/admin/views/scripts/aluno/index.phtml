@@ -10,7 +10,19 @@
             
             <!-- INICIO dos campos de busca -->
             <div class="form-actions" style="padding-left: 20px!important">
+                <div class="control-group">
+                    <label class="control-label" for="aluno-tx_nome_aluno">Nome</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="aluno[tx_nome_aluno]" id="aluno-tx_nome_aluno" maxlength="45"/>
+                    </div>
+                </div>
                 
+                <div class="control-group">
+                    <label class="control-label" for="aluno-tx_cpf">CPF</label>
+                    <div class="controls">
+                        <input class="input-xlarge cpf" type="text" name="aluno[tx_cpf]" id="aluno-tx_cpf" maxlength="14"/>
+                    </div>
+                </div>
                                 
                 <input class="btn btn-primary" id="btBuscarAluno" type="button" value="Buscar"/>
             </div>
@@ -25,16 +37,12 @@
 
 <script>
     $(function(){                                             
-        //$('#divResCliente').load('<?php echo $this->baseUrl('admin/cliente/grid'); ?>');
+        $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');
         $('#btBuscarAluno').click(function(){            
-            tx_razao_social = urlencodeGet($('#cliente-tx_razao_social').val());
-            tx_cnpj = urlencodeGet($('#cliente-tx_cnpj').val());
-            tx_nome = urlencodeGet($('#cliente-tx_nome').val());
-            tx_cpf = urlencodeGet($('#cliente-tx_cpf').val());
-            tx_tipo_cliente = $('#cliente-tx_tipo_cliente').val();
+            tx_nome_aluno = urlencodeGet($('#aluno-tx_nome_aluno').val());            
+            tx_cpf = urlencodeGet($('#aluno-tx_cpf').val());                        
             
-            
-            $('#divResAluno').load('<?php echo $this->baseUrl('admin/cliente/grid'); ?>'+'/tx_razao_social/' + tx_razao_social + '/tx_cnpj/' + tx_cnpj + '/tx_nome/' + tx_nome + '/tx_cpf/' + tx_cpf + '/tx_tipo_cliente/' + tx_tipo_cliente);
+            $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>'+'/tx_nome_aluno/' + tx_nome_aluno + '/tx_cpf/' + tx_cpf);
         });
         
         //Carrega formulario de novo aluno com jquery
