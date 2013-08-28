@@ -48,10 +48,14 @@
             </fieldset>             
                                                     
             <div class="form-actions">
-                <input class="btn btn-primary" id="btLerPLanilha" type="button" value="Ler Planilha"/>                                
+                <input class="btn" id="btLerPLanilha" type="button" value="Ler Planilha"/>                                
             </div>
             
             <div id="divResAlunosImportados"></div>
+            
+            <div class="form-actions" style="display: none" id="botaoSubmit">
+                <input class="btn btn-primary" id="btEnviar" type="submit" value="Salvar Alunos"/>                                
+            </div>
         </fieldset>
     </form>
 </div>
@@ -90,6 +94,28 @@
             autoOpen: false
         });                  
         
+        $('#btLerPLanilha').click(function() {
+            url_planilha = urlencodeGet($('#aluno-url_planilha').val());
+            if(url_planilha == '') {
+                $('#mensagemAluno').html('Selecione a planilha antes de realizar a leitura dos Alunos');
+                $('#mensagemAluno').dialog({
+                    modal: true,
+                    title: "ATENÇÃO",
+                    buttons: {
+                        "Ok": function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
+                $('#mensagemAluno').dialog("open");
+            } else {
+                ShowMsgAguarde();
+                $('#divResAlunosImportados').load('<?php echo $this->baseUrl('admin/aluno/ler-planilha'); ?>'+'/url_planilha/' + url_planilha, function() {
+                    CloseMsgAguarde();
+                });
+            }
+        });
+        
         $('#fileUploadAlunos').change(function(){
             url_original = $('#form_importar_alunos').attr('action');
             ShowMsgAguarde();
@@ -112,6 +138,8 @@
                     
                     if(data.tipo == 'sucesso') {
                         $('#aluno-url_planilha').val(data.urlArquivo);
+                        $('#divResAlunosImportados').html('');
+                        $('#botaoSubmit').hide();
                     } else {
                         $('#fileUploadAlunos').val('');
                     }
@@ -122,8 +150,10 @@
             
         $('#form_importar_alunos').validate({
             submitHandler: function(form) {
+                $('.danger').removeClass('warning');
+                salva = true;
                 if($('#aluno-id_cliente').val() == '') {
-                    $('#mensagemAluno').html("Selecione o Cliente responsável por esse Aluno");                            
+                    $('#mensagemAluno').html("Selecione o Cliente responsável por esses Alunos");                            
                     $("#mensagemAluno").dialog({
                         modal: true,
                         buttons: {
@@ -134,14 +164,14 @@
                     });
                     $('#mensagemAluno').dialog("open");
                 } else {
-                    jQuery(form).ajaxSubmit({
-                        dataType:  'json', 
-                        success: function(r){
-                            if(r.tipo == 'sucesso'){
-                                //$('#div_mensagem').html(r.msg);
-                                window.location = r.url;
-                            } else {
-                                $('#mensagemAluno').html(r.msg);                            
+                    salva = true;
+                    $('.tx_salva-required').each(function () {
+                        id_linha = $(this).attr('id_linha');                        
+                        if($(this).is(':checked')) {                            
+                            if(($('#nome-required'+id_linha).val() == '') || ($('#cpf-required'+id_linha).val() == '')) {                            
+                                salva = false;
+                                $(this).parent().parent().addClass('warning');
+                                $('#mensagemAluno').html("Um aluno não pode ser salvo sem Nome ou CPF, verifique!");
                                 $("#mensagemAluno").dialog({
                                     modal: true,
                                     buttons: {
@@ -150,10 +180,49 @@
                                         }
                                     }
                                 });
-                                $('#mensagemAluno').dialog("open");                            
+                                $('#mensagemAluno').dialog("open");
+                                return;
+                            } 
+                            if(!validarCPF($('#cpf-required'+id_linha).val())) {
+                                salva = false;
+                                $(this).parent().parent().addClass('warning');
+                                $('#mensagemAluno').html("Um aluno não pode ser salvo com CPF inválido, verifique!");
+                                $("#mensagemAluno").dialog({
+                                    modal: true,
+                                    buttons: {
+                                        Ok: function() {
+                                            $(this).dialog("close");                                        
+                                        }
+                                    }
+                                });
+                                $('#mensagemAluno').dialog("open");
+                                return;
                             }
-                        } 
+                        }
                     });
+                    
+                    if(salva) {
+                        jQuery(form).ajaxSubmit({
+                            dataType:  'json', 
+                            success: function(r){
+                                if(r.tipo == 'sucesso'){
+                                    //$('#div_mensagem').html(r.msg);
+                                    window.location = r.url;
+                                } else {
+                                    $('#mensagemAluno').html(r.msg);                            
+                                    $("#mensagemAluno").dialog({
+                                        modal: true,
+                                        buttons: {
+                                            Ok: function() {
+                                                $(this).dialog("close");                                        
+                                            }
+                                        }
+                                    });
+                                    $('#mensagemAluno').dialog("open");                            
+                                }
+                            } 
+                        });
+                    }
                 }
             } 
         });
