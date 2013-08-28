@@ -1,0 +1,70 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>RG</th>
+        <th>Cargo</th>        
+        <th>Salvar</th>
+    </tr>
+    
+        <?php foreach ($this->alunos as $k => $aluno): ?>
+        <tr >
+            <td>
+                <?php    
+                    if(!empty($aluno['tx_nome_aluno'])) {
+                        echo $aluno['tx_nome_aluno'];        
+                    } else {
+                        echo "&nbsp;";        
+                    }
+                ?>
+                <input type="hidden" id="nome-required<?=$k?>" name="alunos[<?=$k?>][tx_nome_aluno]" value="<?=$aluno['tx_nome_aluno']?>"/>
+            </td>
+            <td>
+                <?php                                         
+                    if(!empty($aluno['tx_cpf'])) {
+                        echo $aluno['tx_cpf'];        
+                    } else {
+                        echo "&nbsp;";        
+                    }
+                ?>
+                <input type="hidden" id="cpf-required<?=$k?>" name="alunos[<?=$k?>][tx_cpf]" value="<?=$aluno['tx_cpf']?>"/>
+            </td>
+            <td>
+                <?php                                         
+                    if(!empty($aluno['tx_rg'])) {
+                        echo $aluno['tx_rg'];        
+                    } else {
+                        echo "&nbsp;";        
+                    }
+                ?>
+                <input type="hidden" name="alunos[<?=$k?>][tx_rg]" value="<?=$aluno['tx_rg']?>"/>
+            </td>
+            <td>
+                <?php 
+                    if(!empty($aluno['tx_cargo'])) {
+                        echo $aluno['tx_cargo'];        
+                    } else {
+                        echo "&nbsp;";        
+                    }                    
+                ?>
+                <input type="hidden" name="alunos[<?=$k?>][tx_cargo]" value="<?=$aluno['tx_cargo']?>"/>
+            </td>            
+            <td style="text-align: center">
+                <input type="checkbox"  value="S" name="alunos[<?=$k?>][tx_salva]" checked="checked" class="tx_salva-required" id_linha="<?=$k?>">
+            </td>
+        </tr>    
+    <?php endforeach; ?>
+    <?php if(empty($this->alunos)) { ?>    
+        <tr>
+            <td colspan="5">Nenhum Aluno foi encontrado na Planilha!</td>
+        </tr>
+    <?php } ?>    
+</table>
+<script>
+    $(document).ready(function() {
+        <?php if(!empty($this->alunos)) { ?>    
+        $('#botaoSubmit').show();
+        <?php } ?>    
+    });
+</script>
+

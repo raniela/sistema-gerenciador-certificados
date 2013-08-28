@@ -196,10 +196,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
         if(!is_dir($diretorioFiles)) {            
             mkdir($diretorioFiles, 0777, true);
         }
-        
-        
-        
-                                
+                                                        
         $extensoesPermitidas = array('xls','xlsx');
         
         $fileUploadAlunos = $_FILES['fileUploadAlunos'];
@@ -208,10 +205,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
             $extensao = $extensao[1];
         } else {
             $extensao = '';
-        }
-        
-        
-        
+        }                        
         
         if (in_array($extensao, $extensoesPermitidas) == false) {            
             $this->_helper->json->sendJson(array(
@@ -226,8 +220,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
                     'msg' => 'O arquivo não deve exceder 10 MB!',                    
             ));            
         }
-                
-        
+                        
         $urlArquivo = $this->_helper->upload->file('fileUploadAlunos', null, $extensoesPermitidas, $diretorioFiles.'/');        
         $diretorio = $diretorioFiles.'/'.$urlArquivo;
         
@@ -242,8 +235,60 @@ class Admin_AlunoController extends Zend_Controller_Action {
                     'tipo' => 'sucesso',
                     'msg' => 'Algum erro ocorreu durante a transferência da planilha, contate o administrador do sistema!',                    
             )); 
-        }
-                       
+        }                       
+    }
+    
+    public function lerPlanilhaAction() {
+        $this->getHelper('layout')->disableLayout();
+        
+        $urlPlanilha = $this->_helper->util->urldecodeGet($this->_getParam('url_planilha'));
+        
+        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/files") . '/';                        
+        $diretorioFiles .= 'IMPORTAR';
+        
+        $caminhoPlanilha = $diretorioFiles . "/" . $urlPlanilha;        
+        $objPHPExcel = PHPExcel_IOFactory::load($caminhoPlanilha);        
+             
+        $alunosPlanilha = array();
+        $numAluno = 0;
+        foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {            
+            $highestRow         = $worksheet->getHighestRow(); // e.g. 10
+            $highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
+            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);                        
+            for ($row = 2; $row <= $highestRow; ++ $row) {                                
+                for ($col = 0; $col < $highestColumnIndex; ++ $col) {
+                    $cell = $worksheet->getCellByColumnAndRow($col, $row);
+                    $val = $cell->getValue(); 
+                                        
+                    $alunosPlanilha[$numAluno][$col] = $val;                                       
+                }                
+                $numAluno++;                
+            }            
+        }                
+        
+        foreach ($alunosPlanilha as $index => $aluno) {
+            if(!empty($aluno[0])) {
+                $alunos[$index]['tx_nome_aluno'] = trim($aluno[0]);
+            } else {
+                $alunos[$index]['tx_nome_aluno'] = "";
+            }            
+            $alunos[$index]['tx_rg'] = $aluno[1];
+            if(!empty($aluno[2])) {
+                $alunos[$index]['tx_cpf'] = trim($aluno[2]);
+            } else {
+                $alunos[$index]['tx_cpf'] = "";
+            }            
+            $alunos[$index]['tx_cargo'] = $aluno[3];
+            
+            //Remove linhas completamente em branco
+            if(empty($aluno[0]) && empty($aluno[1]) && empty($aluno[2]) && empty($aluno[3])){
+                unset($alunos[$index]);
+            }
+        }        
+        
+        //Envia as linhas referentes aos alunos que vieram do excel para a 
+        //visualização em html
+        $this->view->alunos = $alunos;                
     }
     
 }
