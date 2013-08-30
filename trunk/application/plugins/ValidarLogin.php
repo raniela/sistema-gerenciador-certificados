@@ -42,15 +42,15 @@ class Application_Plugin_ValidarLogin extends Zend_Controller_Plugin_Abstract {
     }
 
     public function redirecionaUsuario($usuario, $request) {
-        if ($usuario->tipo == USUARIO_ADMIN && $request->getControllerName() == 'index') {
+        if ($usuario->tx_tipo_usuario == USUARIO_ADMIN && $request->getControllerName() == 'index') {
             $request->setModuleName('admin');
             $request->setControllerName('index');
             $request->setActionName('index');
-        } elseif ($usuario->tipo == USUARIO_ALUNO && $request->getControllerName() == 'index') {
+        } elseif ($usuario->tx_tipo_usuario == USUARIO_ALUNO && $request->getControllerName() == 'index') {
             $request->setModuleName('aluno');
             $request->setControllerName('index');
             $request->setActionName('index');
-        } elseif ($usuario->tipo == USUARIO_CLIENTE && $request->getControllerName() == 'index') {
+        } elseif ($usuario->tx_tipo_usuario == USUARIO_CLIENTE && $request->getControllerName() == 'index') {
             $request->setModuleName('cliente');
             $request->setControllerName('index');
             $request->setActionName('index');

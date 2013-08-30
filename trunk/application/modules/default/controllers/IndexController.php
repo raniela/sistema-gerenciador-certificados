@@ -55,7 +55,9 @@ class IndexController extends Zend_Controller_Action {
                      /* Pega o usuario logado */
                     $usuario = Zend_Auth::getInstance()->getIdentity();
                     
-                    $tipo_usuario = $usuario->tipo;
+                    //print_r($usuario); die;
+                    
+                    $tipo_usuario = $usuario->tx_tipo_usuario;
                     
                     //$ident = $auth->getIdentity();
                       //Zend_Debug::dump($ident);

@@ -1,0 +1,136 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>Login</th>
+        <th>Tipo</th>
+        <th>Ações</th>
+    </tr>
+
+    <tr class="alt" >
+        <?php foreach ($this->paginator as $k => $usuarios): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td><?php echo $usuarios['tx_nome'] ?></td>
+            <td><?php echo $usuarios['tx_login'] ?></td>
+            <td>
+                <?php
+                if ($usuarios['tx_tipo_usuario'] == 1) {
+                    echo "Administrador";
+                }
+                if ($usuarios['tx_tipo_usuario'] == 2) {
+                    echo "Cliente";
+                }
+                if ($usuarios['tx_tipo_usuario'] == 3) {
+                    echo "Aluno";
+                }
+                ?>
+            </td>
+            <td>
+                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/usuario/form') ?>/id/<?php echo $usuarios['id_usuario'] ?>">
+                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                </a>
+                <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/usuario/excluir') ?>/id/<?php echo $usuarios['id_usuario'] ?>">
+                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                </a>
+            </td>
+        </tr>    
+    <?php endforeach; ?>
+
+</table>
+
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'my_pagination_control.phtml'); ?>
+
+<div id="dcUsuario">
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse usuário?
+</div>
+
+<div id="usuarioErro">
+    Erro    
+</div>
+
+<div id="usuarioSucesso">
+    Sucesso    
+</div>
+
+
+<script>
+    
+    var url = "";
+    $(function(){
+        
+        $( "#usuarioSucesso" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+        
+        $( "#usuarioErro" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+                
+        $("#dcUsuario").dialog({
+            resizable: false,
+            height:250,
+            width:500,
+            modal: true,
+            title: "Aviso",
+            autoOpen: false,
+                
+            buttons: {
+                "Ok": function() {
+                    $.get(url, null, function(retorno){
+                        if(retorno.tipo == 'sucesso'){
+                            $('#usuarioSucesso').html(retorno.msg);
+                            
+                            $('#usuarioSucesso').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#usuarioSucesso').dialog("open");    
+                            $('#div_usuario').load('<?php echo $this->baseUrl('admin/usuario/grid'); ?>');                                
+                        } else {
+                            $('#usuarioErro').html(retorno.msg);                            
+                            $('#usuarioErro').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#usuarioErro').dialog("open");
+                            $('#div_usuario').load('<?php echo $this->baseUrl('admin/usuario/grid'); ?>');
+                        }                    
+                    }, 'json');
+                    $( this ).dialog("close");
+                    
+                },
+                Cancel: function() {
+                    $('#div_usuario').load('/usuario/grid/');
+                    $( this ).dialog( "close" );
+                    
+    }
+    
+}
+                
+        });
+                
+        $('.pagination a').click(function(){
+           
+            var href = $(this).attr('href');
+            $('#div_usuario').load(href);
+            return false;
+        });
+        
+        $('.btExcluir').click(function(){
+            
+            url = $(this).attr('href');
+            $("#dcUsuario").dialog("open");
+            
+            return false;
+        });
+        
+    });
+    
+</script>

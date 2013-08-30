@@ -2,12 +2,11 @@
     <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
     <form class="form-horizontal well" action="#" method="post">        
         <fieldset>
-            <legend><?php echo $this->titulo; ?></legend>
-            
-            <!-- Botão novo alinhado a direita -->
-            <input class="btn btn-primary" id="novo_cliente" type="button" value="Novo Cliente" style="float: right"/>
-            <div style="clear: both;"></div>
-            
+            <legend><?php echo $this->titulo; ?>
+                <button id="novo_usuario" style="float: right; margin-top: 2px" class="btn btn-primary" type="button">Novo Cliente</button>
+            </legend>
+            <!--            <div style="clear: both;"></div>-->
+
             <!-- INICIO dos campos de busca -->
             <div class="form-actions" style="padding-left: 20px!important">
                 <div class="control-group dados_pessoa_juridica">
@@ -16,28 +15,28 @@
                         <input class="input-xlarge" type="text" name="cliente[tx_razao_social]" id="cliente-tx_razao_social" maxlength="60"/>
                     </div>
                 </div>
-                
+
                 <div class="control-group dados_pessoa_juridica">
                     <label class="control-label" for="cliente-tx_cnpj">CNPJ</label>
                     <div class="controls">
                         <input class="input-xlarge cnpj validarCNPJ required" type="text" name="cliente[tx_cnpj]" id="cliente-tx_cnpj" maxlength="18"/>
                     </div>
                 </div>
-                
+
                 <div class="control-group dados_pessoa_fisica">
                     <label class="control-label" for="cliente-tx_nome">Nome</label>
                     <div class="controls">
                         <input class="input-xlarge required" type="text" name="cliente[tx_nome]" id="cliente-tx_nome" maxlength="45"/>
                     </div>
                 </div>
-                
+
                 <div class="control-group dados_pessoa_fisica">
                     <label class="control-label" for="cliente-tx_cpf">CPF</label>
                     <div class="controls">
                         <input class="input-xlarge required cpf validarCPF" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
                     </div>
                 </div>
-                
+
                 <div class="control-group">
                     <label class="control-label" for="tx_tipo_cliente">Tipo </label>
                     <div class="controls">
@@ -47,12 +46,14 @@
                         </select>
                     </div>
                 </div>
-                                
-                <input class="btn btn-primary" id="btBuscarCliente" type="button" value="Buscar"/>
+                <div class="form-actions">
+                    <input class="btn btn-primary" id="btBuscarCliente" type="button" value="Buscar"/>
+                </div>
+
             </div>
             <!-- FIM dos campos de busca -->            
         </fieldset>
-        
+
         <div id="divResCliente"></div>
     </form>
 
