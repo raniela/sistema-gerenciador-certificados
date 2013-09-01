@@ -291,6 +291,71 @@ class Admin_AlunoController extends Zend_Controller_Action {
         $this->view->alunos = $alunos;                
     }
     
+    public function salvarImportacaoAction() {
+        $this->getHelper('viewRenderer')->setNoRender();
+        $this->getHelper('layout')->disableLayout();
+        
+        $dado_aluno = $this->_helper->util->utf8Decode($this->getRequest()->getPost('aluno')); 
+        $alunos = $this->_helper->util->utf8Decode($this->getRequest()->getPost('alunos'));                 
+                
+        $this->adpter->beginTransaction();
+        try {                             
+            
+            foreach($alunos as $a) {
+                if(!empty($a['tx_salva']) && ($a['tx_salva'] == "S")) {
+                    $alunoExistente = $this->alunoDbTable->fetchRow("tx_cpf = '{$a['tx_cpf']}'");
+                    
+                    $a['id_cliente'] = $dado_aluno['id_cliente'];
+                    unset($a['tx_salva']);
+                    
+                    if (!empty($alunoExistente['id_aluno'])) {
+                        $id_aluno = $alunoExistente['id_aluno'];                                        
+                        $this->alunoDbTable->update($a, "id_aluno = {$id_aluno}");                                       
+                    } else {
+                        $usuario['tx_nome'] = $a['tx_nome_aluno'];
+                        $login = str_replace(".", "", $a['tx_cpf']);
+                        $login = str_replace("-", "", $login); 
+                        $usuario['tx_login'] = "ALUNO_".$login;                                        
+                        $usuario['tx_senha'] = '12345';                                       
+                        $usuario['tipo'] = 3;
+                        $id_usuario = $this->usuarioDbTable->insert($usuario);
+
+                        $a['id_usuario'] = $id_usuario;                                                
+                        $this->alunoDbTable->insert($a);                                                                                
+                    }   
+                }
+            }                                 
+            
+            /** commita */
+            $this->adpter->commit();
+
+            $diretorioFiles = realpath(APPLICATION_PATH . "/../public/files") . '/';                        
+            $diretorioFiles .= 'IMPORTAR';
+        
+            $caminhoPlanilha = $diretorioFiles . "/" . $dado_aluno['url_planilha'];
+            array_map('unlink', glob($caminhoPlanilha)); 
+            
+            $this->flashMessenger->addMessage('Alunos salvos com sucesso!');
+
+            $this->_helper->json->sendJson(array(
+                'tipo' => 'sucesso',
+                'msg' => 'Alunos salvos com sucesso!',
+                'url' => '/admin/aluno/index/'
+            ));
+        } catch (Exception $exc) {
+            /** executa rollback */
+            $this->adpter->rollBack();
+
+            $this->_helper->json->sendJson(array(
+                'tipo' => 'erro',
+                'msg' => $exc->getMessage(),
+                //'url' => '/admin/usuario/index/'
+            ));                                        
+        }
+              
+    }
+    
+    
 }
 
 ?>
