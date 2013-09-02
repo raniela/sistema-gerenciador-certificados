@@ -84,17 +84,19 @@ class Admin_UsuarioController extends Zend_Controller_Action {
 
             $usuario['tx_tipo_usuario'] = USUARIO_ADMIN;
 
-            /* if ($this->usuarioDbTable->verificaDb($id, $usuario) == false) {
-              $this->_helper->json->sendJson(array(
-              'tipo' => 'erro',
-              'url' => '/index/tabs/dir/2/',
-              'msg' => 'Usuário já existente com esse Login'
-              ));
-              } */
-
-
+            $id = null;
             if ($this->_getParam('id')) {
                 $id = $this->_getParam('id');
+            }
+
+            if ($this->usuarioDbTable->verificaDb($id, $usuario) == false) {
+                $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'Usuário já existente com esse Login'
+                ));
+            }
+
+            if ($id != null) {
                 $this->usuarioDbTable->update($usuario, "id_usuario = {$id}");
             } else {
                 $this->usuarioDbTable->insert($usuario);
@@ -120,7 +122,7 @@ class Admin_UsuarioController extends Zend_Controller_Action {
         try {
             $id = $this->getRequest()->getParam('id');
             $this->usuarioDbTable->delete("id_usuario = $id");
-            
+
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Excluído com sucesso!',
