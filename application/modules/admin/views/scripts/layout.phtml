@@ -10,41 +10,46 @@
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.ui.widget.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.ui.button.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/bootstrap-dropdown.js'); ?>"></script>
-        
+
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.form.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.alphanumeric.js'); ?>"></script>
 
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.maskMoney.js'); ?>"></script>
-        
+
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.mask.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.validate.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/additional-methods.js'); ?>"></script>
-        
-        
+
+
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.populate.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/messages_ptbr.js'); ?>"></script>
-        
+
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.numeric.pack.js'); ?>"></script>
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.blockui.js'); ?>"></script>        
-        
+
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/global.js'); ?>"></script>
-        
-        
+
+
     </head>
     <body>
         <div class="navbar navbar-fixed-top navbar-default">
             <div class="navbar-inner">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a style="font-size: 30px !important">SGC</a>
+                    </li>
+                </ul>
                 <div class="container">
                     <div class="navbar-collapse nav-collapse collapse" id="navbar-main">
                         <ul class="nav navbar-nav">
                             <li class="cliente">
-                                <a href="<?php echo $this->baseUrl('admin/cliente');?>" onclick="">Clientes</a>
+                                <a href="<?php echo $this->baseUrl('admin/cliente'); ?>" onclick="">Clientes</a>
                             </li>
                             <li class="dropdown aluno">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Alunos<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                  <li><a href="<?php echo $this->baseUrl('admin/aluno');?>">Manutençao de Alunos</a></li>
-                                  <li><a href="<?php echo $this->baseUrl('admin/aluno/importar');?>">Importar Alunos</a></li>                             
+                                    <li><a href="<?php echo $this->baseUrl('admin/aluno'); ?>">Manutençao de Alunos</a></li>
+                                    <li><a href="<?php echo $this->baseUrl('admin/aluno/importar'); ?>">Importar Alunos</a></li>                             
                                 </ul>
                             </li>
                             <li>
@@ -106,9 +111,9 @@
 <script>
     $(document).ready(function() {
         $('.active').removeClass('active');
-        <?php if(!empty($this->menu)) { ?>
-        $('.<?= $this->menu ?>').addClass('active');
-        <?php } ?>
+<?php if (!empty($this->menu)) { ?>
+            $('.<?= $this->menu ?>').addClass('active');
+<?php } ?>
     });
 </script>
 
