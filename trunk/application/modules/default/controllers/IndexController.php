@@ -4,7 +4,7 @@ class IndexController extends Zend_Controller_Action {
 
     public function indexAction() {
 
-        $this->view->titulo = "Login Gerenciador de Certificados";
+        $this->view->titulo = "Sistema Gerenciador de Certificados";
 
         if ($this->getRequest()->isPost()) {
 
