@@ -176,7 +176,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         }
     }   
     
-    public function uploadLogoTopoAction()
+    public function uploadLogoTopoEsquerdoAction()
     {
         //desabilita layout
         $this->getHelper('layout')->disableLayout();        
@@ -233,10 +233,237 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         }                       
     }
     
-    private function _getHTMLfotoAlunoComPath($urlImagem) {
+    public function uploadLogoTopoCentroAction()
+    {
+        //desabilita layout
+        $this->getHelper('layout')->disableLayout();        
+                
+        /** Cria o diretorio do arquivo caso não exista*/
+        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/img/logos_certificado") . '/';                        
+        $diretorioFiles .= 'cabecalho';
+        if(!is_dir($diretorioFiles)) {            
+            mkdir($diretorioFiles, 0777, true);
+        }
+                                                        
+        $extensoesPermitidas = array('swf', 'gif', 'jpeg', 'jpg', 'png');
+        
+        $fileUploadLogoTopoEsquerda = $_FILES['fileUploadLogoTopoCentro'];
+        if(!empty($fileUploadLogoTopoEsquerda['name'])) {
+            $extensao = explode(".", $fileUploadLogoTopoEsquerda['name']);
+            $extensao = $extensao[1];
+        } else {
+            $extensao = '';
+        }                        
+        
+        if (in_array($extensao, $extensoesPermitidas) == false) {            
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo deve ser do tipo SWF/GIF/JPEG/JPG/PNG!',                    
+            ));            
+        }
+        
+        if($fileUploadLogoTopoEsquerda['size'] > 10485760) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo não deve exceder 10 MB!',                    
+            ));            
+        }
+         
+        $urlArquivo = $this->_helper->upload->file('fileUploadLogoTopoCentro', null, $extensoesPermitidas, $diretorioFiles.'/');        
+        $diretorio = $diretorioFiles.'/'.$urlArquivo;
+        
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo);
+        
+        if(!empty($urlArquivo)) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Imagem transferida com sucesso!',
+                    'urlArquivo' => $urlArquivo,
+                    'htmlImagem' => $htmlImagem
+            )); 
+        } else {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Algum erro ocorreu durante a transferência da image, contate o administrador do sistema!',                    
+            )); 
+        }                       
+    }
+    
+    public function uploadLogoTopoDireitaAction()
+    {
+        //desabilita layout
+        $this->getHelper('layout')->disableLayout();        
+        
+        
+        /** Cria o diretorio do arquivo caso não exista*/
+        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/img/logos_certificado") . '/';                        
+        $diretorioFiles .= 'cabecalho';
+        if(!is_dir($diretorioFiles)) {            
+            mkdir($diretorioFiles, 0777, true);
+        }
+                                                        
+        $extensoesPermitidas = array('swf', 'gif', 'jpeg', 'jpg', 'png');
+        
+        $fileUploadLogoTopoEsquerda = $_FILES['fileUploadLogoTopoDireita'];
+        if(!empty($fileUploadLogoTopoEsquerda['name'])) {
+            $extensao = explode(".", $fileUploadLogoTopoEsquerda['name']);
+            $extensao = $extensao[1];
+        } else {
+            $extensao = '';
+        }                        
+        
+        if (in_array($extensao, $extensoesPermitidas) == false) {            
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo deve ser do tipo SWF/GIF/JPEG/JPG/PNG!',                    
+            ));            
+        }
+        
+        if($fileUploadLogoTopoEsquerda['size'] > 10485760) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo não deve exceder 10 MB!',                    
+            ));            
+        }
+         
+        $urlArquivo = $this->_helper->upload->file('fileUploadLogoTopoDireita', null, $extensoesPermitidas, $diretorioFiles.'/');        
+        $diretorio = $diretorioFiles.'/'.$urlArquivo;
+        
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo);
+        
+        if(!empty($urlArquivo)) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Imagem transferida com sucesso!',
+                    'urlArquivo' => $urlArquivo,
+                    'htmlImagem' => $htmlImagem
+            )); 
+        } else {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Algum erro ocorreu durante a transferência da image, contate o administrador do sistema!',                    
+            )); 
+        }                       
+    }
+    
+    public function uploadLogoRodapeEsquerdoAction()
+    {
+        //desabilita layout
+        $this->getHelper('layout')->disableLayout();        
+        
+        
+        /** Cria o diretorio do arquivo caso não exista*/
+        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/img/logos_certificado") . '/';                        
+        $diretorioFiles .= 'rodape';
+        if(!is_dir($diretorioFiles)) {            
+            mkdir($diretorioFiles, 0777, true);
+        }
+                                                        
+        $extensoesPermitidas = array('swf', 'gif', 'jpeg', 'jpg', 'png');
+        
+        $fileUploadLogoTopoEsquerda = $_FILES['fileUploadLogoRodapeEsquerdo'];
+        if(!empty($fileUploadLogoTopoEsquerda['name'])) {
+            $extensao = explode(".", $fileUploadLogoTopoEsquerda['name']);
+            $extensao = $extensao[1];
+        } else {
+            $extensao = '';
+        }                        
+        
+        if (in_array($extensao, $extensoesPermitidas) == false) {            
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo deve ser do tipo SWF/GIF/JPEG/JPG/PNG!',                    
+            ));            
+        }
+        
+        if($fileUploadLogoTopoEsquerda['size'] > 10485760) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo não deve exceder 10 MB!',                    
+            ));            
+        }
+         
+        $urlArquivo = $this->_helper->upload->file('fileUploadLogoRodapeEsquerdo', null, $extensoesPermitidas, $diretorioFiles.'/');        
+        $diretorio = $diretorioFiles.'/'.$urlArquivo;
+        
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo, 'rodape');
+        
+        if(!empty($urlArquivo)) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Imagem transferida com sucesso!',
+                    'urlArquivo' => $urlArquivo,
+                    'htmlImagem' => $htmlImagem
+            )); 
+        } else {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Algum erro ocorreu durante a transferência da image, contate o administrador do sistema!',                    
+            )); 
+        }                       
+    }
+    
+    public function uploadLogoRodapeDireitoAction()
+    {
+        //desabilita layout
+        $this->getHelper('layout')->disableLayout();        
+        
+        
+        /** Cria o diretorio do arquivo caso não exista*/
+        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/img/logos_certificado") . '/';                        
+        $diretorioFiles .= 'rodape';
+        if(!is_dir($diretorioFiles)) {            
+            mkdir($diretorioFiles, 0777, true);
+        }
+                                                        
+        $extensoesPermitidas = array('swf', 'gif', 'jpeg', 'jpg', 'png');
+        
+        $fileUploadLogoTopoEsquerda = $_FILES['fileUploadLogoRodapeDireito'];
+        if(!empty($fileUploadLogoTopoEsquerda['name'])) {
+            $extensao = explode(".", $fileUploadLogoTopoEsquerda['name']);
+            $extensao = $extensao[1];
+        } else {
+            $extensao = '';
+        }                        
+        
+        if (in_array($extensao, $extensoesPermitidas) == false) {            
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo deve ser do tipo SWF/GIF/JPEG/JPG/PNG!',                    
+            ));            
+        }
+        
+        if($fileUploadLogoTopoEsquerda['size'] > 10485760) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => 'O arquivo não deve exceder 10 MB!',                    
+            ));            
+        }
+         
+        $urlArquivo = $this->_helper->upload->file('fileUploadLogoRodapeDireito', null, $extensoesPermitidas, $diretorioFiles.'/');        
+        $diretorio = $diretorioFiles.'/'.$urlArquivo;
+        
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo, 'rodape');
+        
+        if(!empty($urlArquivo)) {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Imagem transferida com sucesso!',
+                    'urlArquivo' => $urlArquivo,
+                    'htmlImagem' => $htmlImagem
+            )); 
+        } else {
+            $this->_helper->json->sendJson(array(
+                    'tipo' => 'sucesso',
+                    'msg' => 'Algum erro ocorreu durante a transferência da image, contate o administrador do sistema!',                    
+            )); 
+        }                       
+    }
+    
+    private function _getHTMLfotoAlunoComPath($urlImagem, $pastaLogo = 'cabecalho') {
         if (!empty($urlImagem)) {
             return '<div>Pré Visualização</div>' .
-                    '<div style="position:relative;">' . $this->_helper->util->getIMGResizeComPath($urlImagem, '110', '80',null, 'cabecalho') . ''.
+                    '<div style="position:relative;">' . $this->_helper->util->getIMGResizeComPath($urlImagem, '110', '80',null, $pastaLogo) . ''.
                 ''.'</div>';
         }
     }                

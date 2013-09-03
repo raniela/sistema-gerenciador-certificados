@@ -36,8 +36,103 @@
                         <div id="preview_logo_topo_esquerda" type="button" style="width: 150px;text-align: center;padding-top:10px">
                             
                         </div>
+                    </div>                    
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="fileUploadLogoTopoCentro">Logo Centro</label>
+                    <div class="controls">                        
+                        <input class="input-xlarge" type="file" name="fileUploadLogoTopoCentro" id="fileUploadLogoTopoCentro"/>
+                        <div id="preview_logo_topo_centro" type="button" style="width: 150px;text-align: center;padding-top:10px">
+                            
+                        </div>
+                    </div>                    
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="fileUploadLogoTopoDireita">Logo Canto Direito</label>
+                    <div class="controls">                        
+                        <input class="input-xlarge" type="file" name="fileUploadLogoTopoDireita" id="fileUploadLogoTopoDireita"/>
+                        <div id="preview_logo_topo_direita" type="button" style="width: 150px;text-align: center;padding-top:10px">
+                            
+                        </div>
+                    </div>                    
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Dados Corpo</legend> 
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_corpo">Corpo</label>
+                    <div class="controls">
+                        <textarea class="input-xlarge required" style="width: 600px;height: 200px;" type="text" name="certificado[tx_corpo]" id="certificado-tx_corpo"></textarea>                        
                     </div>
-                    
+                    <sub>[%nome_aluno%] = Nome do Aluno</sub>
+                </div>                
+            </fieldset>
+            
+            <fieldset>
+                <legend>Dados Rodapé</legend>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_nome_assinatura1">Nome Assinatura 1</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="certificado[tx_nome_assinatura1]" id="certificado-tx_nome_assinatura1" maxlength="45"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_tratamento_assinatura1">Tratamento Assinat. 1</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="certificado[tx_tratamento_assinatura1]" id="certificado-tx_tratamento_assinatura1" maxlength="45"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_nome_assinatura2">Nome Assinatura 2</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="certificado[tx_nome_assinatura2]" id="certificado-tx_nome_assinatura2" maxlength="45"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_tratamento_assinatura2">Tratamento Assinat. 2</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="certificado[tx_tratamento_assinatura2]" id="certificado-tx_tratamento_assinatura2" maxlength="45"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_nome_assinatura3">Nome Assinatura 3</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="certificado[tx_nome_assinatura3]" id="certificado-tx_nome_assinatura3" maxlength="45"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_tratamento_assinatura3">Tratamento Assinat. 3</label>
+                    <div class="controls">
+                        <input class="input-xlarge required" type="text" name="certificado[tx_tratamento_assinatura3]" id="certificado-tx_tratamento_assinatura3" maxlength="45"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="fileUploadLogoRodapeEsquerdo">Logo Rodape Esquerdo</label>
+                    <div class="controls">                        
+                        <input class="input-xlarge" type="file" name="fileUploadLogoRodapeEsquerdo" id="fileUploadLogoRodapeEsquerdo"/>
+                        <div id="preview_logo_rodape_esquerdo" type="button" style="width: 150px;text-align: center;padding-top:10px">                            
+                        </div>
+                    </div>                    
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="fileUploadLogoRodapeDireito">Logo Rodape Direito</label>
+                    <div class="controls">                        
+                        <input class="input-xlarge" type="file" name="fileUploadLogoRodapeDireito" id="fileUploadLogoRodapeDireito"/>
+                        <div id="preview_logo_rodape_direito" type="button" style="width: 150px;text-align: center;padding-top:10px">                            
+                        </div>
+                    </div>                    
                 </div>
             </fieldset>
             
@@ -85,13 +180,75 @@
         
         $('#mensagemCliente').dialog({
             autoOpen: false
-        });                  
+        }); 
+        
+        $('#fileUploadLogoRodapeDireito').change(function(){
+            url_original = $('#form_certificado').attr('action');
+            ShowMsgAguarde();
+            $('#form_certificado').ajaxSubmit({
+                url: '<?php echo $this->baseUrl('/admin/certificado/upload-logo-rodape-direito'); ?>',
+                success: function(data){                
+                    $('#form_certificado').attr('action', url_original);
+                    $('#form_certificado').removeAttr('target');                    
+                    $('#mensagemCertificado').html(data.msg);                            
+                    $('#mensagemCertificado').dialog({
+                        modal: true,
+                        title: "ATENÇÃO",
+                        buttons: {
+                            "Ok": function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    $('#mensagemCertificado').dialog("open");
+                    
+                    if(data.tipo == 'sucesso') {
+                        $('#certificado-tx_url_logotipo_rodape_direita').val(data.urlArquivo);
+                        $('#preview_logo_rodape_direito').html(data.htmlImagem);
+                    } else {
+                        $('#fileUploadLogoRodapeDireito').val('');
+                    }
+                }
+            });
+            CloseMsgAguarde();
+        });
+        
+        $('#fileUploadLogoRodapeEsquerdo').change(function(){
+            url_original = $('#form_certificado').attr('action');
+            ShowMsgAguarde();
+            $('#form_certificado').ajaxSubmit({
+                url: '<?php echo $this->baseUrl('/admin/certificado/upload-logo-rodape-esquerdo'); ?>',
+                success: function(data){                
+                    $('#form_certificado').attr('action', url_original);
+                    $('#form_certificado').removeAttr('target');                    
+                    $('#mensagemCertificado').html(data.msg);                            
+                    $('#mensagemCertificado').dialog({
+                        modal: true,
+                        title: "ATENÇÃO",
+                        buttons: {
+                            "Ok": function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    $('#mensagemCertificado').dialog("open");
+                    
+                    if(data.tipo == 'sucesso') {
+                        $('#certificado-tx_url_logotipo_rodape_esquerda').val(data.urlArquivo);
+                        $('#preview_logo_rodape_esquerdo').html(data.htmlImagem);
+                    } else {
+                        $('#fileUploadLogoRodapeEsquerdo').val('');
+                    }
+                }
+            });
+            CloseMsgAguarde();
+        });
         
         $('#fileUploadLogoTopoEsquerda').change(function(){
             url_original = $('#form_certificado').attr('action');
             ShowMsgAguarde();
             $('#form_certificado').ajaxSubmit({
-                url: '<?php echo $this->baseUrl('/admin/certificado/upload-logo-topo'); ?>',
+                url: '<?php echo $this->baseUrl('/admin/certificado/upload-logo-topo-esquerdo'); ?>',
                 success: function(data){                
                     $('#form_certificado').attr('action', url_original);
                     $('#form_certificado').removeAttr('target');                    
@@ -117,8 +274,70 @@
             });
             CloseMsgAguarde();
         });
-            
-        $('#form_aluno').validate({
+        
+        $('#fileUploadLogoTopoCentro').change(function(){
+            url_original = $('#form_certificado').attr('action');
+            ShowMsgAguarde();
+            $('#form_certificado').ajaxSubmit({
+                url: '<?php echo $this->baseUrl('/admin/certificado/upload-logo-topo-centro'); ?>',
+                success: function(data){                
+                    $('#form_certificado').attr('action', url_original);
+                    $('#form_certificado').removeAttr('target');                    
+                    $('#mensagemCertificado').html(data.msg);                            
+                    $('#mensagemCertificado').dialog({
+                        modal: true,
+                        title: "ATENÇÃO",
+                        buttons: {
+                            "Ok": function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    $('#mensagemCertificado').dialog("open");
+                    
+                    if(data.tipo == 'sucesso') {
+                        $('#certificado-tx_url_logotipo_cabecalho_centro').val(data.urlArquivo);
+                        $('#preview_logo_topo_centro').html(data.htmlImagem);
+                    } else {
+                        $('#fileUploadLogoTopoCentro').val('');
+                    }
+                }
+            });
+            CloseMsgAguarde();
+        });
+        
+        $('#fileUploadLogoTopoDireita').change(function(){
+            url_original = $('#form_certificado').attr('action');
+            ShowMsgAguarde();
+            $('#form_certificado').ajaxSubmit({
+                url: '<?php echo $this->baseUrl('/admin/certificado/upload-logo-topo-direita'); ?>',
+                success: function(data){                
+                    $('#form_certificado').attr('action', url_original);
+                    $('#form_certificado').removeAttr('target');                    
+                    $('#mensagemCertificado').html(data.msg);                            
+                    $('#mensagemCertificado').dialog({
+                        modal: true,
+                        title: "ATENÇÃO",
+                        buttons: {
+                            "Ok": function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    $('#mensagemCertificado').dialog("open");
+                    
+                    if(data.tipo == 'sucesso') {
+                        $('#certificado-tx_url_logotipo_cabecalho_direita').val(data.urlArquivo);
+                        $('#preview_logo_topo_direita').html(data.htmlImagem);
+                    } else {
+                        $('#fileUploadLogoTopoDireita').val('');
+                    }
+                }
+            });
+            CloseMsgAguarde();
+        });
+        
+        $('#form_certificado').validate({
             submitHandler: function(form) {
                 if($('#aluno-id_cliente').val() == '') {
                     $('#mensagemAluno').html("Selecione o Cliente responsável por esse Aluno");                            
