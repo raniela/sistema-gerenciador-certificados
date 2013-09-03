@@ -8,11 +8,7 @@
 class Admin_AlunoController extends Zend_Controller_Action {
     
     public function init() {
-        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->view->msg = $this->flashMessenger->getMessages();
-        
         $this->adpter = Zend_Db_Table_Abstract::getDefaultAdapter();        
-                
         $this->clienteDbTable = new Application_Model_DbTable_Cliente();        
         $this->usuarioDbTable = new Application_Model_DbTable_Usuario();                
         $this->alunoDbTable = new Application_Model_DbTable_Aluno();
@@ -116,8 +112,6 @@ class Admin_AlunoController extends Zend_Controller_Action {
 
                 /** commita */
                 $this->adpter->commit();
-
-                $this->flashMessenger->addMessage('Salvo com sucesso!');
 
                 $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
