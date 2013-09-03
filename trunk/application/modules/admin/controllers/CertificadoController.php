@@ -5,7 +5,7 @@
  * @date 25/08/2013
  * 
  */
-class Admin_AlunoController extends Zend_Controller_Action {
+class Admin_CertificadoController extends Zend_Controller_Action {
     
     public function init() {
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
@@ -17,12 +17,12 @@ class Admin_AlunoController extends Zend_Controller_Action {
         $this->usuarioDbTable = new Application_Model_DbTable_Usuario();                
         $this->alunoDbTable = new Application_Model_DbTable_Aluno();
         
-        $this->view->menu = 'aluno';
+        $this->view->menu = 'certificado';
     }
 
 
     public function indexAction() {
-        $this->view->titulo = "Listagem de Alunos";
+        $this->view->titulo = "Listagem de Modelos de Certificados";
     }
     
     public function gridAction() {
@@ -49,7 +49,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
             /**
              * Edição do registro
              */
-            $this->view->titulo = "Edição de Aluno";
+            $this->view->titulo = "Edição de Modelo de Certificado";
             $id = $this->getRequest()->getParam('id');
                                     
             //busca os dados do aluno
@@ -65,7 +65,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
              * Cadastro do registro
              */
             //se for cadastro é só enviar o titulo
-            $this->view->titulo = "Cadastro de Aluno";
+            $this->view->titulo = "Cadastro de Modelo de Certificado";
         }                        
     }
     
@@ -106,7 +106,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
                     $login = str_replace("-", "", $login); 
                     $usuario['tx_login'] = "ALUNO_".$login;                                        
                     $usuario['tx_senha'] = '12345';                                       
-                    $usuario['tx_tipo_usuario'] = 3;
+                    $usuario['tipo'] = 3;
                     $id_usuario = $this->usuarioDbTable->insert($usuario);
                     
                     $aluno['id_usuario'] = $id_usuario;
@@ -317,7 +317,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
                         $login = str_replace("-", "", $login); 
                         $usuario['tx_login'] = "ALUNO_".$login;                                        
                         $usuario['tx_senha'] = '12345';                                       
-                        $usuario['tx_tipo_usuario'] = 3;
+                        $usuario['tipo'] = 3;
                         $id_usuario = $this->usuarioDbTable->insert($usuario);
 
                         $a['id_usuario'] = $id_usuario;                                                
