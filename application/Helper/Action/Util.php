@@ -173,4 +173,13 @@ class Helper_Action_Util extends Zend_Controller_Action_Helper_Abstract {
         $vl = str_replace('{}', ' ', $vl);
         return $vl;
     }
+    
+    function getIMGResizeComPath($urlImagem, $height = null, $width = null, $alt = null, $path = null) {
+        $alt = htmlentities($alt);
+        if ($height && $width) {
+            return '<img alt="' . $alt . '" title="' . $alt . '" id="' . $alt . '" src="' . Zend_Controller_Front::getInstance()->getBaseUrl() . '/m2brimagem/resize/file/' . $urlImagem . '/width/' . $width . '/height/' . $height . '/path/'. $path . '">';
+        } else {
+            return '<img alt="' . $alt . '" title="' . $alt . '" id="' . $alt . '" src="' . Zend_Controller_Front::getInstance()->getBaseUrl() . '/public/files/' . $urlImagem . '">';
+        }
+    }
 }
