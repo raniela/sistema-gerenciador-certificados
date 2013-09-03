@@ -42,9 +42,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
     }
 
     public function formAction() {        
-        //se já tem id é edição, tem que mandar os dados desse id pra view
-        
-        
+        //se já tem id é edição, tem que mandar os dados desse id pra view                
         if ($this->getRequest()->getParam('id')) {
             /**
              * Edição do registro
@@ -176,32 +174,26 @@ class Admin_CertificadoController extends Zend_Controller_Action {
                 ));
             }            
         }
-    }
+    }   
     
-    public function importarAction() {                
-        //se for cadastro é só enviar o titulo
-        $this->view->titulo = "Importar Alunos";
-                               
-    }
-    
-    public function uploadAlunoAction()
+    public function uploadLogoTopoAction()
     {
         //desabilita layout
         $this->getHelper('layout')->disableLayout();        
         
         
         /** Cria o diretorio do arquivo caso não exista*/
-        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/files") . '/';                        
-        $diretorioFiles .= 'IMPORTAR';
+        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/img/logos_certificado") . '/';                        
+        $diretorioFiles .= 'cabecalho';
         if(!is_dir($diretorioFiles)) {            
             mkdir($diretorioFiles, 0777, true);
         }
                                                         
-        $extensoesPermitidas = array('xls','xlsx');
+        $extensoesPermitidas = array('swf', 'gif', 'jpeg', 'jpg', 'png');
         
-        $fileUploadAlunos = $_FILES['fileUploadAlunos'];
-        if(!empty($fileUploadAlunos['name'])) {
-            $extensao = explode(".", $fileUploadAlunos['name']);
+        $fileUploadLogoTopoEsquerda = $_FILES['fileUploadLogoTopoEsquerda'];
+        if(!empty($fileUploadLogoTopoEsquerda['name'])) {
+            $extensao = explode(".", $fileUploadLogoTopoEsquerda['name']);
             $extensao = $extensao[1];
         } else {
             $extensao = '';
@@ -210,152 +202,44 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         if (in_array($extensao, $extensoesPermitidas) == false) {            
             $this->_helper->json->sendJson(array(
                     'tipo' => 'erro',
-                    'msg' => 'O arquivo deve ser do tipo XLS/XLSX!',                    
+                    'msg' => 'O arquivo deve ser do tipo SWF/GIF/JPEG/JPG/PNG!',                    
             ));            
         }
         
-        if($fileUploadAlunos['size'] > 10485760) {
+        if($fileUploadLogoTopoEsquerda['size'] > 10485760) {
             $this->_helper->json->sendJson(array(
                     'tipo' => 'erro',
                     'msg' => 'O arquivo não deve exceder 10 MB!',                    
             ));            
         }
-                        
-        $urlArquivo = $this->_helper->upload->file('fileUploadAlunos', null, $extensoesPermitidas, $diretorioFiles.'/');        
+         
+        $urlArquivo = $this->_helper->upload->file('fileUploadLogoTopoEsquerda', null, $extensoesPermitidas, $diretorioFiles.'/');        
         $diretorio = $diretorioFiles.'/'.$urlArquivo;
+        
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo);
         
         if(!empty($urlArquivo)) {
             $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
-                    'msg' => 'Planilha transferida com sucesso!',
-                    'urlArquivo' => $urlArquivo
+                    'msg' => 'Imagem transferida com sucesso!',
+                    'urlArquivo' => $urlArquivo,
+                    'htmlImagem' => $htmlImagem
             )); 
         } else {
             $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
-                    'msg' => 'Algum erro ocorreu durante a transferência da planilha, contate o administrador do sistema!',                    
+                    'msg' => 'Algum erro ocorreu durante a transferência da image, contate o administrador do sistema!',                    
             )); 
         }                       
     }
     
-    public function lerPlanilhaAction() {
-        $this->getHelper('layout')->disableLayout();
-        
-        $urlPlanilha = $this->_helper->util->urldecodeGet($this->_getParam('url_planilha'));
-        
-        $diretorioFiles = realpath(APPLICATION_PATH . "/../public/files") . '/';                        
-        $diretorioFiles .= 'IMPORTAR';
-        
-        $caminhoPlanilha = $diretorioFiles . "/" . $urlPlanilha;        
-        $objPHPExcel = PHPExcel_IOFactory::load($caminhoPlanilha);        
-             
-        $alunosPlanilha = array();
-        $numAluno = 0;
-        foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {            
-            $highestRow         = $worksheet->getHighestRow(); // e.g. 10
-            $highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
-            $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);                        
-            for ($row = 2; $row <= $highestRow; ++ $row) {                                
-                for ($col = 0; $col < $highestColumnIndex; ++ $col) {
-                    $cell = $worksheet->getCellByColumnAndRow($col, $row);
-                    $val = $cell->getValue(); 
-                                        
-                    $alunosPlanilha[$numAluno][$col] = $val;                                       
-                }                
-                $numAluno++;                
-            }            
-        }                
-        
-        foreach ($alunosPlanilha as $index => $aluno) {
-            if(!empty($aluno[0])) {
-                $alunos[$index]['tx_nome_aluno'] = trim($aluno[0]);
-            } else {
-                $alunos[$index]['tx_nome_aluno'] = "";
-            }            
-            $alunos[$index]['tx_rg'] = $aluno[1];
-            if(!empty($aluno[2])) {
-                $alunos[$index]['tx_cpf'] = trim($aluno[2]);
-            } else {
-                $alunos[$index]['tx_cpf'] = "";
-            }            
-            $alunos[$index]['tx_cargo'] = $aluno[3];
-            
-            //Remove linhas completamente em branco
-            if(empty($aluno[0]) && empty($aluno[1]) && empty($aluno[2]) && empty($aluno[3])){
-                unset($alunos[$index]);
-            }
-        }        
-        
-        //Envia as linhas referentes aos alunos que vieram do excel para a 
-        //visualização em html
-        $this->view->alunos = $alunos;                
-    }
-    
-    public function salvarImportacaoAction() {
-        $this->getHelper('viewRenderer')->setNoRender();
-        $this->getHelper('layout')->disableLayout();
-        
-        $dado_aluno = $this->_helper->util->utf8Decode($this->getRequest()->getPost('aluno')); 
-        $alunos = $this->_helper->util->utf8Decode($this->getRequest()->getPost('alunos'));                 
-                
-        $this->adpter->beginTransaction();
-        try {                             
-            
-            foreach($alunos as $a) {
-                if(!empty($a['tx_salva']) && ($a['tx_salva'] == "S")) {
-                    $alunoExistente = $this->alunoDbTable->fetchRow("tx_cpf = '{$a['tx_cpf']}'");
-                    
-                    $a['id_cliente'] = $dado_aluno['id_cliente'];
-                    unset($a['tx_salva']);
-                    
-                    if (!empty($alunoExistente['id_aluno'])) {
-                        $id_aluno = $alunoExistente['id_aluno'];                                        
-                        $this->alunoDbTable->update($a, "id_aluno = {$id_aluno}");                                       
-                    } else {
-                        $usuario['tx_nome'] = $a['tx_nome_aluno'];
-                        $login = str_replace(".", "", $a['tx_cpf']);
-                        $login = str_replace("-", "", $login); 
-                        $usuario['tx_login'] = "ALUNO_".$login;                                        
-                        $usuario['tx_senha'] = '12345';                                       
-                        $usuario['tipo'] = 3;
-                        $id_usuario = $this->usuarioDbTable->insert($usuario);
-
-                        $a['id_usuario'] = $id_usuario;                                                
-                        $this->alunoDbTable->insert($a);                                                                                
-                    }   
-                }
-            }                                 
-            
-            /** commita */
-            $this->adpter->commit();
-
-            $diretorioFiles = realpath(APPLICATION_PATH . "/../public/files") . '/';                        
-            $diretorioFiles .= 'IMPORTAR';
-        
-            $caminhoPlanilha = $diretorioFiles . "/" . $dado_aluno['url_planilha'];
-            array_map('unlink', glob($caminhoPlanilha)); 
-            
-            $this->flashMessenger->addMessage('Alunos salvos com sucesso!');
-
-            $this->_helper->json->sendJson(array(
-                'tipo' => 'sucesso',
-                'msg' => 'Alunos salvos com sucesso!',
-                'url' => '/admin/aluno/index/'
-            ));
-        } catch (Exception $exc) {
-            /** executa rollback */
-            $this->adpter->rollBack();
-
-            $this->_helper->json->sendJson(array(
-                'tipo' => 'erro',
-                'msg' => $exc->getMessage(),
-                //'url' => '/admin/usuario/index/'
-            ));                                        
+    private function _getHTMLfotoAlunoComPath($urlImagem) {
+        if (!empty($urlImagem)) {
+            return '<div>Pré Visualização</div>' .
+                    '<div style="position:relative;">' . $this->_helper->util->getIMGResizeComPath($urlImagem, '110', '80',null, 'cabecalho') . ''.
+                ''.'</div>';
         }
-              
-    }
-    
-    
+    }                
 }
 
 ?>
