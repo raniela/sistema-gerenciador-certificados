@@ -100,7 +100,7 @@ class Admin_ClienteController extends Zend_Controller_Action {
             $cliente['tx_razao_social'] = null;
             $cliente['tx_cnpj'] = null;
             $cliente['tx_inscricao_estadual'] = null;
-            $cliente['tx_isncricao_municipal'] = null;
+            $cliente['tx_inscricao_municipal'] = null;
             $cliente['tx_nome_contato'] = null;  
             
             if(empty($cliente['id_cliente'])) {
@@ -168,7 +168,7 @@ class Admin_ClienteController extends Zend_Controller_Action {
                     $usuario['tx_login'] = "CLIENTE_".$login;
                     $usuario['tx_senha'] = '12345';
                     $usuario['tx_email'] = $cliente['tx_email'];                    
-                    $usuario['tipo'] = 2;
+                    $usuario['tx_tipo_usuario'] = 2;
                     $id_usuario = $this->usuarioDbTable->insert($usuario);
                     //die($id_usuario);                    
                     $cliente['id_usuario'] = $id_usuario;
@@ -191,7 +191,7 @@ class Admin_ClienteController extends Zend_Controller_Action {
                         $usuario_aluno['tx_login'] = "ALUNO_".$login;
                         $usuario_aluno['tx_senha'] = '12345';
                         $usuario_aluno['tx_email'] = $cliente['tx_email'];                            
-                        $usuario_aluno['tipo'] = 3;
+                        $usuario_aluno['tx_tipo_usuario'] = 3;
                         $id_usuario_aluno = $this->usuarioDbTable->insert($usuario_aluno);
                         
                         $aluno['id_cliente'] = $id_cliente;

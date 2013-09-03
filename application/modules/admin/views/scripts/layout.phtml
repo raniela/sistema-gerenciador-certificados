@@ -25,7 +25,7 @@
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/messages_ptbr.js'); ?>"></script>
 
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.numeric.pack.js'); ?>"></script>
-        <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.blockui.js'); ?>"></script>        
+        <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/jquery.blockui.js'); ?>"></script>
 
         <script type="text/javascript"  src="<?php echo $this->baseUrl('/js/global.js'); ?>"></script>
 
@@ -53,7 +53,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="" onclick="">Cursos</a>
+                                <a href="" onclick="">Treinamentos</a>
                             </li>
                             <li>
                                 <a href="<?php echo $this->baseUrl('admin/usuario'); ?>" onclick="">Usuários</a>
@@ -61,9 +61,12 @@
                             <li>
                                 <a href="/turmas/index" onclick="">Turmas</a>
                             </li>
-                            <li>
-                                <a href="" onclick="">Certificados</a>
-                            </li>
+                            <li class="dropdown certificado">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Certificados<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->baseUrl('admin/certificado'); ?>">Manutençao de Modelos de Certificado</a></li>                                    
+                                </ul>
+                            </li>                            
                         </ul>
                         <ul class="nav pull-right">
                             <li>

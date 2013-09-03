@@ -1,0 +1,119 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Cargo</th>        
+        <th>Ações</th>
+    </tr>
+
+    <tr class="alt" >
+        <?php foreach ($this->paginator as $k => $aluno): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php                     
+                    echo $aluno['tx_nome_aluno'];                    
+                ?>
+            </td>
+            <td>
+                <?php                     
+                    echo $aluno['tx_cpf'];                    
+                ?>
+            </td>            
+            <td><?php echo $aluno['tx_cargo']; ?></td>            
+            <td>
+                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/aluno/form')?>/id/<?php echo $aluno['id_aluno'] ?>">
+                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                </a>
+                <a class="btExcluir" href="./aluno/excluir/id/<?php echo $aluno['id_aluno'] ?>">
+                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                </a>
+            </td>
+        </tr>    
+    <?php endforeach; ?>
+
+</table>
+
+<div id="confirmacao">
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse Aluno?
+</div>
+
+<div id="erroAlu">
+    Erro    
+</div>
+
+<div id="sucessoAlu">
+    Sucesso    
+</div>
+
+<script>        
+    $(function(){       
+                
+        $( "#sucessoAlu" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+        
+        $( "#erroAlu" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+                
+        $('.btExcluir').click(function(){
+            
+            url = $(this).attr('href');
+            $("#confirmacao").dialog("open");
+            
+            return false;
+        });
+                
+        $("#confirmacao").dialog({
+            resizable: false,
+            height:250,
+            width:500,
+            modal: true,
+            autoOpen: false,
+                
+            buttons: {
+                "Ok": function() {
+                    $.get(url, null, function(retorno){
+                        if(retorno.tipo == 'sucesso'){
+                            $('#sucessoAlu').html(retorno.msg);
+                            
+                            $('#sucessoAlu').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#sucessoAlu').dialog("open");    
+                            $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');                                
+                        } else {
+                            $('#erroAlu').html(retorno.msg);                            
+                            $('#erroAlu').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#erroAlu').dialog("open");
+                            $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');
+                        }                    
+                    }, 'json');
+                    $( this ).dialog("close");
+                    
+                },
+                "Cancel": function() {
+                    $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');
+                    $( this ).dialog( "close" );
+                        
+                }
+                    
+            }
+                
+        });
+        
+    })
+    
+</script>
