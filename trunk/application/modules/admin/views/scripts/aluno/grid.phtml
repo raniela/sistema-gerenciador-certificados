@@ -10,18 +10,18 @@
         <?php foreach ($this->paginator as $k => $aluno): ?>
         <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
             <td>
-                <?php                     
-                    echo $aluno['tx_nome_aluno'];                    
+                <?php
+                echo $aluno['tx_nome_aluno'];
                 ?>
             </td>
             <td>
-                <?php                     
-                    echo $aluno['tx_cpf'];                    
+                <?php
+                echo $aluno['tx_cpf'];
                 ?>
             </td>            
             <td><?php echo $aluno['tx_cargo']; ?></td>            
             <td>
-                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/aluno/form')?>/id/<?php echo $aluno['id_aluno'] ?>">
+                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/aluno/form') ?>/id/<?php echo $aluno['id_aluno'] ?>">
                     <img src="/img/edit-icon.gif" title="Editar registro" />
                 </a>
                 <a class="btExcluir" href="./aluno/excluir/id/<?php echo $aluno['id_aluno'] ?>">
@@ -32,6 +32,8 @@
     <?php endforeach; ?>
 
 </table>
+
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'my_pagination_control.phtml'); ?>
 
 <div id="confirmacao">
     <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse Aluno?

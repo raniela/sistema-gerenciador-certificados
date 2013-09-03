@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * @author raniela.carvalho
+ * @date 17/07/2013
+ * 
+ */
+
 class Admin_IndexController extends Zend_Controller_Action {
 
     public function init() {        

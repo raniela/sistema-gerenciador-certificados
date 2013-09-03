@@ -1,0 +1,45 @@
+<div class="container" style="margin-top: 50px">
+    <form class="form-horizontal well" action="/admin/treinamento/form" method="post">
+        <fieldset>
+            <legend>
+                <?php echo $this->titulo; ?>
+                <button id="novo_treinamento" style="float: right; margin-top: 2px" class="btn btn-primary" type="button">Novo Treinamento</button>
+            </legend>
+
+            <div class="form-actions" style="padding-left: 20px!important">
+                <div class="control-group">
+                    <label class="control-label" for="nome">Nome</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="nome" id="nome" maxlength="18"/>
+                    </div>
+                </div>               
+                <div class="form-actions">
+                    <input class="btn btn-primary" id="btBuscarUsuario" type="button" value="Buscar"/>
+                </div>
+            </div>
+        </fieldset>
+        <div id="div_treinamento" >
+
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+    $(function(){
+
+        $('#novo_treinamento').on("click", function(event){
+            window.location = "/admin/treinamento/form";
+        });
+       
+        $('#div_treinamento').load('<?php echo $this->baseUrl('admin/treinamento/grid'); ?>');
+        $('#btBuscarTreinamento').click(function(){            
+            nome = urlencodeGet($('#nome').val());
+            
+            $('#div_treinamento').load('<?php echo $this->baseUrl('admin/treinamento/grid'); ?>'+'/nome/' + nome);
+        });
+        
+    }); 
+    
+</script>
