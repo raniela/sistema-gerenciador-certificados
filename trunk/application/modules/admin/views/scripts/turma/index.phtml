@@ -14,11 +14,17 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="nome_instrutor">Nome do Instrutor</label>
+                    <label class="control-label" for="data_inicial">Período</label>
                     <div class="controls">
-                        <input class="input-xlarge" type="text" name="nome_instrutor" id="nome_instrutor" maxlength="18"/>
+                        <input class="input-xlarge" type="text" name="data_inicial" id="data_inicial" value=""/>
                     </div>
-                </div> 
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="data_final"></label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="data_final" id="data_final" value=""/>
+                    </div>
+                </div>
                 <div class="form-actions">
                     <input class="btn btn-primary" id="btBuscarTurma" type="button" value="Buscar"/>
                 </div>
@@ -35,6 +41,10 @@
 
     $(function(){
 
+        $('#data_inicial').datepicker({dateFormat: 'dd/mm/yy'});
+        $('#data_final').datepicker({dateFormat: 'dd/mm/yy'});
+    
+
         $('#nova_turma').on("click", function(event){
             window.location = "/admin/turma/form";
         });
@@ -43,8 +53,10 @@
         $('#btBuscarTurma').click(function(){
             
             nome_treinamento = urlencodeGet($('#nome_treinamento').val());
+            data_inicial = urlencodeGet($('#data_inicial').val());
+            data_final = urlencodeGet($('#data_final').val());
             
-            $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>'+'/nome_treinamento/' + nome_treinamento);
+            $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>'+'/nome_treinamento/' + nome_treinamento + '/data_inicial/' + data_inicial + '/data_final/' + data_final);
         });
         
     }); 

@@ -16,13 +16,13 @@ class Admin_TurmaController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $this->view->titulo = "Cadastro de Turma";
+        $this->view->titulo = "Listagem de Turma";
     }
 
     public function gridAction() {
         $this->getHelper('layout')->disableLayout();
 
-        
+
         $params['nome_treinamento'] = $this->_getParam('nome_treinamento');
 
         $params['data_inicial'] = $this->_helper->util->urldecodeGet($this->_getParam('data_inicial'));
@@ -31,11 +31,9 @@ class Admin_TurmaController extends Zend_Controller_Action {
         $params['data_final'] = $this->_helper->util->urldecodeGet($this->_getParam('data_final'));
         $params['data_final'] = trim($this->_helper->util->reverseDate($params['data_final']));
 
-        $turmas = $this->_helper->util->utf8Encode($this->turmaDbTable->getDataGrid($params));
+        $turmas = $this->turmaDbTable->getDataGrid($params);
 
-        print_r($turmas); die;
-
-        $paginator = Zend_Paginator::factory($turmas);
+        $paginator = Zend_Paginator::factory($this->_helper->util->utf8Encode($turmas));
         $paginator->setCurrentPageNumber($this->_getParam('page'));
         $paginator->setDefaultItemCountPerPage(5);
         $this->view->paginator = $paginator;
@@ -43,8 +41,9 @@ class Admin_TurmaController extends Zend_Controller_Action {
 
     public function formAction() {
 
+        //busca dados de treinamento para autocomplete e manda pra view
         $autoCompleteTreinamentos = $this->treinamentoDbTable->getAutoCompleteTreinamentos();
-        $this->view->autoCompleteTreinamentos = $autoCompleteTreinamentos;
+        $this->view->autoCompleteTreinamentos = $this->_helper->util->utf8Encode($autoCompleteTreinamentos);
 
         if ($this->getRequest()->getParam('id')) {
 
@@ -53,9 +52,13 @@ class Admin_TurmaController extends Zend_Controller_Action {
             $id = $this->getRequest()->getParam('id');
 
             /* busca turma */
-            $turma = $this->turmaDbTable->fetchRow("id_turma = '{$id}'")->toArray();
+            $turma = $this->turmaDbTable->getDataGrid(array('id_venda' => $id));
 
-            $this->view->turma = $this->_helper->util->utf8Encode($turma);
+            /* altera o formato das datas para popular o form */
+            $turma[0]['dt_inicio_treinamento'] = $this->_helper->util->reverseDate($turma[0]['dt_inicio_treinamento']);
+            $turma[0]['dt_termino_treinamento'] = $this->_helper->util->reverseDate($turma[0]['dt_termino_treinamento']);
+
+            $this->view->turma = $this->_helper->util->utf8Encode($turma[0]);
         } else {
             $this->view->titulo = "Cadastro de Turma";
         }
@@ -68,6 +71,21 @@ class Admin_TurmaController extends Zend_Controller_Action {
         try {
             $turma = $this->_helper->util->utf8Decode($this->getRequest()->getPost());
 
+            /* destroi o indice do vetor que não existe no banco */
+            unset($turma['tx_nome_treinamento']);
+
+            /* compara periodo de datas */
+            $dt1 = new Zend_Date($turma['dt_inicio_treinamento']);
+            $dt2 = new Zend_Date($turma['dt_termino_treinamento']);
+
+            if ($dt1->isLater($dt2)) {
+                $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => "A data de início deve ser menor que a data de término!",
+                ));
+            }
+
+            /* altera o formato das datas para salvar no banco */
             $turma['dt_inicio_treinamento'] = ($this->_helper->util->reverseDate($turma['dt_inicio_treinamento']));
             $turma['dt_termino_treinamento'] = ($this->_helper->util->reverseDate($turma['dt_termino_treinamento']));
 
