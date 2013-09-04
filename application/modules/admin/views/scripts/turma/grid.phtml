@@ -1,22 +1,22 @@
 <table class="table table-bordered table-striped table-hover">
     <tr>
-        <th>Nome do Treinamento</th>
-        <th>Carga Horária</th>
-        <th>Instrutor</th>
+        <th>Treinamento</th>
+        <th>Data de início</th>
+        <th>Data de término</th>
         <th>Ações</th>
     </tr>
 
     <tr class="alt" >
-        <?php foreach ($this->paginator as $k => $treinamentos): ?>
+        <?php foreach ($this->paginator as $k => $turmas): ?>
         <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
-            <td><?php echo $treinamentos['tx_nome_treinamento'] ?></td>
-            <td><?php echo $treinamentos['nr_carga_horaria'] ?></td>
-            <td><?php echo $treinamentos['tx_nome_instrutor'] ?></td>
+            <td><?php echo $turmas['tx_nome_treinamento'] ?></td>
+            <td><?php echo $turmas['dt_inicio_treinamento'] ?></td>
+            <td><?php echo $turmas['dt_termino_treinamento'] ?></td>
             <td>
-                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/treinamento/form') ?>/id/<?php echo $treinamentos['id_treinamento'] ?>">
+                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/turma/form') ?>/id/<?php echo $turmas['id_turma'] ?>">
                     <img src="/img/edit-icon.gif" title="Editar registro" />
                 </a>
-                <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/treinamento/excluir') ?>/id/<?php echo $treinamentos['id_treinamento'] ?>">
+                <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/turma/excluir') ?>/id/<?php echo $turmas['id_turma'] ?>">
                     <img src="/img/delete-icon.gif" title="Excluir Registro" />
                 </a>
             </td>
@@ -27,15 +27,15 @@
 
 <?php echo $this->paginationControl($this->paginator, 'Sliding', 'my_pagination_control.phtml'); ?>
 
-<div id="dcTreinamento">
-    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse treinamento?
+<div id="dcTurma">
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir essa turma?
 </div>
 
-<div id="treinamentoErro">
+<div id="turmaErro">
     Erro    
 </div>
 
-<div id="treinamentoSucesso">
+<div id="turmaSucesso">
     Sucesso    
 </div>
 
@@ -45,17 +45,17 @@
     var url = "";
     $(function(){
         
-        $( "#treinamentoSucesso" ).dialog({
+        $( "#turmaSucesso" ).dialog({
             modal: true,
             autoOpen: false
         });
         
-        $( "#treinamentoErro" ).dialog({
+        $( "#turmaErro" ).dialog({
             modal: true,
             autoOpen: false
         });
                 
-        $("#dcTreinamento").dialog({
+        $("#dcTurma").dialog({
             resizable: false,
             height:250,
             width:500,
@@ -67,35 +67,35 @@
                 "Ok": function() {
                     $.get(url, null, function(retorno){
                         if(retorno.tipo == 'sucesso'){
-                            $('#treinamentoSucesso').html(retorno.msg);
+                            $('#turmaSucesso').html(retorno.msg);
                             
-                            $('#treinamentoSucesso').dialog({
+                            $('#turmaSucesso').dialog({
                                 buttons: {
                                     Ok: function() {
                                         $( this ).dialog( "close" );
                                     }
                                 }
                             });
-                            $('#treinamentoSucesso').dialog("open");    
-                            $('#div_treinamento').load('<?php echo $this->baseUrl('admin/treinamento/grid'); ?>');                                
+                            $('#turmaSucesso').dialog("open");    
+                            $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>');                                
                         } else {
-                            $('#treinamentoErro').html(retorno.msg);                            
-                            $('#treinamentoErro').dialog({
+                            $('#turmaErro').html(retorno.msg);                            
+                            $('#turmaErro').dialog({
                                 buttons: {
                                     Ok: function() {
                                         $( this ).dialog( "close" );
                                     }
                                 }
                             });
-                            $('#treinamentoErro').dialog("open");
-                            $('#div_treinamento').load('<?php echo $this->baseUrl('admin/treinamento/grid'); ?>');
+                            $('#turmaErro').dialog("open");
+                            $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>');
                         }                    
                     }, 'json');
                     $( this ).dialog("close");
                     
                 },
                 Cancel: function() {
-                    $('#div_treinamento').load('/treinamento/grid/');
+                    $('#div_turma').load('/turma/grid/');
                     $( this ).dialog( "close" );
                     
                 }
@@ -107,14 +107,14 @@
         $('.pagination a').click(function(){
            
             var href = $(this).attr('href');
-            $('#div_treinamento').load(href);
+            $('#div_turma').load(href);
             return false;
         });
         
         $('.btExcluir').click(function(){
             
             url = $(this).attr('href');
-            $("#dcTreinamento").dialog("open");
+            $("#dcTurma").dialog("open");
             
             return false;
         });

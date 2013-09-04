@@ -3,44 +3,39 @@
 /*
  * 
  * @author raniela.carvalho
- * @date 02/09/2013
+ * @date 03/09/2013
  * 
  */
 
-class Admin_TreinamentoController extends Zend_Controller_Action {
+class Admin_TurmaController extends Zend_Controller_Action {
 
     public function init() {
+        $this->turmaDbTable = new Application_Model_DbTable_Turma();
         $this->treinamentoDbTable = new Application_Model_DbTable_Treinamento();
-        $this->view->menu = 'treinamento';
+        $this->view->menu = 'turma';
     }
 
     public function indexAction() {
-        $this->view->titulo = "Cadastro de Treinamentos";
+        $this->view->titulo = "Cadastro de Turma";
     }
 
     public function gridAction() {
         $this->getHelper('layout')->disableLayout();
 
-        $nome_treinamento = $this->_getParam('nome_treinamento');
-        $nome_instrutor = $this->_getParam('nome_instrutor');
+        
+        $params['nome_treinamento'] = $this->_getParam('nome_treinamento');
 
-        $select = $this->treinamentoDbTable->select();
-        //print_r($nome . $tipo_usuario); die;
+        $params['data_inicial'] = $this->_helper->util->urldecodeGet($this->_getParam('data_inicial'));
+        $params['data_inicial'] = trim($this->_helper->util->reverseDate($params['data_inicial']));
 
-        if (!empty($nome_treinamento)) {
-            $select->where("tx_nome_treinamento LIKE ?", "%$nome_treinamento%");
-        }
-        if (!empty($nome_instrutor)) {
-            $select->where("tx_nome_instrutor LIKE ?", "%$nome_instrutor%");
-        }
+        $params['data_final'] = $this->_helper->util->urldecodeGet($this->_getParam('data_final'));
+        $params['data_final'] = trim($this->_helper->util->reverseDate($params['data_final']));
 
-        $select->order('tx_nome_instrutor');
+        $turmas = $this->_helper->util->utf8Encode($this->turmaDbTable->getDataGrid($params));
 
-        $treinamentos = $this->_helper->util->utf8Encode($select->query()->fetchAll());
+        print_r($turmas); die;
 
-        //print_r($usuarios); die;
-
-        $paginator = Zend_Paginator::factory($treinamentos);
+        $paginator = Zend_Paginator::factory($turmas);
         $paginator->setCurrentPageNumber($this->_getParam('page'));
         $paginator->setDefaultItemCountPerPage(5);
         $this->view->paginator = $paginator;
@@ -48,18 +43,21 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
 
     public function formAction() {
 
+        $autoCompleteTreinamentos = $this->treinamentoDbTable->getAutoCompleteTreinamentos();
+        $this->view->autoCompleteTreinamentos = $autoCompleteTreinamentos;
+
         if ($this->getRequest()->getParam('id')) {
 
             /* edicao de treinamento */
-            $this->view->titulo = "Edição de Treinamento";
+            $this->view->titulo = "Edição de Turma";
             $id = $this->getRequest()->getParam('id');
 
-            /* busca treinamento */
-            $treinamento = $this->treinamentoDbTable->fetchRow("id_treinamento = '{$id}'")->toArray();
+            /* busca turma */
+            $turma = $this->turmaDbTable->fetchRow("id_turma = '{$id}'")->toArray();
 
-            $this->view->treinamento = $this->_helper->util->utf8Encode($treinamento);
+            $this->view->turma = $this->_helper->util->utf8Encode($turma);
         } else {
-            $this->view->titulo = "Cadastro de Treinamento";
+            $this->view->titulo = "Cadastro de Turma";
         }
     }
 
@@ -68,9 +66,10 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
         $this->getHelper('layout')->disableLayout();
 
         try {
-            $treinamento = $this->_helper->util->utf8Decode($this->getRequest()->getPost());
+            $turma = $this->_helper->util->utf8Decode($this->getRequest()->getPost());
 
-            //print_r($treinamento); die;
+            $turma['dt_inicio_treinamento'] = ($this->_helper->util->reverseDate($turma['dt_inicio_treinamento']));
+            $turma['dt_termino_treinamento'] = ($this->_helper->util->reverseDate($turma['dt_termino_treinamento']));
 
             $id = null;
             if ($this->_getParam('id')) {
@@ -78,15 +77,15 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
             }
 
             if ($id != null) {
-                $this->treinamentoDbTable->update($treinamento, "id_treinamento = {$id}");
+                $this->turmaDbTable->update($turma, "id_turma = {$id}");
             } else {
-                $this->treinamentoDbTable->insert($treinamento);
+                $this->turmaDbTable->insert($turma);
             }
 
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Salvo com sucesso!',
-                'url' => '/admin/treinamento/index/'
+                'url' => '/admin/turma/index/'
             ));
         } catch (Exception $exc) {
             $this->_helper->json->sendJson(array(
@@ -102,12 +101,12 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
 
         try {
             $id = $this->getRequest()->getParam('id');
-            $this->treinamentoDbTable->delete("id_treinamento = $id");
+            $this->turmaDbTable->delete("id_turma = $id");
 
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Excluído com sucesso!',
-                'url' => '/admin/treinamento/index/'
+                'url' => '/admin/turma/index/'
             ));
         } catch (Exception $exc) {
 
