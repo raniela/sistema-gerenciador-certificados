@@ -1,6 +1,5 @@
 <?php
 /*
- * 
  * @author Cesar Augusto Vieira Giovani
  * @date 25/08/2013
  * 
@@ -328,9 +327,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
         
             $caminhoPlanilha = $diretorioFiles . "/" . $dado_aluno['url_planilha'];
             array_map('unlink', glob($caminhoPlanilha)); 
-            
-            $this->flashMessenger->addMessage('Alunos salvos com sucesso!');
-
+                        
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Alunos salvos com sucesso!',

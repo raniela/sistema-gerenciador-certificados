@@ -165,9 +165,11 @@
                     $('#mensagemAluno').dialog("open");
                 } else {
                     salva = true;
+                    encontrou = false;
                     $('.tx_salva-required').each(function () {
                         id_linha = $(this).attr('id_linha');                        
-                        if($(this).is(':checked')) {                            
+                        if($(this).is(':checked')) { 
+                            encontrou = true;
                             if(($('#nome-required'+id_linha).val() == '') || ($('#cpf-required'+id_linha).val() == '')) {                            
                                 salva = false;
                                 $(this).parent().parent().addClass('warning');
@@ -200,14 +202,36 @@
                             }
                         }
                     });
-                    
+                    if(encontrou == false) {
+                        $('#mensagemAluno').html("Selecione pelo menos UM aluno para realizar a importação!");
+                        $("#mensagemAluno").dialog({
+                            modal: true,
+                            buttons: {
+                                Ok: function() {
+                                    $(this).dialog("close");                                        
+                                }
+                            }
+                        });
+                        $('#mensagemAluno').dialog("open");
+                        return;
+                    }
                     if(salva) {
                         jQuery(form).ajaxSubmit({
                             dataType:  'json', 
                             success: function(r){
                                 if(r.tipo == 'sucesso'){
-                                    //$('#div_mensagem').html(r.msg);
-                                    window.location = r.url;
+                                    $('#mensagemAluno').html(r.msg);                            
+                                    $("#mensagemAluno").dialog({
+                                        modal: true,
+                                        buttons: {
+                                            Ok: function() {
+                                                $(this).dialog("close");
+                                                window.location = r.url;
+                                            }
+                                        }
+                                    });
+                                    $('#mensagemAluno').dialog("open");
+                                    //$('#div_mensagem').html(r.msg);                                    
                                 } else {
                                     $('#mensagemAluno').html(r.msg);                            
                                     $("#mensagemAluno").dialog({
