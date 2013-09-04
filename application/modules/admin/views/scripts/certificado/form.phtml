@@ -62,13 +62,34 @@
             
             <fieldset>
                 <legend>Dados Corpo</legend> 
-                
+                <label style="text-align: center">Corpo do Certificado</label>
                 <div class="control-group">
-                    <label class="control-label" for="certificado-tx_corpo">Corpo</label>
+                    
+                    <div class="control-label" for="certificado-tx_corpo">                    
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important;" id="inserir_nome_aluno" class="btn" value="Nome do Aluno">                    
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_cpf_aluno" class="btn" value="CPF do Aluno">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_nome_treinamento" class="btn" value="Nome do Treinamento">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_nome_instrutor" class="btn" value="Nome do Instrutor">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_funcao_instrutor" class="btn" value="Função do Instrutor">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_dt_inicio_treinamento" class="btn" value="Dt. Inicio Treinamento">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_dt_termino_treinamento" class="btn" value="Dt. Término Treinamento">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_carga_horaria" class="btn" value="Carga Horária">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_nome_responsavel" class="btn" value="Nome do Resp. Técnico">
+                    <br/><br/>
+                    <input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" id="inserir_funcao_responsavel" class="btn" value="Função do Resp. Técnico">
+                    </div>
+                    
                     <div class="controls">
                         <textarea class="input-xlarge required" style="width: 600px;height: 200px;" type="text" name="certificado[tx_corpo]" id="certificado-tx_corpo"></textarea>                        
-                    </div>
-                    <sub>[%nome_aluno%] = Nome do Aluno</sub>
+                    </div>                    
                 </div>                
             </fieldset>
             
@@ -154,6 +175,8 @@
 <script>    
     var dataForm = <?php echo Zend_Json::encode(array('aluno' => $this->aluno)); ?>;      
     
+    
+    
     function callBackPesquisarCliente(dataCliente) {        
         $('#aluno-id_cliente').val(dataCliente.id_cliente);
         if(dataCliente.tx_tipo_cliente == 'F') {
@@ -167,9 +190,49 @@
         }
     }
     
-    $(function(){   
+    $(function(){                 
         $('#form_aluno').populate(dataForm);
-                
+        
+        $('#inserir_nome_aluno').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%nome_aluno%]');            
+        });
+        
+        $('#inserir_cpf_aluno').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%cpf_aluno%]');            
+        });
+        
+        $('#inserir_nome_treinamento').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%nome_treinamento%]');            
+        });
+        
+        $('#inserir_nome_instrutor').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%nome_instrutor%]');            
+        });
+        
+        $('#inserir_funcao_instrutor').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%funcao_instrutor%]');            
+        });
+        
+        $('#inserir_dt_inicio_treinamento').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%dt_inicio_treinamento%]');            
+        });
+        
+        $('#inserir_dt_termino_treinamento').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%dt_termino_treinamento%]');            
+        });
+        
+        $('#inserir_carga_horaria').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%inserir_carga_horaria%]');            
+        });
+        
+        $('#inserir_nome_responsavel').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%nome_responsavel%]');            
+        });
+        
+        $('#inserir_funcao_responsavel').click(function(){
+            tinyMCE.execCommand('insertHTML',false, ' [%funcao_responsavel%]');            
+        });
+        
         $('#btLimparCliente').click(function() {
             $('.help-block').html('');
         });

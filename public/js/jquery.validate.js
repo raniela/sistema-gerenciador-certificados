@@ -207,7 +207,7 @@ $.extend($.validator, {
 		messages: {},
 		groups: {},
 		rules: {},
-		errorClass: "error",
+		errorClass: "fieldInvalid",
 		validClass: "valid",
 		errorElement: "label",
 		focusInvalid: true,
@@ -652,7 +652,7 @@ $.extend($.validator, {
 				if ( !this.labelContainer.append(label).length )
 					this.settings.errorPlacement
 						? this.settings.errorPlacement(label, $(element) )
-						: label.insertAfter(element);
+						: "";//label.insertAfter(element)
 			}
 			if ( !message && this.settings.success ) {
 				label.text("");
