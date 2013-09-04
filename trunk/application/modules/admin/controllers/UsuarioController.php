@@ -79,9 +79,8 @@ class Admin_UsuarioController extends Zend_Controller_Action {
         $this->getHelper('layout')->disableLayout();
 
         try {
-            $usuario = $this->getRequest()->getPost();
-
-            //print_r($usuario); die;
+            
+            $usuario = $this->_helper->util->utf8Decode($this->getRequest()->getPost());
 
             $usuario['tx_tipo_usuario'] = USUARIO_ADMIN;
 
