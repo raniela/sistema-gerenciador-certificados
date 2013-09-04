@@ -7,7 +7,7 @@
             <div class="control-group">
                 <label class="control-label" for="nome_treinamento">Treinamento</label>
                 <div class="controls">
-                    <input class="input-xlarge required" type="text" id="nome_treinamento"/>
+                    <input class="input-xlarge required" type="text" name="tx_nome_treinamento" id="nome_treinamento"/>
                     <input class="required" id="id_treinamento" name="id_treinamento" type="hidden" value=""/>
                 </div>
             </div>
@@ -39,7 +39,6 @@
     var dataForm = <?php echo Zend_Json::encode($this->turma); ?>;
     var autoCompleteTreinamentos = <?php echo Zend_Json::encode($this->autoCompleteTreinamentos); ?>;
     
-    alert(autoCompleteTreinamentos); 
     $(function(){
         
         $('#dt_inicio_treinamento').datepicker({dateFormat: 'dd/mm/yy'});

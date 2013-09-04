@@ -10,8 +10,8 @@
         <?php foreach ($this->paginator as $k => $turmas): ?>
         <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
             <td><?php echo $turmas['tx_nome_treinamento'] ?></td>
-            <td><?php echo $turmas['dt_inicio_treinamento'] ?></td>
-            <td><?php echo $turmas['dt_termino_treinamento'] ?></td>
+            <td><?php echo $this->String($turmas['dt_inicio_treinamento'])->reverseDate(); ?></td>
+            <td><?php echo $this->String($turmas['dt_termino_treinamento'])->reverseDate(); ?></td>
             <td>
                 <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/turma/form') ?>/id/<?php echo $turmas['id_turma'] ?>">
                     <img src="/img/edit-icon.gif" title="Editar registro" />
