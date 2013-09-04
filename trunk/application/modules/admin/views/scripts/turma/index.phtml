@@ -1,9 +1,9 @@
 <div class="container" style="margin-top: 50px">
-    <form class="form-horizontal well" action="/admin/treinamento/form" method="post">
+    <form class="form-horizontal well" action="/admin/turma/form" method="post">
         <fieldset>
             <legend>
                 <?php echo $this->titulo; ?>
-                <button id="novo_treinamento" style="float: right; margin-top: 2px" class="btn btn-primary" type="button">Novo Treinamento</button>
+                <button id="nova_turma" style="float: right; margin-top: 2px" class="btn btn-primary" type="button">Nova Turma</button>
             </legend>
 
             <div class="form-actions" style="padding-left: 20px!important">
@@ -20,11 +20,11 @@
                     </div>
                 </div> 
                 <div class="form-actions">
-                    <input class="btn btn-primary" id="btBuscarTreinamento" type="button" value="Buscar"/>
+                    <input class="btn btn-primary" id="btBuscarTurma" type="button" value="Buscar"/>
                 </div>
             </div>
         </fieldset>
-        <div id="div_treinamento" >
+        <div id="div_turma" >
 
         </div>
     </form>
@@ -35,17 +35,16 @@
 
     $(function(){
 
-        $('#novo_treinamento').on("click", function(event){
-            window.location = "/admin/treinamento/form";
+        $('#nova_turma').on("click", function(event){
+            window.location = "/admin/turma/form";
         });
        
-        $('#div_treinamento').load('<?php echo $this->baseUrl('admin/treinamento/grid'); ?>');
-        $('#btBuscarTreinamento').click(function(){
+        $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>');
+        $('#btBuscarTurma').click(function(){
             
             nome_treinamento = urlencodeGet($('#nome_treinamento').val());
-            nome_instrutor = urlencodeGet($('#nome_instrutor').val());
             
-            $('#div_treinamento').load('<?php echo $this->baseUrl('admin/treinamento/grid'); ?>'+'/nome_treinamento/' + nome_treinamento + '/nome_instrutor/' + nome_instrutor);
+            $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>'+'/nome_treinamento/' + nome_treinamento);
         });
         
     }); 

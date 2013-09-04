@@ -13,7 +13,7 @@
             <div class="control-group">
                 <label class="control-label" for="tx_descricao">Descrição</label>
                 <div class="controls">
-                    <input class="input-xlarge email" type="text" name="tx_descricao" id="tx_descricao" maxlength="65"/>
+                    <input class="input-xlarge" type="text" name="tx_descricao" id="tx_descricao" maxlength="65"/>
                 </div>
             </div>
             <div class="control-group">
@@ -34,9 +34,9 @@
             <hr style="margin-top: -10px">
             <div style="margin-left: 60px">
                 <label style="display: inline-block; margin-right: 10px" for="tx_nome_instrutor">Nome</label>
-                <input class="input-prepend" style="margin-right: 25px" type="text" name="tx_nome_instrutor" id="tx_nome_instrutor" value=""/>
+                <input class="input-prepend required" style="margin-right: 25px" type="text" name="tx_nome_instrutor" id="tx_nome_instrutor" value=""/>
                 <label style="display: inline-block; margin-right: 10px" for="tx_funcao_instrutor">Função</label>
-                <input class="input-prepend" style="margin-right: 25px" type="text" name="tx_funcao_instrutor" id="tx_funcao_instrutor" value=""/>
+                <input class="input-prepend required" style="margin-right: 25px" type="text" name="tx_funcao_instrutor" id="tx_funcao_instrutor" value=""/>
             </div>
 
 
@@ -47,7 +47,7 @@
                 <label style="display: inline-block; margin-right: 10px" for="tx_nome_responsavel_tecnico">Nome</label>
                 <input class="" style="margin-right: 25px" type="text" name="tx_nome_responsavel_tecnico" id="tx_nome_responsavel_tecnico" value=""/>
 
-                <label class="" style="display: inline-block; margin-right: 10px" for="tx_funcao_responsavel_tecnico">Registro</label>
+                <label class="" style="display: inline-block; margin-right: 10px" for="tx_registro_responsavel_tecnico">Registro</label>
                 <input class="input-prepend" style="margin-right: 25px"  type="text" name="tx_registro_responsavel_tecnico" id="tx_registro_responsavel_tecnico" value=""/>
 
                 <label class="" style="display: inline-block; margin-right: 10px" for="tx_funcao_responsavel_tecnico">Função</label>
@@ -62,47 +62,47 @@
     </form>
 </div>
 
-<div id="feedbackUsu">
+<div id="mensagemTreinamento">
     <p style="color: #000 !important"></p>
 </div>
 
 <script>
-    //var dataForm = <?php //echo Zend_Json::encode($this->usuario);                   ?>;
+    var dataForm = <?php echo Zend_Json::encode($this->treinamento); ?>;
     
     $(function(){
     
-        //$('#form_usuario').populate(dataForm);
+        $('#form_treinamento').populate(dataForm);
         
-                $('#form_usuario').validate({
-                    submitHandler: function(form) {
-                        jQuery(form).ajaxSubmit({
-                            dataType:  'json', 
-                            success: function(r){
-                                if(r.tipo == 'sucesso'){                    
-                                    $('#feedbackUsu p').html(r.msg);
-                                    $( "#feedbackUsu" ).dialog({
-                                        modal: true,
-                                        buttons: {
-                                            Ok: function() {
-                                                $(this).dialog("close");
-                                                window.location = r.url;
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    $('#feedbackUsu p').html(r.msg);
-                                    $('#feedbackUsu').dialog({
-                                        buttons: {
-                                            Ok: function() {
-                                                $( this ).dialog( "close" );
-                                            }
-                                        }
-                                    });
+        $('#form_treinamento').validate({
+            submitHandler: function(form) {
+                jQuery(form).ajaxSubmit({
+                    dataType:  'json', 
+                    success: function(r){
+                        if(r.tipo == 'sucesso'){                    
+                            $('#mensagemTreinamento p').html(r.msg);
+                            $( "#mensagemTreinamento" ).dialog({
+                                modal: true,
+                                buttons: {
+                                    Ok: function() {
+                                        $(this).dialog("close");
+                                        window.location = r.url;
+                                    }
                                 }
-                            } 
-                        });
+                            });
+                        } else {
+                            $('#mensagemTreinamento p').html(r.msg);
+                            $('#mensagemTreinamento').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                        }
                     } 
                 });
+            } 
+        });
     });
         
 </script>

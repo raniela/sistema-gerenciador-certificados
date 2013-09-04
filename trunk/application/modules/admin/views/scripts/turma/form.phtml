@@ -1,0 +1,98 @@
+<div class="container" style="margin-top: 50px">
+    <form id="form_turma" class="form-horizontal well" action="<?php echo $this->baseUrl('/admin/turma/salvar') ?>/id/<?php echo $this->turma['id_turma'] ?>" method="post">
+
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>
+
+            <div class="control-group">
+                <label class="control-label" for="nome_treinamento">Treinamento</label>
+                <div class="controls">
+                    <input class="input-xlarge required" type="text" id="nome_treinamento"/>
+                    <input class="required" id="id_treinamento" name="id_treinamento" type="hidden" value=""/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="dt_inicio_treinamento">Data Início</label>
+                <div class="controls">
+                    <input class="input-xlarge required" type="text" name="dt_inicio_treinamento" id="dt_inicio_treinamento" value=""/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="dt_termino_treinamento">Data Término</label>
+                <div class="controls">
+                    <input class="input-xlarge required" type="text" name="dt_termino_treinamento" id="dt_termino_treinamento" value=""/>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input class="btn btn-primary" id="btEnviar" type="submit" value="Salvar"/>
+                <input class="btn" id="btVoltar" onclick="window.back()" type="button" value="Voltar"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div id="mensagemTurma">
+    <p style="color: #000 !important"></p>
+</div>
+
+<script>
+    var dataForm = <?php echo Zend_Json::encode($this->turma); ?>;
+    var autoCompleteTreinamentos = <?php echo Zend_Json::encode($this->autoCompleteTreinamentos); ?>;
+    
+    alert(autoCompleteTreinamentos); 
+    $(function(){
+        
+        $('#dt_inicio_treinamento').datepicker({dateFormat: 'dd/mm/yy'});
+        $('#dt_termino_treinamento').datepicker({dateFormat: 'dd/mm/yy'});
+    
+        $('#form_turma').populate(dataForm);
+        
+        $('#nome_treinamento').autocomplete({
+            minLength: 0,
+            source: autoCompleteTreinamentos,
+            select: function(event, ui){
+                if(ui.item){
+                    $('#id_treinamento').val(ui.item.id);
+                }
+            },
+            change: function(event, ui){
+                if(!ui.item){
+                    $(this).val('');
+                    $('#id_treinamento').val('');
+                }
+            }
+        });
+        
+        $('#form_turma').validate({
+            submitHandler: function(form) {
+                jQuery(form).ajaxSubmit({
+                    dataType:  'json', 
+                    success: function(r){
+                        if(r.tipo == 'sucesso'){                    
+                            $('#mensagemTurma p').html(r.msg);
+                            $( "#mensagemTurma" ).dialog({
+                                modal: true,
+                                buttons: {
+                                    Ok: function() {
+                                        $(this).dialog("close");
+                                        window.location = r.url;
+                                    }
+                                }
+                            });
+                        } else {
+                            $('#mensagemTurma p').html(r.msg);
+                            $('#mensagemTurma').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                        }
+                    } 
+                });
+            } 
+        });
+    });
+        
+</script>
