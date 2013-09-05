@@ -6,26 +6,21 @@
                 <button id="nova_turma" style="float: right; margin-top: 2px" class="btn btn-primary" type="button">Nova Turma</button>
             </legend>
 
-            <div class="form-actions" style="padding-left: 20px!important">
+            <div class="form-actions" style="padding-left: 20px!important; margin-top: 0px">
                 <div class="control-group">
                     <label class="control-label" for="nome_treinamento">Nome do Treinamento</label>
                     <div class="controls">
                         <input class="input-xlarge" type="text" name="nome_treinamento" id="nome_treinamento" maxlength="18"/>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="data_inicial">Período</label>
-                    <div class="controls">
-                        <input class="input-xlarge" type="text" name="data_inicial" id="data_inicial" value=""/>
-                    </div>
+                <div style="margin-left: 72px">
+                    <label style="display: inline-block; margin-right: 16px" for="data_inicial">Data/Período</label>
+                    <input class="input-prepend input-medium" style="margin-right: 20px" type="text" name="data_inicial" id="data_inicial" value=""/>
+                    a
+                    <label style="display: inline-block; margin-right: 16px" for="data_final"></label>
+                    <input class="input-prepend input-medium" style="margin-right: 25px; margin-left: 15px" type="text"  name="data_final" id="data_final" value=""/>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="data_final"></label>
-                    <div class="controls">
-                        <input class="input-xlarge" type="text" name="data_final" id="data_final" value=""/>
-                    </div>
-                </div>
-                <div class="form-actions">
+                <div style="margin-bottom: -20px; margin-top: -0px" class="form-actions">
                     <input class="btn btn-primary" id="btBuscarTurma" type="button" value="Buscar"/>
                 </div>
             </div>

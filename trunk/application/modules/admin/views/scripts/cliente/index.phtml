@@ -8,33 +8,19 @@
             <!--            <div style="clear: both;"></div>-->
 
             <!-- INICIO dos campos de busca -->
-            <div class="form-actions" style="padding-left: 20px!important">
-                <div class="control-group dados_pessoa_juridica">
-                    <label class="control-label" for="cliente-tx_razao_social">Razão Social</label>
-                    <div class="controls">
-                        <input class="input-xlarge" type="text" name="cliente[tx_razao_social]" id="cliente-tx_razao_social" maxlength="60"/>
-                    </div>
+            <div class="form-actions" style="padding-left: 20px!important; margin-top: 0px">
+                <div class="dados_pessoa_juridica" style="margin-left: 72px; margin-bottom: 30px">
+                    <label style="display: inline-block; margin-right: 14px" for="cliente-tx_razao_social">Razão Social</label>
+                    <input class="input-prepend" style="margin-right: 25px" type="text" name="cliente[tx_razao_social]" maxlength="60" id="cliente-tx_razao_social"/>
+                    <label style="display: inline-block; margin-right: 10px" for="cliente-tx_cnpj">CNPJ</label>
+                    <input class="input-prepend cnpj validarCNPJ" style="margin-right: 25px" type="text" name="cliente[tx_cnpj]" id="cliente-tx_cnpj" maxlength="18"/>
                 </div>
 
-                <div class="control-group dados_pessoa_juridica">
-                    <label class="control-label" for="cliente-tx_cnpj">CNPJ</label>
-                    <div class="controls">
-                        <input class="input-xlarge cnpj validarCNPJ required" type="text" name="cliente[tx_cnpj]" id="cliente-tx_cnpj" maxlength="18"/>
-                    </div>
-                </div>
-
-                <div class="control-group dados_pessoa_fisica">
-                    <label class="control-label" for="cliente-tx_nome">Nome</label>
-                    <div class="controls">
-                        <input class="input-xlarge required" type="text" name="cliente[tx_nome]" id="cliente-tx_nome" maxlength="45"/>
-                    </div>
-                </div>
-
-                <div class="control-group dados_pessoa_fisica">
-                    <label class="control-label" for="cliente-tx_cpf">CPF</label>
-                    <div class="controls">
-                        <input class="input-xlarge required cpf validarCPF" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
-                    </div>
+                <div class="dados_pessoa_fisica" style="margin-left: 121px; margin-bottom: 30px">
+                    <label style="display: inline-block; margin-right: 14px" for="cliente-tx_nome">Nome</label>
+                    <input class="input-prepend required" style="margin-right: 25px" type="text" name="cliente[tx_nome]" id="cliente-tx_nome" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 10px" for="cliente-tx_cpf">CPF</label>
+                    <input class="input-prepend cpf validarCPF" style="margin-right: 25px" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
                 </div>
 
                 <div class="control-group">
@@ -46,7 +32,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-actions">
+                <div style="margin-bottom: -20px; margin-top: -20px" class="form-actions">
                     <input class="btn btn-primary" id="btBuscarCliente" type="button" value="Buscar"/>
                 </div>
 

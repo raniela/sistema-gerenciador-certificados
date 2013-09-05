@@ -19,7 +19,7 @@ class Admin_UsuarioController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $this->view->titulo = "Cadastro de Usuário";
+        $this->view->titulo = "Listagem de Usuários";
     }
 
     public function gridAction() {
