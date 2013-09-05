@@ -22,7 +22,7 @@ class Admin_TurmaController extends Zend_Controller_Action {
     public function gridAction() {
         $this->getHelper('layout')->disableLayout();
 
-
+        /* pega dados do filtro de pesquisa */
         $params['nome_treinamento'] = $this->_getParam('nome_treinamento');
 
         $params['data_inicial'] = $this->_helper->util->urldecodeGet($this->_getParam('data_inicial'));

@@ -15,7 +15,7 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $this->view->titulo = "Cadastro de Treinamentos";
+        $this->view->titulo = "Listagem de Treinamentos";
     }
 
     public function gridAction() {
