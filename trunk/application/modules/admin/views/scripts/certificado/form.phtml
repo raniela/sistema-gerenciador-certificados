@@ -34,7 +34,11 @@
                     <div class="controls">                        
                         <input class="input-xlarge" type="file" name="fileUploadLogoTopoEsquerda" id="fileUploadLogoTopoEsquerda"/>
                         <div id="preview_logo_topo_esquerda" type="button" style="width: 150px;text-align: center;padding-top:10px">
-                            
+                            <?php 
+                            if(!empty($this->topo_esquerdo)) {
+                                echo $this->topo_esquerdo;
+                            }
+                            ?>
                         </div>
                     </div>                    
                 </div>
@@ -44,7 +48,11 @@
                     <div class="controls">                        
                         <input class="input-xlarge" type="file" name="fileUploadLogoTopoCentro" id="fileUploadLogoTopoCentro"/>
                         <div id="preview_logo_topo_centro" type="button" style="width: 150px;text-align: center;padding-top:10px">
-                            
+                            <?php 
+                            if(!empty($this->topo_centro)) {
+                                echo $this->topo_centro;
+                            }
+                            ?>
                         </div>
                     </div>                    
                 </div>
@@ -54,7 +62,11 @@
                     <div class="controls">                        
                         <input class="input-xlarge" type="file" name="fileUploadLogoTopoDireita" id="fileUploadLogoTopoDireita"/>
                         <div id="preview_logo_topo_direita" type="button" style="width: 150px;text-align: center;padding-top:10px">
-                            
+                            <?php 
+                            if(!empty($this->topo_direito)) {
+                                echo $this->topo_direito;
+                            }
+                            ?>
                         </div>
                     </div>                    
                 </div>
@@ -99,42 +111,42 @@
                 <div class="control-group">
                     <label class="control-label" for="certificado-tx_nome_assinatura1">Nome Assinatura 1</label>
                     <div class="controls">
-                        <input class="input-xlarge required" type="text" name="certificado[tx_nome_assinatura1]" id="certificado-tx_nome_assinatura1" maxlength="45"/>
+                        <input class="input-xlarge" type="text" name="certificado[tx_nome_assinatura1]" id="certificado-tx_nome_assinatura1" maxlength="45"/>
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="certificado-tx_tratamento_assinatura1">Tratamento Assinat. 1</label>
                     <div class="controls">
-                        <input class="input-xlarge required" type="text" name="certificado[tx_tratamento_assinatura1]" id="certificado-tx_tratamento_assinatura1" maxlength="45"/>
+                        <input class="input-xlarge" type="text" name="certificado[tx_tratamento_assinatura1]" id="certificado-tx_tratamento_assinatura1" maxlength="45"/>
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="certificado-tx_nome_assinatura2">Nome Assinatura 2</label>
                     <div class="controls">
-                        <input class="input-xlarge required" type="text" name="certificado[tx_nome_assinatura2]" id="certificado-tx_nome_assinatura2" maxlength="45"/>
+                        <input class="input-xlarge" type="text" name="certificado[tx_nome_assinatura2]" id="certificado-tx_nome_assinatura2" maxlength="45"/>
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="certificado-tx_tratamento_assinatura2">Tratamento Assinat. 2</label>
                     <div class="controls">
-                        <input class="input-xlarge required" type="text" name="certificado[tx_tratamento_assinatura2]" id="certificado-tx_tratamento_assinatura2" maxlength="45"/>
+                        <input class="input-xlarge" type="text" name="certificado[tx_tratamento_assinatura2]" id="certificado-tx_tratamento_assinatura2" maxlength="45"/>
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="certificado-tx_nome_assinatura3">Nome Assinatura 3</label>
                     <div class="controls">
-                        <input class="input-xlarge required" type="text" name="certificado[tx_nome_assinatura3]" id="certificado-tx_nome_assinatura3" maxlength="45"/>
+                        <input class="input-xlarge" type="text" name="certificado[tx_nome_assinatura3]" id="certificado-tx_nome_assinatura3" maxlength="45"/>
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="certificado-tx_tratamento_assinatura3">Tratamento Assinat. 3</label>
                     <div class="controls">
-                        <input class="input-xlarge required" type="text" name="certificado[tx_tratamento_assinatura3]" id="certificado-tx_tratamento_assinatura3" maxlength="45"/>
+                        <input class="input-xlarge" type="text" name="certificado[tx_tratamento_assinatura3]" id="certificado-tx_tratamento_assinatura3" maxlength="45"/>
                     </div>
                 </div>
                 
@@ -143,6 +155,11 @@
                     <div class="controls">                        
                         <input class="input-xlarge" type="file" name="fileUploadLogoRodapeEsquerdo" id="fileUploadLogoRodapeEsquerdo"/>
                         <div id="preview_logo_rodape_esquerdo" type="button" style="width: 150px;text-align: center;padding-top:10px">                            
+                            <?php 
+                            if(!empty($this->rodape_esquerdo)) {
+                                echo $this->rodape_esquerdo;
+                            }
+                            ?>
                         </div>
                     </div>                    
                 </div>
@@ -152,6 +169,11 @@
                     <div class="controls">                        
                         <input class="input-xlarge" type="file" name="fileUploadLogoRodapeDireito" id="fileUploadLogoRodapeDireito"/>
                         <div id="preview_logo_rodape_direito" type="button" style="width: 150px;text-align: center;padding-top:10px">                            
+                            <?php 
+                            if(!empty($this->rodape_direito)) {
+                                echo $this->rodape_direito;
+                            }
+                            ?>
                         </div>
                     </div>                    
                 </div>
@@ -173,9 +195,34 @@
 </div>
 
 <script>    
-    var dataForm = <?php echo Zend_Json::encode(array('aluno' => $this->aluno)); ?>;      
+    var dataForm = <?php echo Zend_Json::encode(array('certificado' => $this->certificado)); ?>;      
     
-    
+    function removerLogo(obj) {
+        tipo_logo = $(obj).attr('tipo_logo');
+        
+        if(tipo_logo == 'topo_esquerdo') {
+            $('#preview_logo_topo_esquerda').html('');
+            $('#certificado-tx_url_logotipo_cabecalho_esquerda').val('');
+        } else {
+            if(tipo_logo == 'topo_centro') {
+                $('#preview_logo_topo_centro').html('');
+                $('#certificado-tx_url_logotipo_cabecalho_centro').val('');
+            } else {
+                if(tipo_logo == 'topo_direito') {
+                    $('#preview_logo_topo_direita').html('');
+                    $('#certificado-tx_url_logotipo_cabecalho_direita').val('');
+                } else {
+                    if(tipo_logo == 'rodape_esquerdo') {
+                        $('#preview_logo_rodape_esquerdo').html('');
+                        $('#certificado-tx_url_logotipo_rodape_esquerda').val('');
+                    } else {
+                        $('#preview_logo_rodape_direito').html('');
+                        $('#certificado-tx_url_logotipo_rodape_direita').val('');
+                    }
+                }
+            }
+        }
+    }
     
     function callBackPesquisarCliente(dataCliente) {        
         $('#aluno-id_cliente').val(dataCliente.id_cliente);
@@ -191,7 +238,7 @@
     }
     
     $(function(){                 
-        $('#form_aluno').populate(dataForm);
+        $('#form_certificado').populate(dataForm);
         
         $('#inserir_nome_aluno').click(function(){
             tinyMCE.execCommand('insertHTML',false, ' [%nome_aluno%]');            
@@ -402,9 +449,9 @@
         
         $('#form_certificado').validate({
             submitHandler: function(form) {
-                if($('#aluno-id_cliente').val() == '') {
-                    $('#mensagemAluno').html("Selecione o Cliente responsável por esse Aluno");                            
-                    $("#mensagemAluno").dialog({
+            if(tinyMCE.activeEditor.getContent() == '') {
+                    $('#mensagemCertificado').html("Preencha o corpo do certificado");                            
+                    $("#mensagemCertificado").dialog({
                         modal: true,
                         buttons: {
                             Ok: function() {
@@ -412,17 +459,28 @@
                             }
                         }
                     });
-                    $('#mensagemAluno').dialog("open");
+                    $('#mensagemCertificado').dialog("open");
                 } else {
+                    tinyMCE.get("certificado-tx_corpo").save();
                     jQuery(form).ajaxSubmit({
                         dataType:  'json', 
                         success: function(r){
                             if(r.tipo == 'sucesso'){
-                                //$('#div_mensagem').html(r.msg);
-                                window.location = r.url;
+                                $('#mensagemCertificado').html(r.msg);                            
+                                $("#mensagemCertificado").dialog({
+                                    modal: true,
+                                    buttons: {
+                                        Ok: function() {
+                                            $(this).dialog("close");
+                                            window.location = r.url;
+                                        }
+                                    }
+                                });
+                                $('#mensagemCertificado').dialog("open");
+                                
                             } else {
-                                $('#mensagemAluno').html(r.msg);                            
-                                $("#mensagemAluno").dialog({
+                                $('#mensagemCertificado').html(r.msg);                            
+                                $("#mensagemCertificado").dialog({
                                     modal: true,
                                     buttons: {
                                         Ok: function() {
@@ -430,7 +488,7 @@
                                         }
                                     }
                                 });
-                                $('#mensagemAluno').dialog("open");                            
+                                $('#mensagemCertificado').dialog("open");                            
                             }
                         } 
                     });

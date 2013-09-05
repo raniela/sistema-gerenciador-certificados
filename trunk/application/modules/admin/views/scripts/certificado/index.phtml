@@ -9,11 +9,18 @@
             <!-- INICIO dos campos de busca -->
             <div class="form-actions" style="padding-left: 20px!important">
                 <div class="control-group">
-                    <label class="control-label" for="certificado-tx_nome_modelo">Nome</label>
+                    <label class="control-label" for="certificado-tx_nome_modelo">Nome do Modelo</label>
                     <div class="controls">
                         <input class="input-xlarge" type="text" name="certificado[tx_nome_modelo]" id="certificado-tx_nome_modelo" maxlength="30"/>
                     </div>
-                </div>                                
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_titulo">Título do Modelo</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="certificado[tx_titulo]" id="certificado-tx_titulo" maxlength="45"/>
+                    </div>
+                </div>
                                 
                 <input class="btn btn-primary" id="btBuscarCertificado" type="button" value="Buscar"/>
             </div>
@@ -28,12 +35,12 @@
 
 <script>
     $(function(){                                             
-        //$('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');
-        $('#btBuscarAluno').click(function(){            
-            tx_nome_aluno = urlencodeGet($('#aluno-tx_nome_aluno').val());            
-            tx_cpf = urlencodeGet($('#aluno-tx_cpf').val());                        
+        $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');
+        $('#btBuscarCertificado').click(function(){            
+            tx_nome_modelo = urlencodeGet($('#certificado-tx_nome_modelo').val());            
+            tx_titulo = urlencodeGet($('#certificado-tx_titulo').val());                        
             
-            $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>'+'/tx_nome_aluno/' + tx_nome_aluno + '/tx_cpf/' + tx_cpf);
+            $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>'+'/tx_nome_modelo/' + tx_nome_modelo + '/tx_titulo/' + tx_titulo);
         });
         
         //Carrega formulario de novo aluno com jquery
