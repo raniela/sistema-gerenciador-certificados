@@ -12,10 +12,8 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $this->view->msg = $this->flashMessenger->getMessages();
         
         $this->adpter = Zend_Db_Table_Abstract::getDefaultAdapter();        
-                
-        $this->clienteDbTable = new Application_Model_DbTable_Cliente();        
-        $this->usuarioDbTable = new Application_Model_DbTable_Usuario();                
-        $this->alunoDbTable = new Application_Model_DbTable_Aluno();
+                        
+        $this->certificadoDbTable = new Application_Model_DbTable_Certificado();
         
         $this->view->menu = 'certificado';
     }
@@ -28,14 +26,14 @@ class Admin_CertificadoController extends Zend_Controller_Action {
     public function gridAction() {
         $this->getHelper('layout')->disableLayout();
         
-        $params['tx_nome_aluno'] = $this->_helper->util->utf8Decode($this->_helper->util->urldecodeGet($this->_getParam('tx_nome_aluno')));
-        $params['tx_cpf'] = $this->_helper->util->urldecodeGet($this->_getParam('tx_cpf'));
+        $params['tx_nome_modelo'] = $this->_helper->util->utf8Decode($this->_helper->util->urldecodeGet($this->_getParam('tx_nome_modelo')));
+        $params['tx_titulo'] = $this->_helper->util->utf8Decode($this->_helper->util->urldecodeGet($this->_getParam('tx_titulo')));        
                 
-        $alunos = $this->alunoDbTable->getDataGrid($params);
+        $certificados = $this->certificadoDbTable->getDataGrid($params);
                         
-        $alunos = $this->_helper->util->utf8Encode($alunos);        
+        $certificados = $this->_helper->util->utf8Encode($certificados);        
         //print_r($alunos);die();
-        $paginator = Zend_Paginator::factory($alunos);
+        $paginator = Zend_Paginator::factory($certificados);
         $paginator->setCurrentPageNumber($this->_getParam('page'));
         $paginator->setDefaultItemCountPerPage(10);
         $this->view->paginator = $paginator;
@@ -50,14 +48,32 @@ class Admin_CertificadoController extends Zend_Controller_Action {
             $this->view->titulo = "Edição de Modelo de Certificado";
             $id = $this->getRequest()->getParam('id');
                                     
-            //busca os dados do aluno
-            $aluno = $this->alunoDbTable->fetchRow("id_aluno = '{$id}'")->toArray();
-            $id_cliente = $aluno['id_cliente'];
-            $cliente = $this->clienteDbTable->fetchRow("id_cliente = '{$id_cliente}'")->toArray();            
+            //busca os dados do modelo de certificado
+            $certificado = $this->certificadoDbTable->fetchRow("id_certificado = '{$id}'")->toArray();
+                        
+            if(!empty($certificado['tx_url_logotipo_cabecalho_esquerda'])) {
+                $this->view->topo_esquerdo = $this->_getHTMLfotoAlunoComPath($certificado['tx_url_logotipo_cabecalho_esquerda'],'cabecalho','topo_esquerdo');
+            }
+            
+            if(!empty($certificado['tx_url_logotipo_cabecalho_centro'])) {
+                $this->view->topo_centro = $this->_getHTMLfotoAlunoComPath($certificado['tx_url_logotipo_cabecalho_centro'],'cabecalho','topo_centro');
+            }
+            
+            if(!empty($certificado['tx_url_logotipo_cabecalho_direita'])) {
+                $this->view->topo_direito = $this->_getHTMLfotoAlunoComPath($certificado['tx_url_logotipo_cabecalho_direita'],'cabecalho','topo_direito');
+            }
+                        
+            
+            if(!empty($certificado['tx_url_logotipo_rodape_esquerda'])) {
+                $this->view->rodape_esquerdo = $this->_getHTMLfotoAlunoComPath($certificado['tx_url_logotipo_rodape_esquerda'],'rodape','rodape_esquerdo');
+            }
+            
+            if(!empty($certificado['tx_url_logotipo_rodape_direita'])) {
+                $this->view->rodape_direito = $this->_getHTMLfotoAlunoComPath($certificado['tx_url_logotipo_rodape_direita'],'rodape','rodape_direito');
+            }
             
             //Envia dados do cliente para a View
-            $this->view->aluno = $this->_helper->util->utf8Encode($aluno);
-            $this->view->cliente = $this->_helper->util->utf8Encode($cliente);            
+            $this->view->certificado = $this->_helper->util->utf8Encode($certificado);            
         } else {
             /**
              * Cadastro do registro
@@ -71,56 +87,85 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $this->getHelper('viewRenderer')->setNoRender();
         $this->getHelper('layout')->disableLayout();
         
-        $aluno = $this->_helper->util->utf8Decode($this->getRequest()->getPost('aluno')); 
-                
+        $certificado = $this->_helper->util->utf8Decode($this->getRequest()->getPost('certificado'));                
+        
         $salva = true;
         
-        if(empty($aluno['id_aluno'])) {
-            $alunoExistente = $this->alunoDbTable->fetchRow("tx_cpf = '{$aluno['tx_cpf']}'");
+        if(empty($certificado['id_certificado'])) {
+            $certificadoExistente = $this->certificadoDbTable->fetchRow("tx_nome_modelo = '{$certificado['tx_nome_modelo']}'");
         } else {
-            $alunoExistente = $this->alunoDbTable->fetchRow("tx_cpf = '{$aluno['tx_cpf']}' AND id_aluno <> '{$aluno['id_aluno']}'");
+            $certificadoExistente = $this->certificadoDbTable->fetchRow("tx_nome_modelo = '{$certificado['tx_nome_modelo']}' AND id_certificado <> '{$certificado['id_certificado']}'");
         }
         
-        if(!empty($alunoExistente)) {
+        if(!empty($certificadoExistente)) {
             $salva = false;
         }
         
         if(!$salva) {            
             $this->_helper->json->sendJson(array(
                 'tipo' => 'erro',
-                'msg' => 'Aluno já existente com esse CPF, verifique!',
+                'msg' => 'Modelo já existente com esse Nome, verifique!',
                 //'url' => '/admin/usuario/index/'
             ));
         } else {
             $this->adpter->beginTransaction();
             
             try {                                
-                if (!empty($aluno['id_aluno'])) {
-                    $id_aluno = $aluno['id_aluno'];                                        
-                    $this->alunoDbTable->update($aluno, "id_aluno = {$id_aluno}");                                       
-                } else {
-                    $usuario['tx_nome'] = $aluno['tx_nome_aluno'];
-                    $login = str_replace(".", "", $aluno['tx_cpf']);
-                    $login = str_replace("-", "", $login); 
-                    $usuario['tx_login'] = "ALUNO_".$login;                                        
-                    $usuario['tx_senha'] = '12345';                                       
-                    $usuario['tipo'] = 3;
-                    $id_usuario = $this->usuarioDbTable->insert($usuario);
+                if (!empty($certificado['id_certificado'])) {
+                    $id_certificado = $certificado['id_certificado'];       
                     
-                    $aluno['id_usuario'] = $id_usuario;
+                    $certificadoAntigo = $this->certificadoDbTable->fetchRow("id_certificado = '{$id_certificado}'")->toArray();
                     
-                    $this->alunoDbTable->insert($aluno);                                                                                
+                    $diretorioImgCab = realpath(APPLICATION_PATH . "/../public/img/logos_certificado/cabecalho");
+                    $diretorioImgRod = realpath(APPLICATION_PATH . "/../public/img/logos_certificado/rodape");           
+
+                    if(!empty($certificadoAntigo['tx_url_logotipo_cabecalho_esquerda']) && ($certificadoAntigo['tx_url_logotipo_cabecalho_esquerda'] != $certificado['tx_url_logotipo_cabecalho_esquerda'])) {
+                        $arrayLogo = explode(".", $certificadoAntigo['tx_url_logotipo_cabecalho_esquerda']);
+
+                        $caminhoPlanilha = $diretorioImgCab . "\\" . "{$arrayLogo[0]}*.*";                
+                        array_map('unlink', glob($caminhoPlanilha)); 
+                    }
+
+                    if(!empty($certificadoAntigo['tx_url_logotipo_cabecalho_centro']) && ($certificadoAntigo['tx_url_logotipo_cabecalho_centro'] != $certificado['tx_url_logotipo_cabecalho_centro'])) {
+                        $arrayLogo = explode(".", $certificadoAntigo['tx_url_logotipo_cabecalho_centro']);
+
+                        $caminhoPlanilha = $diretorioImgCab . "/" . "{$arrayLogo[0]}*.*";
+                        array_map('unlink', glob($caminhoPlanilha)); 
+                    }
+
+                    if(!empty($certificadoAntigo['tx_url_logotipo_cabecalho_direita']) && ($certificadoAntigo['tx_url_logotipo_cabecalho_direita'] != $certificado['tx_url_logotipo_cabecalho_direita'])) {
+                        $arrayLogo = explode(".", $certificadoAntigo['tx_url_logotipo_cabecalho_direita']);
+
+                        $caminhoPlanilha = $diretorioImgCab . "/" . "{$arrayLogo[0]}*.*";
+                        array_map('unlink', glob($caminhoPlanilha)); 
+                    }
+
+                    if(!empty($certificadoAntigo['tx_url_logotipo_rodape_esquerda']) && ($certificadoAntigo['tx_url_logotipo_rodape_esquerda'] != $certificado['tx_url_logotipo_rodape_esquerda'])) {
+                        $arrayLogo = explode(".", $certificadoAntigo['tx_url_logotipo_rodape_esquerda']);
+
+                        $caminhoPlanilha = $diretorioImgRod . "/" . "{$arrayLogo[0]}*.*";
+                        array_map('unlink', glob($caminhoPlanilha)); 
+                    }
+
+                    if(!empty($certificadoAntigo['tx_url_logotipo_rodape_direita']) && ($certificadoAntigo['tx_url_logotipo_rodape_direita'] != $certificado['tx_url_logotipo_rodape_direita'])) {
+                        $arrayLogo = explode(".", $certificadoAntigo['tx_url_logotipo_rodape_direita']);
+
+                        $caminhoPlanilha = $diretorioImgRod . "/" . "{$arrayLogo[0]}*.*";
+                        array_map('unlink', glob($caminhoPlanilha)); 
+                    }
+                    
+                    $this->certificadoDbTable->update($certificado, "id_certificado = {$id_certificado}");                                       
+                } else {                                        
+                    $this->certificadoDbTable->insert($certificado);                                                                                
                 }            
 
                 /** commita */
-                $this->adpter->commit();
-
-                $this->flashMessenger->addMessage('Salvo com sucesso!');
+                $this->adpter->commit();                
 
                 $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
                     'msg' => 'Salvo com sucesso!',
-                    'url' => '/admin/aluno/index/'
+                    'url' => '/admin/certificado/index/'
                 ));
             } catch (Exception $exc) {
                 /** executa rollback */
@@ -144,11 +189,48 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         try {
             $id = $this->getRequest()->getParam('id');
             
-            $aluno = $this->alunoDbTable->fetchRow("id_aluno = '{$id}'")->toArray();
-            $id_usuario = $aluno['id_usuario'];
+            $certificado = $this->certificadoDbTable->fetchRow("id_certificado = '{$id}'")->toArray();
             
-            $this->alunoDbTable->delete("id_aluno = $id");
-            $this->usuarioDbTable->delete("id_usuario = $id_usuario");
+            
+            $diretorioImgCab = realpath(APPLICATION_PATH . "/../public/img/logos_certificado/cabecalho");
+            $diretorioImgRod = realpath(APPLICATION_PATH . "/../public/img/logos_certificado/rodape");           
+            
+            if(!empty($certificado['tx_url_logotipo_cabecalho_esquerda'])) {
+                $arrayLogo = explode(".", $certificado['tx_url_logotipo_cabecalho_esquerda']);
+
+                $caminhoPlanilha = $diretorioImgCab . "\\" . "{$arrayLogo[0]}*.*";                
+                array_map('unlink', glob($caminhoPlanilha)); 
+            }
+            
+            if(!empty($certificado['tx_url_logotipo_cabecalho_centro'])) {
+                $arrayLogo = explode(".", $certificado['tx_url_logotipo_cabecalho_centro']);
+
+                $caminhoPlanilha = $diretorioImgCab . "/" . "{$arrayLogo[0]}*.*";
+                array_map('unlink', glob($caminhoPlanilha)); 
+            }
+            
+            if(!empty($certificado['tx_url_logotipo_cabecalho_direita'])) {
+                $arrayLogo = explode(".", $certificado['tx_url_logotipo_cabecalho_direita']);
+
+                $caminhoPlanilha = $diretorioImgCab . "/" . "{$arrayLogo[0]}*.*";
+                array_map('unlink', glob($caminhoPlanilha)); 
+            }
+            
+            if(!empty($certificado['tx_url_logotipo_rodape_esquerda'])) {
+                $arrayLogo = explode(".", $certificado['tx_url_logotipo_rodape_esquerda']);
+
+                $caminhoPlanilha = $diretorioImgRod . "/" . "{$arrayLogo[0]}*.*";
+                array_map('unlink', glob($caminhoPlanilha)); 
+            }
+            
+            if(!empty($certificado['tx_url_logotipo_rodape_direita'])) {
+                $arrayLogo = explode(".", $certificado['tx_url_logotipo_rodape_direita']);
+
+                $caminhoPlanilha = $diretorioImgRod . "/" . "{$arrayLogo[0]}*.*";
+                array_map('unlink', glob($caminhoPlanilha)); 
+            }
+            
+            $this->certificadoDbTable->delete("id_certificado = $id");            
                                     
             /** commita */
             $this->adpter->commit();
@@ -216,7 +298,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $urlArquivo = $this->_helper->upload->file('fileUploadLogoTopoEsquerda', null, $extensoesPermitidas, $diretorioFiles.'/');        
         $diretorio = $diretorioFiles.'/'.$urlArquivo;
         
-        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo);
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo,'cabecalho','topo_esquerdo');
         
         if(!empty($urlArquivo)) {
             $this->_helper->json->sendJson(array(
@@ -272,7 +354,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $urlArquivo = $this->_helper->upload->file('fileUploadLogoTopoCentro', null, $extensoesPermitidas, $diretorioFiles.'/');        
         $diretorio = $diretorioFiles.'/'.$urlArquivo;
         
-        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo);
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo,'cabecalho','topo_centro');
         
         if(!empty($urlArquivo)) {
             $this->_helper->json->sendJson(array(
@@ -329,7 +411,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $urlArquivo = $this->_helper->upload->file('fileUploadLogoTopoDireita', null, $extensoesPermitidas, $diretorioFiles.'/');        
         $diretorio = $diretorioFiles.'/'.$urlArquivo;
         
-        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo);
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo,'cabecalho','topo_direito');
         
         if(!empty($urlArquivo)) {
             $this->_helper->json->sendJson(array(
@@ -386,7 +468,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $urlArquivo = $this->_helper->upload->file('fileUploadLogoRodapeEsquerdo', null, $extensoesPermitidas, $diretorioFiles.'/');        
         $diretorio = $diretorioFiles.'/'.$urlArquivo;
         
-        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo, 'rodape');
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo, 'rodape','rodape_esquerdo');
         
         if(!empty($urlArquivo)) {
             $this->_helper->json->sendJson(array(
@@ -443,7 +525,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $urlArquivo = $this->_helper->upload->file('fileUploadLogoRodapeDireito', null, $extensoesPermitidas, $diretorioFiles.'/');        
         $diretorio = $diretorioFiles.'/'.$urlArquivo;
         
-        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo, 'rodape');
+        $htmlImagem = $this->_getHTMLfotoAlunoComPath($urlArquivo, 'rodape','rodape_direito');
         
         if(!empty($urlArquivo)) {
             $this->_helper->json->sendJson(array(
@@ -460,11 +542,11 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         }                       
     }
     
-    private function _getHTMLfotoAlunoComPath($urlImagem, $pastaLogo = 'cabecalho') {
+    private function _getHTMLfotoAlunoComPath($urlImagem, $pastaLogo = 'cabecalho', $tipo_logo = null) {
         if (!empty($urlImagem)) {
-            return '<div>Pré Visualização</div>' .
+            return '<div>Pré Visualização</div>' .                    
                     '<div style="position:relative;">' . $this->_helper->util->getIMGResizeComPath($urlImagem, '110', '80',null, $pastaLogo) . ''.
-                ''.'</div>';
+                ''.'</div>'.'<input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" class="btn removerImagem" tipo_logo="'.$tipo_logo.'" onClick="removerLogo(this)" value="Remover">';
         }
     }                
 }

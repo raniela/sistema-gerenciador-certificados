@@ -1,30 +1,28 @@
 <table class="table table-bordered table-striped table-hover">
     <tr>
         <th>Nome</th>
-        <th>CPF</th>
-        <th>Cargo</th>        
-        <th>Ações</th>
+        <th>Título</th>        
+        <th>Ações</th>        
     </tr>
 
     <tr class="alt" >
-        <?php foreach ($this->paginator as $k => $aluno): ?>
+        <?php foreach ($this->paginator as $k => $certificado): ?>
         <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
             <td>
                 <?php                     
-                    echo $aluno['tx_nome_aluno'];                    
+                    echo $certificado['tx_nome_modelo'];                    
                 ?>
             </td>
             <td>
                 <?php                     
-                    echo $aluno['tx_cpf'];                    
+                    echo $certificado['tx_titulo'];                    
                 ?>
-            </td>            
-            <td><?php echo $aluno['tx_cargo']; ?></td>            
+            </td>                        
             <td>
-                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/aluno/form')?>/id/<?php echo $aluno['id_aluno'] ?>">
+                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/certificado/form')?>/id/<?php echo $certificado['id_certificado'] ?>">
                     <img src="/img/edit-icon.gif" title="Editar registro" />
                 </a>
-                <a class="btExcluir" href="./aluno/excluir/id/<?php echo $aluno['id_aluno'] ?>">
+                <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/certificado/excluir') ?>/id/<?php echo $certificado['id_certificado'] ?>">
                     <img src="/img/delete-icon.gif" title="Excluir Registro" />
                 </a>
             </td>
@@ -32,28 +30,30 @@
     <?php endforeach; ?>
 
 </table>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'my_pagination_control.phtml'); ?>
 
 <div id="confirmacao">
-    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse Aluno?
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse Certificado?
 </div>
 
-<div id="erroAlu">
+<div id="erroCert">
     Erro    
 </div>
 
-<div id="sucessoAlu">
+<div id="sucessoCert">
     Sucesso    
 </div>
 
-<script>        
+<script>
+    var url = "";
     $(function(){       
                 
-        $( "#sucessoAlu" ).dialog({
+        $( "#sucessoCert" ).dialog({
             modal: true,
             autoOpen: false
         });
         
-        $( "#erroAlu" ).dialog({
+        $( "#erroCert" ).dialog({
             modal: true,
             autoOpen: false
         });
@@ -77,35 +77,35 @@
                 "Ok": function() {
                     $.get(url, null, function(retorno){
                         if(retorno.tipo == 'sucesso'){
-                            $('#sucessoAlu').html(retorno.msg);
+                            $('#sucessoCert').html(retorno.msg);
                             
-                            $('#sucessoAlu').dialog({
+                            $('#sucessoCert').dialog({
                                 buttons: {
                                     Ok: function() {
                                         $( this ).dialog( "close" );
                                     }
                                 }
                             });
-                            $('#sucessoAlu').dialog("open");    
-                            $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');                                
+                            $('#sucessoCert').dialog("open");    
+                            $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');                                
                         } else {
-                            $('#erroAlu').html(retorno.msg);                            
-                            $('#erroAlu').dialog({
+                            $('#erroCert').html(retorno.msg);                            
+                            $('#erroCert').dialog({
                                 buttons: {
                                     Ok: function() {
                                         $( this ).dialog( "close" );
                                     }
                                 }
                             });
-                            $('#erroAlu').dialog("open");
-                            $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');
+                            $('#erroCert').dialog("open");
+                            $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');
                         }                    
                     }, 'json');
                     $( this ).dialog("close");
                     
                 },
                 "Cancel": function() {
-                    $('#divResAluno').load('<?php echo $this->baseUrl('admin/aluno/grid'); ?>');
+                    $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');
                     $( this ).dialog( "close" );
                         
                 }
