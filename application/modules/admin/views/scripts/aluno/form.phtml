@@ -5,15 +5,15 @@
             <input type="hidden" name="aluno[id_aluno]" id="aluno-id_aluno"/>
             <input type="hidden" class="required" name="aluno[id_cliente]" id="aluno-id_cliente"/>
 
-            <fieldset>
-                <legend>Dados do Cliente</legend>
-
-                <div class="control-group">
-                    <input class="btn" id="btModalCliente" type="button" value="Buscar"/>
+            <fieldset style="margin-top: -40px">
+                <h5 style="margin-top: 40px">Dados do Cliente</h5>
+                <hr style="margin-top: -10px">
+                <div align="right" class="control-group">
+                    <input class="btn btn-primary" id="btModalCliente" type="button" value="Buscar Cliente"/>
                     <input class="btn" id="btLimparCliente" type="button" value="Limpar"/>
                 </div>
 
-                <div class="control-group">
+                <div style="margin-top: -50px" class="control-group">
                     <label class="control-label" for="">Nome/Razão Social</label>
                     <div class="controls">
                         <span class="help-block label" id="dados-cliente_tx_nome_razao_social"></span>
@@ -35,35 +35,23 @@
                 </div>
             </fieldset>                                                   
 
-            <fieldset>
-                <legend>Dados do Aluno</legend>                
-                <div class="control-group">
-                    <label class="control-label" for="aluno-tx_nome_aluno">Nome</label>
-                    <div class="controls">
-                        <input class="input-xlarge required" type="text" name="aluno[tx_nome_aluno]" id="aluno-tx_nome_aluno" maxlength="45"/>
-                    </div>
-                </div> 
-
-                <div class="control-group">
-                    <label class="control-label" for="aluno-tx_rg">RG</label>
-                    <div class="controls">
-                        <input class="input-xlarge" type="text" name="aluno[tx_rg]" id="aluno-tx_rg" maxlength="9"/>
-                    </div>
+            <fieldset style="margin-top: -40px">
+                <h5 style="margin-top: 40px">Dados do Aluno</h5>
+                <hr style="margin-top: -10px">         
+                <div style="margin-left: 100px; margin-bottom: 20px">
+                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_nome_aluno">Nome</label>
+                    <input class="input-prepend input-large required" style="margin-right: 25px" type="text" name="aluno[tx_nome_aluno]" id="aluno-tx_nome_aluno" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_cargo">Profissão</label>
+                    <input class="input-prepend input-medium" style="margin-right: 25px" type="text" name="aluno[tx_cargo]" id="aluno-tx_cargo" maxlength="45"/>
+                </div>
+                
+                <div style="margin-left: 118px">
+                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_rg">RG</label>
+                    <input class="input-prepend input-medium required" style="margin-right: 117px" type="text" name="aluno[tx_rg]" id="aluno-tx_rg" maxlength="9"/>
+                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_cpf">CPF</label>
+                    <input class="input-prepend input-medium required cpf validarCPF" style="margin-right: 25px" type="text" name="aluno[tx_cpf]" id="aluno-tx_cpf" maxlength="14"/>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="aluno-tx_cpf">CPF</label>
-                    <div class="controls">
-                        <input class="input-xlarge required cpf validarCPF" type="text" name="aluno[tx_cpf]" id="aluno-tx_cpf" maxlength="14"/>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="aluno-tx_cargo">Profissão</label>
-                    <div class="controls">
-                        <input class="input-xlarge" type="text" name="aluno[tx_cargo]" id="aluno-tx_cargo" maxlength="45"/>
-                    </div>
-                </div>                                               
             </fieldset>             
 
 
@@ -114,55 +102,55 @@ echo $this->render('partials/modal-pesquisa-cliente.phtml');
         });                  
         
 <?php if (!empty($this->cliente)) { ?>
-                    callBackPesquisarCliente(<?php echo Zend_Json::encode($this->cliente) ?>);
+            callBackPesquisarCliente(<?php echo Zend_Json::encode($this->cliente) ?>);
 <?php } ?>
             
-                $('#form_aluno').validate({
-                    submitHandler: function(form) {
-                        if($('#aluno-id_cliente').val() == '') {
-                            $('#mensagemAluno').html("Selecione o Cliente responsável por esse Aluno");                            
-                            $("#mensagemAluno").dialog({
-                                modal: true,
-                                buttons: {
-                                    Ok: function() {
-                                        $(this).dialog("close");                                        
-                                    }
-                                }
-                            });
-                            $('#mensagemAluno').dialog("open");
-                        } else {
-                            jQuery(form).ajaxSubmit({
-                                dataType:  'json', 
-                                success: function(r){
-                                    if(r.tipo == 'sucesso'){
-                                        $('#mensagemAluno').html(r.msg);
-                                        $("#mensagemAluno").dialog({
-                                            modal: true,
-                                            buttons: {
-                                                Ok: function() {
-                                                    $(this).dialog("close");
-                                                    window.location = r.url;
-                                                }
-                                            }
-                                        });
-                                
-                                    } else {
-                                        $('#mensagemAluno').html(r.msg);                            
-                                        $("#mensagemAluno").dialog({
-                                            modal: true,
-                                            buttons: {
-                                                Ok: function() {
-                                                    $(this).dialog("close");                                        
-                                                }
-                                            }
-                                        });
-                                        $('#mensagemAluno').dialog("open");                            
-                                    }
-                                } 
-                            });
+        $('#form_aluno').validate({
+            submitHandler: function(form) {
+                if($('#aluno-id_cliente').val() == '') {
+                    $('#mensagemAluno').html("Selecione o Cliente responsável por esse Aluno");                            
+                    $("#mensagemAluno").dialog({
+                        modal: true,
+                        buttons: {
+                            Ok: function() {
+                                $(this).dialog("close");                                        
+                            }
                         }
-                    } 
-                });
-            });
+                    });
+                    $('#mensagemAluno').dialog("open");
+                } else {
+                    jQuery(form).ajaxSubmit({
+                        dataType:  'json', 
+                        success: function(r){
+                            if(r.tipo == 'sucesso'){
+                                $('#mensagemAluno').html(r.msg);
+                                $("#mensagemAluno").dialog({
+                                    modal: true,
+                                    buttons: {
+                                        Ok: function() {
+                                            $(this).dialog("close");
+                                            window.location = r.url;
+                                        }
+                                    }
+                                });
+                                
+                            } else {
+                                $('#mensagemAluno').html(r.msg);                            
+                                $("#mensagemAluno").dialog({
+                                    modal: true,
+                                    buttons: {
+                                        Ok: function() {
+                                            $(this).dialog("close");                                        
+                                        }
+                                    }
+                                });
+                                $('#mensagemAluno').dialog("open");                            
+                            }
+                        } 
+                    });
+                }
+            } 
+        });
+    });
         
 </script>
