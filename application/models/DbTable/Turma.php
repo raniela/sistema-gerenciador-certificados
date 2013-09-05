@@ -29,19 +29,21 @@ class Application_Model_DbTable_Turma extends Zend_Db_Table_Abstract {
             $select->where("tr.tx_nome_treinamento LIKE '%{$params['nome_treinamento']}%'");
         }
 
-        if (!empty($params['data_inicial'])) {
+        if (!empty($params['data_inicial']) && empty($params['data_final'])) {
             $select->where("tu.dt_inicio_treinamento >= '{$params['data_inicial']}'");
         }
 
-        if (!empty($params['data_final'])) {
-            $select->where("tu.dt_termino_treinamento <= '{$params['data_final']}'");
+        if (!empty($params['data_final']) && empty($params['data_inicial'])) {
+            $select->where("tu.dt_termino_treinamento <= '{$params['data_final']}' OR tu.dt_inicio_treinamento <= '{$params['data_final']}'");
+        }
+
+        if (!empty($params['data_inicial']) && !empty($params['data_final'])) {
+            $select->where("(tu.dt_inicio_treinamento >= '{$params['data_inicial']}' AND tu.dt_inicio_treinamento <= '{$params['data_final']}') OR (tu.dt_termino_treinamento >= '{$params['data_inicial']}')");
         }
 
         if (!empty($params['id_turma'])) {
             $select->where("tu.id_turma = '{$params['id_turma']}'");
         }
-
-        //print_r($select->query()->fetchAll()); die;
 
         return $select->query()->fetchAll();
     }
