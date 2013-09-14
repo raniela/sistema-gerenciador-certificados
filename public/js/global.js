@@ -17,8 +17,7 @@ $(function(){
     });
     
     $('.numeric').numeric();
-
-    $('.data').mask("99/99/9999");
+    
     $(".data").datepicker({
         dateFormat:'dd/mm/yy',
         dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
@@ -29,11 +28,13 @@ $(function(){
         nextText: 'Próximo',
         prevText: 'Anterior'
     });       
+    $('.data').mask("99/99/9999");
 
     $(".telefone").mask('(00) 0000-0000');
     $(".cnpj").mask("99.999.999/9999-99");
     $(".cpf").mask("999.999.999-99");
     $(".cep").mask("99.999-999");
+    $(".dataMask").mask("99/99/9999");
 });
 
 $.fn.populateSelectJson = function(data)

@@ -346,6 +346,22 @@ class Admin_AlunoController extends Zend_Controller_Action {
               
     }
     
+    //Utilizada para buscar os alunos em tela modal 
+    public function pesquisarAlunoAction() {
+        try {
+            $this->getHelper('layout')->disableLayout();
+            
+            $params = $this->_getAllParams();
+            $params = $this->_helper->util->urldecodeGet($params);            
+            $params = $this->_helper->util->utf8Decode($params);                                                                        
+            $params['limit'] = 5;                        
+                                                
+            $this->view->dataGrid = $this->_helper->util->utf8Encode($this->alunoDbTable->getDataGrid($params));                                                 
+        } catch (Exception $e) {  
+            echo $e->getMessage();
+            die('ERRO|Ocorreu um erro ao tentar executar a operação. Tente novamente. Caso persista, contate o administrador do sistema.');
+        }
+    }
     
 }
 

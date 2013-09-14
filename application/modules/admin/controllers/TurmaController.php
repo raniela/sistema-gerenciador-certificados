@@ -141,6 +141,32 @@ class Admin_TurmaController extends Zend_Controller_Action {
             }
         }
     }
+    
+    //Utilizada para buscar as turmas em tela modal 
+    public function pesquisarTurmaAction() {
+        try {
+            $this->getHelper('layout')->disableLayout();
+            
+            $params = $this->_getAllParams();
+            $params = $this->_helper->util->urldecodeGet($params);            
+            $params = $this->_helper->util->utf8Decode($params);                                                                        
+            $params['limit'] = 5;                        
+            
+            if(!empty($params['data_inicial'])) {
+                $params['data_inicial'] = $this->_helper->util->reverseDate($params['data_inicial']);
+            }
+            
+            if(!empty($params['data_final'])) {
+                $params['data_final'] = $this->_helper->util->reverseDate($params['data_final']);
+            }
+            
+            $this->view->dataGrid = $this->_helper->util->utf8Encode($this->turmaDbTable->getDataGrid($params)); 
+                        
+        } catch (Exception $e) {  
+            echo $e->getMessage();
+            die('ERRO|Ocorreu um erro ao tentar executar a operação. Tente novamente. Caso persista, contate o administrador do sistema.');
+        }
+    }
 
 }
 

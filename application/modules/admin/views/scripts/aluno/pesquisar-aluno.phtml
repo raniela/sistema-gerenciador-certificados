@@ -1,0 +1,58 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>CPF</th>        
+        <th>Ações</th>
+    </tr>
+    <?php foreach ($this->dataGrid as $k => $aluno): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php                    
+                    echo $aluno['tx_nome_aluno'];                    
+                ?>
+            </td>
+            <td>
+                <?php                     
+                    echo $aluno['tx_cpf'];                    
+                ?>
+            </td>            
+            <td>                                                      
+                <button class="btn selecionar-aluno" 
+                    type="button" 
+                    id_aluno="<?=$aluno['id_aluno']?>"                                
+                    tx_nome_aluno="<?=$aluno['tx_nome_aluno']?>"
+                    tx_cpf="<?=$aluno['tx_cpf']?>"
+                    >
+                        SELECIONAR
+                </button>                                 
+            </td>
+            
+        </tr>    
+    <?php endforeach; ?>    
+</table>    
+
+<?php if (count($this->dataGrid) > 0): ?>
+    <script>
+        $(document).ready(function(){                        
+            $('.selecionar-aluno').click(function() {
+                /** captura os campos do aluno para a chamada de callBack*/
+                                                
+                id_aluno = $(this).attr('id_aluno');
+                tx_nome_aluno = $(this).attr('tx_nome_aluno');
+                tx_cpf = $(this).attr('tx_cpf');                
+                
+                dataAluno =  jQuery.parseJSON('{' 
+                    + '"id_aluno":"' + id_aluno+ '"' 
+                    + ',"tx_nome_aluno":"' + tx_nome_aluno+ '"'
+                    + ',"tx_cpf":"' + tx_cpf+ '"'                   
+                    + '}');
+                
+                /** a funcao de callBack é escrita no phtml que está chamando essa modal, ou seja, 
+                    apenas chamo uma função que espero existir na pagina onde está renderizada essa modal */
+                callBackPesquisarAluno(dataAluno);
+                closeModalPesquisaAluno();
+                return false;	                                                              
+            });                                            
+        });
+    </script>
+<?php endif; ?>

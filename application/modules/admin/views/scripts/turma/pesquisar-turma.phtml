@@ -1,0 +1,67 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Treinamento</th>
+        <th>Data Início</th>        
+        <th>Data Fim</th>        
+        <th>Ações</th>
+    </tr>
+    <?php foreach ($this->dataGrid as $k => $turma): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php                     
+                    echo $turma['tx_nome_treinamento'];
+                ?>
+            </td>
+            <td>
+                <?php 
+                    echo $this->String($turma['dt_inicio_treinamento'])->reverseDate();
+                ?>
+            </td>
+            <td>
+                <?php 
+                    echo $this->String($turma['dt_termino_treinamento'])->reverseDate();
+                ?>
+            </td>            
+            <td>                                                      
+                <button class="btn selecionar-turma" 
+                    type="button" 
+                    id_turma="<?=$turma['id_turma']?>"
+                    tx_nome_treinamento="<?=$turma['tx_nome_treinamento']?>"                                
+                    dt_inicio_treinamento="<?=$turma['dt_inicio_treinamento']?>"
+                    dt_termino_treinamento="<?=$turma['dt_termino_treinamento']?>"
+                    >
+                        SELECIONAR
+                </button>                                 
+            </td>
+            
+        </tr>    
+    <?php endforeach; ?>    
+</table>    
+
+<?php if (count($this->dataGrid) > 0): ?>
+    <script>
+        $(document).ready(function(){                        
+            $('.selecionar-turma').click(function() {
+                /** captura os campos do aluno para a chamada de callBack*/
+                                                
+                id_turma = $(this).attr('id_turma');
+                tx_nome_treinamento = $(this).attr('tx_nome_treinamento');
+                dt_inicio_treinamento = $(this).attr('dt_inicio_treinamento');
+                dt_termino_treinamento = $(this).attr('dt_termino_treinamento');
+                
+                dataTurma =  jQuery.parseJSON('{' 
+                    + '"id_turma":"' + id_turma+ '"' 
+                    + ',"tx_nome_treinamento":"' + tx_nome_treinamento+ '"'
+                    + ',"dt_inicio_treinamento":"' + dt_inicio_treinamento+ '"'
+                    + ',"dt_termino_treinamento":"' + dt_termino_treinamento+ '"'                    
+                    + '}');
+                
+                /** a funcao de callBack é escrita no phtml que está chamando essa modal, ou seja, 
+                    apenas chamo uma função que espero existir na pagina onde está renderizada essa modal */
+                callBackPesquisarTurma(dataTurma);
+                closeModalPesquisaTurma();
+                return false;	                                                              
+            });                                            
+        });
+    </script>
+<?php endif; ?>

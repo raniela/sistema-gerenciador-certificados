@@ -84,6 +84,7 @@
     $(function(){                           
         $('#btLimparCliente').click(function() {
             $('.help-block').html('');
+            $('#aluno-id_cliente').val('');
         });
         
         $('#btModalCliente').click(function() {
@@ -153,6 +154,7 @@
                 $('.danger').removeClass('warning');
                 salva = true;
                 if($('#aluno-id_cliente').val() == '') {
+                    salva = false;
                     $('#mensagemAluno').html("Selecione o Cliente responsável por esses Alunos");                            
                     $("#mensagemAluno").dialog({
                         modal: true,
@@ -163,8 +165,7 @@
                         }
                     });
                     $('#mensagemAluno').dialog("open");
-                } else {
-                    salva = true;
+                } else {                    
                     encontrou = false;
                     $('.tx_salva-required').each(function () {
                         id_linha = $(this).attr('id_linha');                        
