@@ -1,0 +1,93 @@
+<fieldset style="margin-top: -40px">
+    <h5 style="margin-top: 40px">Dados dos Alunos</h5>
+    <hr style="margin-top: -10px">
+    
+    <div align="right" class="control-group">
+        <input class="btn btn-primary" id="btModalAluno" type="button" value="Buscar Aluno"/>        
+    </div>
+    
+    <table id="tblAlunos" class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Aluno</th>
+        <th>CPF</th>        
+        <th>Ações</th>
+    </tr>
+    <?php foreach ($this->matriculas as $k => $matricula): ?>
+        <tr>
+            <td>
+                <?php                     
+                    echo $matricula['tx_nome_aluno'];
+                ?>
+            </td>
+            <td>
+               <?php                     
+                    echo $matricula['tx_cpf'];
+                ?>
+            </td>                      
+            <td style="text-align: center">   
+                <input type="hidden" class="id_aluno" name="alunos[]" value="<?=$matricula['id_aluno']?>">
+                <input class="btn btRemover" type="button" value="Remover"/>
+            </td>            
+        </tr>    
+    <?php endforeach; ?>    
+    </table>    
+</fieldset>   
+
+<div id="mensagemAlunosGrid"></div>
+<?php    
+    echo $this->render('partials/modal-pesquisa-aluno.phtml');
+?>
+
+<script>
+    function callBackPesquisarAluno(dataAluno) {
+        adiciona = true;
+        $('.id_aluno').each(function(){
+            if(dataAluno.id_aluno == $(this).val()) {
+                adiciona = false;
+            }
+        });
+        
+        if(adiciona) {
+            htmlAluno = "<tr>" 
+                            + "<td>"
+                                + dataAluno.tx_nome_aluno
+                            + "</td>"
+                            + "<td>"
+                                + dataAluno.tx_cpf
+                            + "</td>"
+                            + "<td style='text-align: center'>"
+                                + '<input type="hidden" class="id_aluno" name="alunos[]" value="'+dataAluno.id_aluno+'">'
+                                + '<input class="btn btRemover" type="button" value="Remover"/>'
+                            + "</td>"
+                      + "</tr>";
+            $("#tblAlunos tr:last").after(htmlAluno);
+        } else {
+            $('#mensagemAlunosGrid').html("Aluno já presentes não serão adicionados novamente.");                
+            $('#mensagemAlunosGrid').dialog({
+                modal: true,
+                buttons: {
+                    "Ok": function() {
+                        $(this).dialog("close");                            
+                    }
+                }
+            });
+            $('#mensagemAlunosGrid').dialog("open");
+        }
+    }
+    
+    $(function(){
+        $('#botaoSubmit').show();
+        
+        $('#btModalAluno').click(function() {
+            openModalPesquisaAluno();
+        });
+        
+        $('.btRemover').click(function () {
+            $(this).parent().parent().remove();
+        });
+        
+        $('#mensagemAlunosGrid').dialog({
+            autoOpen: false
+        });  
+    });
+</script>

@@ -60,8 +60,13 @@
                             <li class="usuario">
                                 <a href="<?php echo $this->baseUrl('admin/usuario'); ?>" onclick="">Usuários</a>
                             </li>
-                            <li class="turma">
-                                <a href="<?php echo $this->baseUrl('admin/turma'); ?>" onclick="">Turmas</a>
+                            <li class="dropdown turma">                                
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Turmas<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->baseUrl('admin/turma'); ?>">Manutençao de Turmas</a></li>
+                                    <li><a href="<?php echo $this->baseUrl('admin/matricula/matricula-alunos'); ?>">Matriculas de Alunos</a></li>
+                                    <li><a href="<?php echo $this->baseUrl('admin/matricula/'); ?>">Manutenção de Matrículas</a></li>
+                                </ul>
                             </li>
                             <li class="dropdown certificado">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Certificados<b class="caret"></b></a>

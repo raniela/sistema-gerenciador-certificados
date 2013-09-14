@@ -1,0 +1,95 @@
+<div id="dialog-pesquisa-turma" title="PESQUISA DE TURMA" style="display:none; padding:0px;">            
+    <!-- INICIO dos campos de busca -->
+    <div class="form-actions" style="padding-left: 20px!important">
+        <div class="control-group">
+            <label class="control-label" for="selecionar-turma-tx_nome_treinamento">Treinamento</label>
+            <div class="controls">
+                <input class="input-xlarge" type="text" name="selecionar-turma[tx_nome_treinamento]" id="selecionar-turma-tx_nome_treinamento" maxlength="45"/>
+            </div>
+        </div>
+                        
+        <div>
+            <label class="control-label" for="selecionar-turma-dt_inicio_treinamento">Data/Período</label>
+            <input class="input-prepend input-medium data" style="margin-right: 20px" type="text" name="selecionar-turma[dt_inicio_treinamento]" id="selecionar-turma-dt_inicio_treinamento" value=""/>
+            à
+            <label style="display: inline-block; margin-right: 16px" for="selecionar-turma-dt_termino_treinamento"></label>
+            <input class="input-prepend input-medium data" style="margin-right: 25px; margin-left: 15px" type="text"  name="selecionar-turma[dt_termino_treinamento]" id="selecionar-turma-dt_termino_treinamento" value=""/>
+        </div>
+        
+        <input class="btn btn-primary" id="btLocalizarTurma" onclick="localizarTurma()" type="button" value="Localizar"/>
+    </div>
+    <!-- FIM dos campos de busca --> 
+    
+    <fieldset style="min-height:425px">
+        <div id='div-grid-pesquisar-turma'></div>
+    </fieldset>
+</div>
+
+<div id="avisoPesquisaTurma" title="ATENÇÃO">    
+</div>            
+            
+<script>
+    function configModalPesquisaTurma(){                
+        /** configura a modal */
+        $("#dialog-pesquisa-turma").dialog({
+            autoOpen: false,
+            height: '600',
+            width: '800',          
+            modal: true,
+            resizable: false,
+            position: ['center','center'],
+            closeOnEscape: true           
+        });
+    }        
+    
+    function closeModalPesquisaTurma(){			
+        /** elimina a modal da memória */
+        $("#dialog-pesquisa-turma").dialog("close");
+        /** fecha a modal ativando o click do botão de fechar */
+        $('#dialog-pesquisa-turma').prev('.ui-dialog-titlebar-close').click();               
+    }
+
+    function openModalPesquisaTurma(){
+        configModalPesquisaTurma();
+        $("#dialog-pesquisa-turma").dialog("open");
+    }
+    function localizarTurma() {                
+        tx_nome_treinamento = urlencodeGet($.trim($('#selecionar-turma-tx_nome_treinamento').val()));
+        dt_inicio_treinamento = urlencodeGet($.trim($('#selecionar-turma-dt_inicio_treinamento').val()));                
+        dt_termino_treinamento = urlencodeGet($.trim($('#selecionar-turma-dt_termino_treinamento').val()));        
+        
+        if(tx_nome_treinamento.length >= 3) {            
+            $(this).attr('disabled',true);
+            url = '<?php echo $this->baseUrl('/admin/turma'); ?>/pesquisar-turma/tx_nome_treinamento/'+tx_nome_treinamento+'/data_inicial/'+dt_inicio_treinamento+'/data_final/'+dt_termino_treinamento;
+            ShowMsgAguarde();
+            $('#div-grid-pesquisar-turma').load(url, function(data){
+                $('#btLocalizarTurma').attr('disabled',false);
+                CloseMsgAguarde();
+            });
+        } else {
+            $('#avisoPesquisaTurma').html('Insira no mínimo 3 caracteres no Treinamento para realizar a busca!');                
+            $('#avisoPesquisaTurma').dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $(this).dialog("close");                            
+                    }
+                }
+            });                                
+            $('#avisoPesquisaTurma').dialog("open");
+        }
+    }
+            
+    $(document).ready(function(){            
+        $('#avisoPesquisaTurma').dialog({
+            autoOpen: false
+        });                                      
+                        
+        //para todos os inputs da modal de selecionar o orientador, caso pressionado o enter deve ativar a pesquisa
+        $('#dialog-pesquisa-turma input').keypress(function(event){
+            if(event.which == 13){				
+                $('#btLocalizarTurma').click();
+            }
+        });               
+    });
+</script>
