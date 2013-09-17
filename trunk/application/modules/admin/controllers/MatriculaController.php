@@ -98,7 +98,7 @@ class Admin_MatriculaController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Alunos matriculados com sucesso!',
-                'url' => '/admin/aluno/index/'
+                'url' => '/admin/matricula/index/'
             ));
         } catch (Exception $exc) {
             if ($exc->getCode() == 23000) {

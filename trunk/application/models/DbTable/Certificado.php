@@ -35,11 +35,11 @@ class Application_Model_DbTable_Certificado extends Zend_Db_Table_Abstract {
             $select->where("c.id_certificado = '{$params['id_certificado']}'");
         }                                       
         
-        if(!empty($params['tx_nome'])) {
+        if(!empty($params['tx_nome_modelo'])) {
             $select->where("UPPER(c.tx_nome_modelo) LIKE UPPER('%{$params['tx_nome_modelo']}%')");
         }
         
-        if(!empty($params['tx_razao_social'])) {
+        if(!empty($params['tx_titulo'])) {
             $select->where("UPPER(c.tx_titulo) LIKE UPPER('%{$params['tx_titulo']}%')");
         }               
         
