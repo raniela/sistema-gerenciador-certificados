@@ -14,6 +14,9 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $this->adpter = Zend_Db_Table_Abstract::getDefaultAdapter();        
                         
         $this->certificadoDbTable = new Application_Model_DbTable_Certificado();
+        $this->certificadoEmitidoDbTable = new Application_Model_DbTable_CertificadoEmitido();
+        
+        $this->matriculaDbTable = new Application_Model_DbTable_Matricula();
         
         $this->view->menu = 'certificado';
     }
@@ -548,7 +551,122 @@ class Admin_CertificadoController extends Zend_Controller_Action {
                     '<div style="position:relative;">' . $this->_helper->util->getIMGResizeComPath($urlImagem, '110', '80',null, $pastaLogo) . ''.
                 ''.'</div>'.'<input type="button" style="font-size: 12px!important;line-height: 15px!important;padding: 5px 10px!important" class="btn removerImagem" tipo_logo="'.$tipo_logo.'" onClick="removerLogo(this)" value="Remover">';
         }
-    }                
+    }
+    
+    //Utilizada para buscar os certificados em tela modal 
+    public function pesquisarCertificadoAction() {
+        try {
+            $this->getHelper('layout')->disableLayout();
+            
+            $params = $this->_getAllParams();
+            $params = $this->_helper->util->urldecodeGet($params);            
+            $params = $this->_helper->util->utf8Decode($params);                                                                        
+            $params['limit'] = 5;                        
+                                    
+            $this->view->dataGrid = $this->_helper->util->utf8Encode($this->certificadoDbTable->getDataGrid($params)); 
+                        
+        } catch (Exception $e) {  
+            echo $e->getMessage();
+            die('ERRO|Ocorreu um erro ao tentar executar a operação. Tente novamente. Caso persista, contate o administrador do sistema.');
+        }
+    }
+    
+    public function gerarCertificadosAlunosAction() {
+        $this->view->titulo = "Emitir Certificados dos Alunos Matriculados";
+    }
+    
+    public function gridMatriculaTurmaAction()
+    {
+        $this->getHelper('layout')->disableLayout();
+        
+        $id_turma = $this->_getParam('id_turma');                                       
+        
+        $matriculas = $this->matriculaDbTable->getDataGrid(array('id_turma'=>$id_turma));                                                        
+                        
+        $this->view->matriculas = $this->_helper->util->utf8Encode($matriculas);                 
+    }
+    
+    public function salvarCertificadosGeradosAction() {
+        $this->getHelper('viewRenderer')->setNoRender();
+        $this->getHelper('layout')->disableLayout();
+        
+        $matricula = $this->_helper->util->utf8Decode($this->getRequest()->getPost('matricula')); 
+        $certificados = $this->_helper->util->utf8Decode($this->getRequest()->getPost('certificados'));                                             
+        
+        $this->adpter->beginTransaction();
+        try {                             
+            $id_turma = $matricula['id_turma'];
+            $id_certificado = $matricula['id_certificado'];            
+            
+            $certificadoEmitido['id_certificado'] = $id_certificado;
+            $certificadoEmitido['dt_emissao_certificado'] = date('Y-m-d');            
+            foreach($certificados as $id_matricula => $nr_registro_certificado) {
+                $certificadoEmitido['id_matricula'] = $id_matricula;
+                $certificadoEmitido['nr_registro_certificado'] = $nr_registro_certificado;
+                
+                $this->certificadoEmitidoDbTable->delete("id_certificado = $id_certificado AND id_matricula = $id_matricula");
+                
+                $this->certificadoEmitidoDbTable->insert($certificadoEmitido);
+            }                                 
+            
+            /** commita */
+            $this->adpter->commit();                       
+                        
+            $this->_helper->json->sendJson(array(
+                'tipo' => 'sucesso',
+                'msg' => 'Certificados gerados com sucesso!',
+                'url' => '/admin/certificado/index/'
+            ));
+        } catch (Exception $exc) {
+            if ($exc->getCode() == 23000) {
+                $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => "Esses registros possuem vínculos e não podem ser excluídos",
+                ));
+            } else {
+                $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => "Ocorreu um erro ao tentar executar a operacao, contate o administrador!" . $exc,
+                ));
+            }                                       
+        }
+              
+    }
+    
+    public function pesquisarAction() {
+        $this->view->titulo = "Listagem de Certificados Emitidos";
+    }
+    
+    public function gridPesquisarAction()
+    {
+        $this->getHelper('layout')->disableLayout();
+        
+        $params = $this->_helper->util->utf8Decode($this->getAllParams());
+        
+        $params['data_inicial'] = $this->_helper->util->urldecodeGet($this->_getParam('data_inicial'));
+        $params['data_inicial'] = trim($this->_helper->util->reverseDate($params['data_inicial']));
+
+        $params['data_final'] = $this->_helper->util->urldecodeGet($this->_getParam('data_final'));
+        $params['data_final'] = trim($this->_helper->util->reverseDate($params['data_final']));                                       
+        
+        if($params['tx_tipo_cliente'] == 'F') {
+            $params['tx_razao_social'] = null;
+            $params['[tx_cnpj'] = null;
+        } else {
+            $params['tx_nome_cliente'] = null;
+            $params['tx_cpf_cliente'] = null;
+        }                
+        
+        $certificadosEmitidos = $this->certificadoEmitidoDbTable->getDataGridPesquisar($params);                                                        
+                                        
+        $paginator = Zend_Paginator::factory($this->_helper->util->utf8Encode($certificadosEmitidos));
+                
+        
+        
+        $paginator->setCurrentPageNumber($this->_getParam('page'));
+        $paginator->setDefaultItemCountPerPage(5);
+        $this->view->paginator = $paginator;                
+    }
 }
 
 ?>

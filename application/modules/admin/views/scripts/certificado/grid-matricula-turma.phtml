@@ -1,0 +1,56 @@
+<fieldset style="margin-top: -40px">
+    <h5 style="margin-top: 40px">Alunos Matriculados na Turma</h5>
+    <hr style="margin-top: -10px">        
+    
+    <table id="tblAlunos" class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Aluno</th>
+        <th>CPF</th>        
+        <th>Nº Reg. Certificado</th>
+        <th>Ações</th>
+    </tr>
+    <?php foreach ($this->matriculas as $k => $matricula): ?>
+        <tr>
+            <td>
+                <?php                     
+                    echo $matricula['tx_nome_aluno'];
+                ?>
+            </td>
+            <td>
+               <?php                     
+                    echo $matricula['tx_cpf'];
+                ?>
+            </td> 
+            <td>
+               <?php                     
+                    $nr_registro_certificado = md5($matricula['id_matricula']);
+                ?>
+                <input class="input-xlarge id_aluno required" type="text" name="certificados[<?=$matricula['id_matricula']?>]" id="certificado_<?=$matricula['id_matricula']?>" maxlength="32" value="<?=$nr_registro_certificado?>"/>
+            </td>
+            <td style="text-align: center">                  
+                <input class="btn btRemover" type="button" value="Remover"/>
+            </td>            
+        </tr>    
+    <?php endforeach; ?>    
+    </table>    
+</fieldset>   
+
+<script>
+    
+    
+    $(function(){
+        $('#botaoSubmit').show();
+        
+        $('#btModalAluno').click(function() {
+            openModalPesquisaAluno();
+        });
+        
+        $('.btRemover').click(function () {
+            $(this).parent().parent().remove();
+        });
+        
+        $('#mensagemAlunosGrid').dialog({
+            autoOpen: false
+        });  
+    });
+</script>

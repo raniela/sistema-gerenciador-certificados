@@ -1,0 +1,93 @@
+<div id="dialog-pesquisa-certificado" title="PESQUISA DE CERTIFICADO" style="display:none; padding:0px;">            
+    <!-- INICIO dos campos de busca -->
+    <div class="form-actions" style="padding-left: 20px!important">
+        <div class="control-group">
+            <label class="control-label" for="selecionar-certificado-tx_nome_modelo">Nome do Modelo</label>
+            <div class="controls">
+                <input class="input-xlarge" type="text" name="selecionar-certificado[tx_nome_modelo]" id="selecionar-certificado-tx_nome_modelo" maxlength="30"/>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="selecionar-certificado-tx_titulo">Título</label>
+            <div class="controls">
+                <input class="input-xlarge" type="text" name="selecionar-certificado[tx_titulo]" id="selecionar-certificado-tx_titulo" maxlength="45"/>
+            </div>
+        </div>                
+        
+        <input class="btn btn-primary" id="btLocalizarCertificado" onclick="localizarCertificado()" type="button" value="Localizar"/>
+    </div>
+    <!-- FIM dos campos de busca --> 
+    
+    <fieldset style="min-height:425px">
+        <div id='div-grid-pesquisar-certificado'></div>
+    </fieldset>
+</div>
+
+<div id="avisoPesquisaCertificado" title="ATENÇÃO">    
+</div>            
+            
+<script>
+    function configModalPesquisaCertificado(){                
+        /** configura a modal */
+        $("#dialog-pesquisa-certificado").dialog({
+            autoOpen: false,
+            height: '600',
+            width: '800',          
+            modal: true,
+            resizable: false,
+            position: ['center','center'],
+            closeOnEscape: true           
+        });
+    }        
+    
+    function closeModalPesquisaCertificado(){			
+        /** elimina a modal da memória */
+        $("#dialog-pesquisa-certificado").dialog("close");
+        /** fecha a modal ativando o click do botão de fechar */
+        $('#dialog-pesquisa-certificado').prev('.ui-dialog-titlebar-close').click();               
+    }
+
+    function openModalPesquisaCertificado(){
+        configModalPesquisaCertificado();
+        $("#dialog-pesquisa-certificado").dialog("open");
+    }
+    function localizarCertificado() {           
+        tx_nome_modelo = urlencodeGet($.trim($('#selecionar-certificado-tx_nome_modelo').val()));
+        tx_titulo = urlencodeGet($.trim($('#selecionar-certificado-tx_titulo').val()));                        
+        
+        if((tx_nome_modelo.length > 2) || (tx_titulo.length > 2)) {
+            $(this).attr('disabled',true);
+            url = '<?php echo $this->baseUrl('/admin/certificado'); ?>/pesquisar-certificado/tx_nome_modelo/'+tx_nome_modelo+'/tx_titulo/'+tx_titulo;
+            ShowMsgAguarde();
+            $('#div-grid-pesquisar-certificado').load(url, function(data){
+                $('#btLocalizarCertificado').attr('disabled',false);
+                CloseMsgAguarde();
+            });
+        } else {
+            $('#avisoPesquisaCertificado').html('Insira no mínimo 3 caracteres no Nome/Título do Certificado para realizar a busca!');                
+            $('#avisoPesquisaCertificado').dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $(this).dialog("close");                            
+                    }
+                }
+            });                                
+            $('#avisoPesquisaCertificado').dialog("open");
+        }
+    }
+            
+    $(document).ready(function(){            
+        $('#avisoPesquisaCertificado').dialog({
+            autoOpen: false
+        });                                      
+                        
+        //para todos os inputs da modal de selecionar o certificado, caso pressionado o enter deve ativar a pesquisa
+        $('#dialog-pesquisa-certificado input').keypress(function(event){
+            if(event.which == 13){				
+                $('#btLocalizarCertificado').click();
+            }
+        });               
+    });
+</script>

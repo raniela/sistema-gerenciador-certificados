@@ -1,0 +1,57 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome do Modelo</th>
+        <th>Título do Certificado</th>                
+        <th>Ações</th>
+    </tr>
+    <?php foreach ($this->dataGrid as $k => $certificado): ?>
+       <tr>
+            <td>
+                <?php                     
+                    echo $certificado['tx_nome_modelo'];
+                ?>
+            </td>
+            <td>
+                <?php 
+                    echo $certificado['tx_titulo'];
+                ?>
+            </td>                       
+            <td>                                                      
+                <button class="btn selecionar-certificado" 
+                    type="button" 
+                    id_certificado="<?=$certificado['id_certificado']?>"
+                    tx_nome_modelo="<?=$certificado['tx_nome_modelo']?>"                                
+                    tx_titulo="<?=$certificado['tx_titulo']?>">
+                        SELECIONAR
+                </button>                                 
+            </td>
+            
+        </tr>    
+    <?php endforeach; ?>    
+</table>    
+
+<?php if (count($this->dataGrid) > 0): ?>
+    <script>
+        $(document).ready(function(){                        
+            $('.selecionar-certificado').click(function() {
+                /** captura os campos do aluno para a chamada de callBack*/
+                                                
+                id_certificado = $(this).attr('id_certificado');
+                tx_nome_modelo = $(this).attr('tx_nome_modelo');
+                tx_titulo = $(this).attr('tx_titulo');
+                
+                dataCertificado =  jQuery.parseJSON('{' 
+                    + '"id_certificado":"' + id_certificado+ '"' 
+                    + ',"tx_nome_modelo":"' + tx_nome_modelo+ '"'
+                    + ',"tx_titulo":"' + tx_titulo+ '"'                                      
+                    + '}');
+                
+                /** a funcao de callBack é escrita no phtml que está chamando essa modal, ou seja, 
+                    apenas chamo uma função que espero existir na pagina onde está renderizada essa modal */
+                callBackPesquisarCertificado(dataCertificado);
+                closeModalPesquisaCertificado();
+                return false;	                                                              
+            });                                            
+        });
+    </script>
+<?php endif; ?>

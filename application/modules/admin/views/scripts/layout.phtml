@@ -71,8 +71,10 @@
                             <li class="dropdown certificado">
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Certificados<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?php echo $this->baseUrl('admin/certificado'); ?>">Manutençao de Modelos de Certificado</a></li>                                    
-                                </ul>
+                                    <li><a href="<?php echo $this->baseUrl('admin/certificado'); ?>">Manutençao de Modelos de Certificado</a></li>  
+                                    <li><a href="<?php echo $this->baseUrl('admin/certificado/gerar-certificados-alunos'); ?>">Emitir Certificados</a></li>
+                                    <li><a href="<?php echo $this->baseUrl('admin/certificado/pesquisar'); ?>">Pesquisar Certificados</a></li>
+                                </ul>                                
                             </li>                            
                         </ul>
                         <ul class="nav pull-right">

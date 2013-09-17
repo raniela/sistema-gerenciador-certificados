@@ -1,0 +1,64 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        
+        <th>Aluno</th>
+        <th>CPF</th>
+        <th>Treinamento</th>
+        <th>Data Emissão</th>
+        <th>Nº Registro Certificado</th>
+        <th>Ações</th>        
+    </tr>
+
+    <tr class="alt" >
+        <?php foreach ($this->paginator as $k => $certificadoEmitido): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            
+            <td>
+                <?php                     
+                    echo $certificadoEmitido['tx_nome_aluno'];                    
+                ?>
+            </td>
+            <td>
+                <?php                     
+                    echo $certificadoEmitido['tx_cpf'];
+                ?>
+            </td>
+            <td>
+                <?php                     
+                    echo $certificadoEmitido['tx_nome_treinamento'];
+                ?>
+            </td>
+            <td>
+                <?php                     
+                    echo $this->String($certificadoEmitido['dt_emissao_certificado'])->reverseDate();
+                ?>
+            </td>
+            <td>
+                <?php                     
+                    echo $certificadoEmitido['nr_registro_certificado'];
+                ?>
+            </td>
+            <td>                
+                <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/certificado/imprimir-certificado') ?>/id/<?php echo $certificadoEmitido['id_certificado_emitido'] ?>">
+                    <img src="/img/pdf-icon.jpg" title="Imprimir Certificado" />
+                </a>
+            </td>
+        </tr>    
+    <?php endforeach; ?>
+
+</table>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'my_pagination_control.phtml'); ?>
+
+<script>
+    var url = "";
+    $(function(){                                 
+        $('.btExcluir').click(function(){
+            
+            url = $(this).attr('href');
+            alert(url);
+            
+            return false;
+        });                                
+    })
+    
+</script>
