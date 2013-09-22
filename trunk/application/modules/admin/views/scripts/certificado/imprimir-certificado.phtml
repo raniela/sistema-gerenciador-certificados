@@ -1,0 +1,208 @@
+<?php
+/** incia a captura do conteudo que sera renderizado como PDF */
+ob_start();
+
+$encontrouAssinatura = false;
+?>
+<style>
+.logo_topo
+{
+    z-index:100;
+    position:absolute;                
+    top:0px;
+}    
+    
+.topo
+{
+    z-index:100;
+    position:absolute;                
+    top:100px;
+}
+
+.topo_verso
+{
+    z-index:100;
+    position:absolute;                
+    top:50px;
+}
+
+.corpo
+{
+    z-index:100;
+    position:absolute;
+    top:200px;    
+    
+}
+
+.corpo_verso
+{
+    z-index:100;
+    position:absolute;
+    top:130px;    
+    
+}
+
+.data_assinatura
+{
+    z-index:100;
+    position:absolute;
+    top:480px;
+}
+
+.assinatura
+{
+    z-index:100;
+    position:absolute;
+    top:550px;
+}
+
+.logo_rodape
+{
+    z-index:100;
+    position:absolute;
+    top:650px;
+}
+
+.registro
+{
+    z-index:100;
+    position:absolute;
+    top:750px;
+}
+
+</style>
+    
+
+<page backtop="0mm" backbottom="0mm" backleft="0mm" backright="0mm" style="margin: 0px 0px 0px 0px"> 
+    <table class="logo_topo">
+        <tr>
+            <td style="width: 366px;text-align: left">
+                <?php if(!empty($this->dadosCertificado['tx_url_logotipo_cabecalho_esquerda'])) { 
+                $arrayUrlLogoTopoEsquerdo = explode(".", $this->dadosCertificado['tx_url_logotipo_cabecalho_esquerda']);
+                $urlLogoTopoEsquerdo = $arrayUrlLogoTopoEsquerdo[0]."_80_x_110.".$arrayUrlLogoTopoEsquerdo[1];
+                ?>
+                    <img src="<?php echo str_replace('\\', '/', realpath('./')). '/img/logos_certificado/cabecalho/'.$urlLogoTopoEsquerdo ?>">
+                <?php } ?>
+            </td>
+            <td style="width: 366px;text-align: center">
+                <?php if(!empty($this->dadosCertificado['tx_url_logotipo_cabecalho_centro'])) { 
+                $arrayUrlLogoTopoCentro = explode(".", $this->dadosCertificado['tx_url_logotipo_cabecalho_centro']);
+                $urlLogoTopoCentro = $arrayUrlLogoTopoCentro[0]."_80_x_110.".$arrayUrlLogoTopoCentro[1];
+                ?>
+                    <img src="<?php echo str_replace('\\', '/', realpath('./')). '/img/logos_certificado/cabecalho/'.$urlLogoTopoCentro ?>">
+                <?php } ?>
+            </td>
+            <td style="width: 366px;text-align: right">
+                <?php if(!empty($this->dadosCertificado['tx_url_logotipo_cabecalho_direita'])) { 
+                $arrayUrlLogoTopoDireito = explode(".", $this->dadosCertificado['tx_url_logotipo_cabecalho_direita']);
+                $urlLogoTopoDireito = $arrayUrlLogoTopoDireito[0]."_80_x_110.".$arrayUrlLogoTopoDireito[1];
+                ?>
+                    <img src="<?php echo str_replace('\\', '/', realpath('./')). '/img/logos_certificado/cabecalho/'.$urlLogoTopoDireito ?>">
+                <?php } ?>
+            </td>
+        </tr>
+    </table>
+    
+    <p class="topo" style="text-align: center;font-weight:bold;font-size: 25pt">
+        <i><?=$this->dadosCertificado['tx_titulo'];?></i>
+    </p>
+    
+    <p class="corpo" style="font-size: 14pt;line-height: 150%;margin-left: 60px;margin-right: 60px;">        
+         <?=$this->dadosCertificado['tx_corpo'];?>
+    </p>
+    
+    <p class="data_assinatura" style="text-align: center;font-size: 14pt">
+        Ourinhos, <?=date('d')?> de <?=$this->utf8($this->string(date('m'))->getNomMonth())->decode()?> de <?=date('Y')?>.
+    </p>
+    
+    <p class="assinatura" style="text-align: center;font-size: 14pt">
+        <table style="alignment-adjust: central;" align="center" cellspacing="20">
+            <tr>
+                <?php 
+                if(!empty($this->dadosCertificado['tx_nome_assinatura1'])) {
+                    $encontrouAssinatura = true;
+                ?>
+                    <td style="border-top: #000 solid thin;width: 270px">
+                        <?=$this->dadosCertificado['tx_nome_assinatura1']?>
+                        <br>
+                        <b><?=$this->dadosCertificado['tx_tratamento_assinatura1']?></b>
+                    </td>
+                <?php } ?>
+                    
+                <?php 
+                if(!empty($this->dadosCertificado['tx_nome_assinatura2'])) {
+                    $encontrouAssinatura = true;
+                ?>
+                <td style="border-top: #000 solid thin;width: 270px">
+                    <?=$this->dadosCertificado['tx_nome_assinatura2']?>
+                    <br>
+                    <b><?=$this->dadosCertificado['tx_tratamento_assinatura2']?></b>
+                </td>
+                <?php } ?>
+                
+                <?php 
+                if(!empty($this->dadosCertificado['tx_nome_assinatura3'])) {
+                    $encontrouAssinatura = true;
+                ?>
+                <td style="border-top: #000 solid thin;width: 270px">
+                    <?=$this->dadosCertificado['tx_nome_assinatura3']?>
+                    <br>
+                    <b><?=$this->dadosCertificado['tx_tratamento_assinatura3']?></b>
+                </td>
+                <?php } ?>
+                
+                <?php if(!$encontrouAssinatura) { ?>
+                <td>
+                    &nbsp;
+                </td>
+                <?php } ?>
+            </tr>
+        </table>            
+    </p>
+    
+    <table class="logo_rodape">
+        <tr>
+            <td style="width: 552px;text-align: left">
+                <?php if(!empty($this->dadosCertificado['tx_url_logotipo_rodape_esquerda'])) { 
+                $arrayUrlLogoRodapeEsquerdo = explode(".", $this->dadosCertificado['tx_url_logotipo_rodape_esquerda']);
+                $urlLogoRodapeEsquerdo = $arrayUrlLogoRodapeEsquerdo[0]."_80_x_110.".$arrayUrlLogoRodapeEsquerdo[1];
+                ?>
+                    <img src="<?php echo str_replace('\\', '/', realpath('./')). '/img/logos_certificado/rodape/'.$urlLogoRodapeEsquerdo ?>">
+                <?php } ?>
+            </td>            
+            <td style="width: 552px;text-align: right">
+                <?php if(!empty($this->dadosCertificado['tx_url_logotipo_rodape_direita'])) { 
+                $arrayUrlLogoRodapeDireito = explode(".", $this->dadosCertificado['tx_url_logotipo_rodape_direita']);
+                $urlLogoRodapeDireito = $arrayUrlLogoRodapeDireito[0]."_80_x_110.".$arrayUrlLogoRodapeDireito[1];
+                ?>
+                    <img src="<?php echo str_replace('\\', '/', realpath('./')). '/img/logos_certificado/rodape/'.$urlLogoRodapeDireito ?>">
+                <?php } ?>
+            </td>
+        </tr>
+    </table>
+     
+    <p class="registro" style="text-align: left;font-size: 10pt;padding-left: 420px">
+        Registro: <?=$this->dadosCertificado['nr_registro_certificado']?>
+    </p>
+</page>
+
+<page backtop="0mm" backbottom="0mm" backleft="0mm" backright="0mm" style="margin: 0px 0px 0px 0px">
+    <p class="topo_verso" style="text-align: left;font-weight:bold;font-size: 25pt;margin-left: 60px;">
+        <?=$this->utf8("Conteúdo Programático")->decode();?>
+    </p>
+    
+    <p class="corpo_verso" style="font-size: 14pt;line-height: 150%;margin-left: 60px;margin-right: 60px;">        
+         <?=$this->dadosCertificado['tx_conteudo_programatico'];?>
+    </p>
+</page>
+
+<?php
+/** finaliza a captura do conteudo */
+//die();
+$content = ob_get_clean();
+/** renderiza o PDF */
+$orientation = 'L'; //L = PAISAGEM
+//P = Porta Retrato
+/** renderiza o PDF */
+$this->pdf($content, 'CERTIFICADO_ALUNO.pdf', null, $orientation, array(0,0,0,0));
+?>

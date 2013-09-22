@@ -192,8 +192,12 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         try {
             $id = $this->getRequest()->getParam('id');
             
-            $certificado = $this->certificadoDbTable->fetchRow("id_certificado = '{$id}'")->toArray();
+            $certificado = $this->certificadoDbTable->fetchRow("id_certificado = '{$id}'")->toArray();                                    
             
+            $this->certificadoDbTable->delete("id_certificado = $id");                        
+                                    
+            /** commita */
+            $this->adpter->commit();
             
             $diretorioImgCab = realpath(APPLICATION_PATH . "/../public/img/logos_certificado/cabecalho");
             $diretorioImgRod = realpath(APPLICATION_PATH . "/../public/img/logos_certificado/rodape");           
@@ -232,11 +236,6 @@ class Admin_CertificadoController extends Zend_Controller_Action {
                 $caminhoPlanilha = $diretorioImgRod . "/" . "{$arrayLogo[0]}*.*";
                 array_map('unlink', glob($caminhoPlanilha)); 
             }
-            
-            $this->certificadoDbTable->delete("id_certificado = $id");            
-                                    
-            /** commita */
-            $this->adpter->commit();
             
             $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
@@ -666,6 +665,35 @@ class Admin_CertificadoController extends Zend_Controller_Action {
         $paginator->setCurrentPageNumber($this->_getParam('page'));
         $paginator->setDefaultItemCountPerPage(5);
         $this->view->paginator = $paginator;                
+    }
+    
+    public function imprimirCertificadoAction() {
+        //desabilita layout
+        $this->getHelper('layout')->disableLayout();
+        
+        //Caputara os parametros que chegarão pela url
+        $params = $this->_getAllParams(); 
+        
+        $dadosCertificado = $this->certificadoEmitidoDbTable->getDataToImpressaoCertificado($params); 
+        
+        //Substitui as tags que foram escolhidas pelo usuário pelo seus respectivos valores
+        $corpoCertificado = trim($dadosCertificado['tx_corpo']);
+        $corpoCertificado = str_replace("[%nome_aluno%]", $dadosCertificado['tx_nome_aluno'], $corpoCertificado);
+        $corpoCertificado = str_replace("[%cpf_aluno%]", $dadosCertificado['tx_cpf'], $corpoCertificado);
+        $corpoCertificado = str_replace("[%nome_treinamento%]", $dadosCertificado['tx_nome_treinamento'], $corpoCertificado);
+        $corpoCertificado = str_replace("[%nome_instrutor%]", $dadosCertificado['tx_nome_instrutor'], $corpoCertificado);
+        $corpoCertificado = str_replace("[%funcao_instrutor%]", $dadosCertificado['tx_funcao_instrutor'], $corpoCertificado);
+        $corpoCertificado = str_replace("[%dt_inicio_treinamento%]", $this->_helper->util->reverseDate($dadosCertificado['dt_inicio_treinamento']), $corpoCertificado);
+        $corpoCertificado = str_replace("[%dt_termino_treinamento%]", $this->_helper->util->reverseDate($dadosCertificado['dt_termino_treinamento']), $corpoCertificado);
+        $corpoCertificado = str_replace("[%inserir_carga_horaria%]", $this->_helper->util->reverseDate($dadosCertificado['nr_carga_horaria']), $corpoCertificado);
+        $corpoCertificado = str_replace("[%nome_responsavel%]", $this->_helper->util->reverseDate($dadosCertificado['tx_nome_responsavel_tecnico']), $corpoCertificado);
+        $corpoCertificado = str_replace("[%funcao_responsavel%]", $this->_helper->util->reverseDate($dadosCertificado['tx_funcao_responsavel_tecnico']), $corpoCertificado);                                
+        $dadosCertificado['tx_corpo'] = $corpoCertificado;
+        
+        $this->view->dadosCertificado = $dadosCertificado;
+        
+        //print_r($dadosCertificado);
+        //die();
     }
 }
 

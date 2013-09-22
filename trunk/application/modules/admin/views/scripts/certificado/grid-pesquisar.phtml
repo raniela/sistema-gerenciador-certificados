@@ -39,7 +39,7 @@
                 ?>
             </td>
             <td>                
-                <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/certificado/imprimir-certificado') ?>/id/<?php echo $certificadoEmitido['id_certificado_emitido'] ?>">
+                <a class="btImprimir" href="<?php echo $this->baseUrl('/admin/certificado/imprimir-certificado') ?>/id_certificado_emitido/<?php echo $certificadoEmitido['id_certificado_emitido'] ?>">
                     <img src="/img/pdf-icon.jpg" title="Imprimir Certificado" />
                 </a>
             </td>
@@ -52,11 +52,9 @@
 <script>
     var url = "";
     $(function(){                                 
-        $('.btExcluir').click(function(){
-            
-            url = $(this).attr('href');
-            alert(url);
-            
+        $('.btImprimir').click(function(){            
+            url = $(this).attr('href');            
+            window.open(url);
             return false;
         });                                
     })
