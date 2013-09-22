@@ -1,6 +1,6 @@
 <?php 
 
-class Core_View_Helper_Utf8 extends Zend_View_Helper_HtmlElement
+class Helper_View_Utf8 extends Zend_View_Helper_HtmlElement
 {
 	
 	private $_data;

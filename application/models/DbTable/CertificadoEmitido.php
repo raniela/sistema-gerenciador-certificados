@@ -138,4 +138,29 @@ class Application_Model_DbTable_CertificadoEmitido extends Zend_Db_Table_Abstrac
         return $select->query()->fetchAll();
     }
     
+    //Método para buscar os dados de impressão de um certificado
+    public function getDataToImpressaoCertificado($params = null)
+    {
+        //obj select
+        $select = $this->getDefaultAdapter()->select();
+        
+        //from contato
+        $select->from(array('ce' => $this->_name));                                                
+        
+        //join 
+        $select->joinInner(array('c' => 'certificado'), 'ce.id_certificado = c.id_certificado', array('*'));
+        $select->joinInner(array('m' => 'matricula'), 'ce.id_matricula = m.id_matricula', array());
+        $select->joinInner(array('t' => 'turma'), 'm.id_turma = t.id_turma', array('id_turma','dt_inicio_treinamento','dt_termino_treinamento'));
+        $select->joinInner(array('tr' => 'treinamento'), 't.id_treinamento = tr.id_treinamento', array('*'));
+        $select->joinInner(array('a' => 'aluno'), 'm.id_aluno = a.id_aluno', array('*'));                                                
+        
+        //filtros do formulario
+        if(!empty($params['id_certificado_emitido'])) {
+            $select->where("ce.id_certificado_emitido = '{$params['id_certificado_emitido']}'");
+        }                                       
+                
+        //die($select);
+        $ret = $select->query()->fetchAll();        
+        return $ret[0];
+    }    
 }
