@@ -162,5 +162,32 @@ class Application_Model_DbTable_CertificadoEmitido extends Zend_Db_Table_Abstrac
         //die($select);
         $ret = $select->query()->fetchAll();        
         return $ret[0];
-    }    
+    }
+    
+    //Método para buscar os certificados emitidos para um aluno    
+    public function getCertificadosEmitidosToRelCertificados($params = null)
+    {
+        //obj select
+        $select = $this->getDefaultAdapter()->select();
+        
+        //from contato
+        $select->from(array('ce' => $this->_name));                                                
+        
+        //join         
+        $select->joinInner(array('m' => 'matricula'), 'ce.id_matricula = m.id_matricula', array());
+        $select->joinInner(array('t' => 'turma'), 'm.id_turma = t.id_turma', array('id_turma','dt_inicio_treinamento','dt_termino_treinamento'));
+        $select->joinInner(array('tr' => 'treinamento'), 't.id_treinamento = tr.id_treinamento', array('*'));
+        $select->joinInner(array('a' => 'aluno'), 'm.id_aluno = a.id_aluno', array());
+                       
+        //ordenacao
+        $select->order('ce.dt_emissao_certificado DESC');                        
+        
+        //filtros do formulario
+        if(!empty($params['id_aluno'])) {
+            $select->where("a.id_aluno = '{$params['id_aluno']}'");
+        }                                       
+                
+        //die($select);
+        return $select->query()->fetchAll();
+    }
 }

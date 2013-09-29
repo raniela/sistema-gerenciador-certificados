@@ -75,7 +75,14 @@
                                     <li><a href="<?php echo $this->baseUrl('admin/certificado/gerar-certificados-alunos'); ?>">Emitir Certificados</a></li>
                                     <li><a href="<?php echo $this->baseUrl('admin/certificado/pesquisar'); ?>">Pesquisar Certificados</a></li>
                                 </ul>                                
-                            </li>                            
+                            </li>
+                            <li class="dropdown relatorio">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Relatórios<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->baseUrl('admin/relatorio/filtro-relatorio-treinamentos'); ?>">Relatório de Treinamentos Realizados</a></li>  
+                                    <li><a href="<?php echo $this->baseUrl('admin/relatorio/filtro-relatorio-certificados'); ?>">Relatório de Certificados Emitidos</a></li>                                    
+                                </ul>                                
+                            </li>
                         </ul>
                         <ul class="nav pull-right">
                             <li>

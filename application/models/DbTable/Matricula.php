@@ -61,6 +61,35 @@ class Application_Model_DbTable_Matricula extends Zend_Db_Table_Abstract {
 
         return $select->query()->fetchAll();
     }
+    
+    //Método para buscar os alunos de uma turma para o relatorio de treinamentos    
+    public function getAlunosToRelTreinamentos($params = null)
+    {
+        //obj select
+        $select = $this->getDefaultAdapter()->select();
+        
+        //from contato
+        $select->from(array('m' => $this->_name));                                                
+        
+        //join         
+        $select->joinInner(array('t' => 'turma'), 'm.id_turma = t.id_turma', array());       
+        $select->joinInner(array('a' => 'aluno'), 'm.id_aluno = a.id_aluno', array('*'));
+        
+        $camposCliente = array('tx_cliente' => new Zend_Db_Expr("CASE WHEN cli.tx_nome_fantasia IS NOT NULL THEN cli.tx_nome_fantasia WHEN cli.tx_razao_social IS NOT NULL THEN cli.tx_razao_social ELSE cli.tx_nome END"));
+        $select->joinInner(array('cli' => 'cliente'), 'a.id_cliente = cli.id_cliente', $camposCliente);
+        
+        //ordenacao       
+        $select->order('a.tx_nome_aluno');
+                        
+        //filtros do formulario
+        if(!empty($params['id_turma'])) {
+            $select->where("t.id_turma = '{$params['id_turma']}'");
+        }                                       
+        
+        
+        //die($select);
+        return $select->query()->fetchAll();
+    }
 
 }
 
