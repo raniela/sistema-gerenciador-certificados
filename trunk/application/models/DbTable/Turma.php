@@ -19,7 +19,7 @@ class Application_Model_DbTable_Turma extends Zend_Db_Table_Abstract {
         $select->from(array('tu' => $this->_name));
 
         //join 
-        $select->joinInner(array('tr' => 'treinamento'), 'tr.id_treinamento = tu.id_treinamento', array('tu.id_turma', 'tr.tx_nome_treinamento', 'tu.dt_inicio_treinamento', 'tu.dt_termino_treinamento'));
+        $select->joinInner(array('tr' => 'treinamento'), 'tr.id_treinamento = tu.id_treinamento', array('tu.id_turma', 'tr.tx_nome_treinamento', 'tu.dt_inicio_treinamento', 'tu.dt_termino_treinamento','tr.nr_carga_horaria','tr.tx_nome_instrutor','tr.tx_descricao'));
 
         //ordenacao
         $select->order('dt_inicio_treinamento DESC');
@@ -44,7 +44,7 @@ class Application_Model_DbTable_Turma extends Zend_Db_Table_Abstract {
         if (!empty($params['id_turma'])) {
             $select->where("tu.id_turma = '{$params['id_turma']}'");
         }
-
+        //die($select);
         return $select->query()->fetchAll();
     }
 

@@ -1,0 +1,32 @@
+<div class="container" style="margin-top: 50px">
+    <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
+    <form class="form-horizontal well" action="#" method="post">        
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>                        
+            
+            <!-- INICIO dos campos de busca -->
+            <div class="form-actions" style="padding-left: 20px!important">
+                <div class="control-group">
+                    <label class="control-label" for="tx_nome_aluno">Nome do Aluno</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="tx_nome_aluno" id="tx_nome_aluno" maxlength="18"/>
+                    </div>
+                </div>                
+                <div style="margin-bottom: -20px; margin-top: -0px" class="form-actions">
+                    <input class="btn btn-primary" id="btGerarRelatorioCertificados" type="button" value="Gerar Relatório"/>
+                </div>
+            </div>
+            <!-- FIM dos campos de busca -->            
+        </fieldset>                
+    </form>
+</div>
+
+<script>
+    $(function(){                                                                     
+        $('#btGerarRelatorioCertificados').click(function(){            
+            tx_nome_aluno = urlencodeGet($('#tx_nome_aluno').val());
+            
+            window.open('<?php echo $this->baseUrl('admin/relatorio/relatorio-certificados/tx_nome_aluno/'); ?>' + tx_nome_aluno);
+        });                
+    });     
+</script>
