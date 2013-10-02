@@ -125,6 +125,26 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
         }
     }
 
+    public function pesquisarTreinamentoAction() {
+        try {
+            $this->getHelper('layout')->disableLayout();
+
+            $params = $this->_getAllParams();
+            $params = $this->_helper->util->urldecodeGet($params);
+            $params = $this->_helper->util->utf8Decode($params);
+            $params['limit'] = 5;
+
+            
+            $this->view->dataGrid = $this->_helper->util->utf8Encode($this->treinamentoDbTable->getDataGrid($params));
+
+            //print_r($this->view->dataGrid);
+            //die();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            die('ERRO|Ocorreu um erro ao tentar executar a operação. Tente novamente. Caso persista, contate o administrador do sistema.');
+        }
+    }
+
 }
 
 ?>
