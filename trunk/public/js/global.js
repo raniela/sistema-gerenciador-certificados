@@ -1,6 +1,19 @@
-$(function(){
+$(function(){    
     tinymce.init({
-        selector: "textarea", 
+        selector: ".descricao-treinamento, .conteudo-treinamento",
+        width: 550,
+        height: 100,
+        plugins: [
+         "advlist autolink link lists preview hr textcolor",
+         "searchreplace wordcount visualblocks visualchars insertdatetime nonbreaking textcolor",
+         "table contextmenu directionality emoticons paste textcolor"
+        ],        
+        language : "pt_BR",
+        toolbar: "insertfile undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link textcolor"
+    });
+   
+   tinymce.init({
+        selector: "textarea",
         width: 800,
         height: 350,
         plugins: [

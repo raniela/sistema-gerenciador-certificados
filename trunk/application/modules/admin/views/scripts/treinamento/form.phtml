@@ -13,13 +13,13 @@
             <div class="control-group">
                 <label class="control-label" for="tx_descricao">Descrição</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name="tx_descricao" id="tx_descricao" maxlength="65"/>
+                    <textarea class="descricao-treinamento" class="required" type="text" name="tx_descricao" id="tx_descricao"></textarea>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="tx_conteudo_programatico">Conteúdo Programático</label>
                 <div class="controls">
-                    <input class="input-xlarge" type="text" name="tx_conteudo_programatico" id="tx_conteudo_programatico" value=""/>
+                    <textarea class="conteudo-treinamento" class="required" type="text" name="tx_conteudo_programatico" id="tx_conteudo_programatico"></textarea>
                 </div>
             </div>
             <div class="control-group">
@@ -70,7 +70,11 @@
     var dataForm = <?php echo Zend_Json::encode($this->treinamento); ?>;
     
     $(function(){
-    
+           
+        $('.mce-tinymce .mce-container .mce-panel').each(function(){
+            $(this).width(1);
+        });
+           
         $('#form_treinamento').populate(dataForm);
         
         $('#form_treinamento').validate({
