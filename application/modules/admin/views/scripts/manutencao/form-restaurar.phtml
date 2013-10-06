@@ -1,0 +1,48 @@
+<div class="container" style="margin-top: 50px">
+    <form enctype="multipart/form-data" action="" id="formRestaurar" method="post" class="form-horizontal well">
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>            
+            <div class="control-group">
+                <label class="control-label" for="fileUploadBackup">Arquivo de Backup</label>
+                <div class="controls">                        
+                    <input class="input-xlarge" type="file" name="fileUploadBackup" id="fileUploadBackup"/>                    
+                </div>                    
+            </div>                        
+        </fieldset>
+    </form>
+</div>
+<div id="backupSucesso">
+    <p></p>    
+</div>
+<script>        
+    $(function(){
+        $("#backupSucesso").dialog({
+            autoOpen: false
+        });
+        
+        $('#fileUploadBackup').change(function() {
+            url_original = $('#formRestaurar').attr('action');
+            //ShowMsgAguarde();
+            $('#formRestaurar').ajaxSubmit({
+                url: '<?php echo $this->baseUrl('/admin/manutencao/upload-backup'); ?>',
+                success: function(data){                
+                    $('#formRestaurar').attr('action', url_original);
+                    $('#formRestaurar').removeAttr('target');
+                    //$('#div-imagem-anexo').html(data);
+                    $('#backupSucesso').html(data.msg);                            
+                    $('#backupSucesso').dialog({
+                        modal: true,
+                        buttons: {
+                            "Ok": function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    $('#backupSucesso').dialog("open");
+                }
+            });
+            //CloseMsgAguarde();
+        });
+    });
+        
+</script>
