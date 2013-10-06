@@ -11,7 +11,7 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
 
     public function init() {
         $this->treinamentoDbTable = new Application_Model_DbTable_Treinamento();
-        $this->view->menu = 'treinamento';
+        $this->view->menu = 'turma';
     }
 
     public function indexAction() {

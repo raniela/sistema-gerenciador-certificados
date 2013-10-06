@@ -54,15 +54,16 @@
                                     <li><a href="<?php echo $this->baseUrl('admin/aluno/importar'); ?>">Importar Alunos</a></li>                             
                                 </ul>
                             </li>
-                            <li class="treinamento">
-                                <a href="<?php echo $this->baseUrl('admin/treinamento'); ?>" onclick="">Treinamentos</a>
-                            </li>
-                            <li class="usuario">
-                                <a href="<?php echo $this->baseUrl('admin/usuario'); ?>" onclick="">Usuários</a>
-                            </li>
+<!--                            <li class="treinamento">
+                                <a href="<?php //echo $this->baseUrl('admin/treinamento'); ?>" onclick="">Treinamentos</a>
+                            </li>-->
+<!--                            <li class="usuario">
+                                <a href="<?php //echo $this->baseUrl('admin/usuario'); ?>" onclick="">Usuários</a>
+                            </li>-->
                             <li class="dropdown turma">                                
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Turmas<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->baseUrl('admin/treinamento'); ?>">Manutençao de Treinamentos</a></li>
                                     <li><a href="<?php echo $this->baseUrl('admin/turma'); ?>">Manutençao de Turmas</a></li>
                                     <li><a href="<?php echo $this->baseUrl('admin/matricula/matricula-alunos'); ?>">Matriculas de Alunos</a></li>
                                     <li><a href="<?php echo $this->baseUrl('admin/matricula/'); ?>">Manutenção de Matrículas</a></li>
@@ -81,6 +82,14 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo $this->baseUrl('admin/relatorio/filtro-relatorio-treinamentos'); ?>">Relatório de Treinamentos Realizados</a></li>  
                                     <li><a href="<?php echo $this->baseUrl('admin/relatorio/filtro-relatorio-certificados'); ?>">Relatório de Certificados Emitidos</a></li>                                    
+                                </ul>                                
+                            </li>
+                            <li class="dropdown manutencao">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Manutenção<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->baseUrl('admin/usuario'); ?>" onclick="">Manutenção de Usuários do Sistema</a></li>                                    
+                                    <li><a href="<?php echo $this->baseUrl('admin/manutencao/form-backup'); ?>">Realizar Backup da Base de Dados</a></li>  
+                                    <li><a href="<?php echo $this->baseUrl('admin/manutencao/form-restaurar'); ?>">Restaurar Backup da Base de Dados</a></li>                                      
                                 </ul>                                
                             </li>
                         </ul>

@@ -1,0 +1,23 @@
+<div class="container" style="margin-top: 50px">
+    <form id="form_backup" class="form-horizontal well" action="#" method="post">
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>            
+
+            <div id="containerGerarBackup" class="form-actions">
+                <input class="btn btn-primary" id="btGerarBackup" type="button" value="Gerar Backup"/>
+                
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>        
+    $(function(){
+        $("#btGerarBackup").click(function(){
+            ShowMsgAguarde();
+            $('#containerGerarBackup').load('<?php echo $this->baseUrl('admin/manutencao/backup'); ?>');
+            CloseMsgAguarde();
+        });                  
+    });
+        
+</script>

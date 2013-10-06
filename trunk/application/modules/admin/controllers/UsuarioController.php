@@ -15,7 +15,7 @@ class Admin_UsuarioController extends Zend_Controller_Action {
         $this->usuarioDbTable = new Application_Model_DbTable_Usuario();
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->msg = $this->flashMessenger->getMessages();
-        $this->view->menu = 'usuario';
+        $this->view->menu = 'manutencao';
     }
 
     public function indexAction() {
