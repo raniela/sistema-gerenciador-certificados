@@ -15,14 +15,24 @@ class Admin_IndexController extends Zend_Controller_Action {
 
         $this->view->titulo = "Módulo Administrativo do Sistema de Certificados";
 
-        /*$date = "1111/22/33";
-
-        try {
-            $dataAlt = "Helper de controller funcionou " . $this->_helper->util->reverseDate($date);
-        } catch (Exception $ex) {
-            $dataAlt = "Helper de controller NAO funcionou " . $ex;
+        $dataTurmasVencimento = new DateTime(date('Y-m-d'));
+        $dataTurmasVencimento->modify("-10 months");
+        $dataVencimentoFinal = $dataTurmasVencimento->format('Y-m-d');        
+        $dataTurmasVencimento->modify("-2 months");
+        $dataVencimentoInicial = $dataTurmasVencimento->format('Y-m-d');
+        
+        $turmaDbTable = new Application_Model_DbTable_Turma();
+        
+        //Buscas as turmas que estão completando 1 Ano 
+        $turmasVencidas = $turmaDbTable->getDataTreinamentoVencidos(array('data_vencimento_inicial'=>$dataVencimentoInicial, 'data_vencimento_final' => $dataVencimentoFinal));
+        
+        $matriculaDbTable = new Application_Model_DbTable_Matricula();
+        foreach ($turmasVencidas as $indice => $turma ) {
+            $clientes = $matriculaDbTable->getAlunosToTurmasVencidas(array('id_turma'=>$turma['id_turma']));
+            $turmasVencidas[$indice]['clientes'] = $clientes;
         }
-        $this->view->data = $dataAlt;*/
+        
+        $this->view->turmasVencidas = $this->_helper->util->utf8Encode($turmasVencidas);
     }
 
 }

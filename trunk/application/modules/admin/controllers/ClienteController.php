@@ -8,8 +8,8 @@
 class Admin_ClienteController extends Zend_Controller_Action {
     
     public function init() {
-        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->view->msg = $this->flashMessenger->getMessages();
+        //$this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        //$this->view->msg = $this->flashMessenger->getMessages();
         
         $this->adpter = Zend_Db_Table_Abstract::getDefaultAdapter();        
         
@@ -208,7 +208,7 @@ class Admin_ClienteController extends Zend_Controller_Action {
                 /** commita */
                 $this->adpter->commit();
 
-                $this->flashMessenger->addMessage('Salvo com sucesso!');
+                //$this->flashMessenger->addMessage('Salvo com sucesso!');
 
                 $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',

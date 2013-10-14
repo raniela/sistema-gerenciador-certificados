@@ -52,7 +52,7 @@
 }
 
 .ui-front {
-	z-index: 100;
+	z-index: 9000!important;
 }
 
 
@@ -467,7 +467,8 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-dialog {
 	position: absolute;
-	top: 100px!important;
+        z-index: 9000 !important ;
+	top: 0;
 	left: 0;
 	padding: .2em;
 	outline: 0;
