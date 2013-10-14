@@ -38,8 +38,9 @@
             modal: true,
             resizable: false,
             position: ['center','center'],
-            closeOnEscape: true           
+            closeOnEscape: true                       
         });
+        
     }        
     
     function closeModalPesquisaTurma(){			
@@ -52,6 +53,7 @@
     function openModalPesquisaTurma(){
         configModalPesquisaTurma();
         $("#dialog-pesquisa-turma").dialog("open");
+        $('#dialog-pesquisa-turma').dialog('option', 'position', 'center');
     }
     function localizarTurma() {                
         tx_nome_treinamento = urlencodeGet($.trim($('#selecionar-turma-tx_nome_treinamento').val()));

@@ -47,6 +47,31 @@ class Application_Model_DbTable_Turma extends Zend_Db_Table_Abstract {
         //die($select);
         return $select->query()->fetchAll();
     }
+    
+    public function getDataTreinamentoVencidos($params = null) {
+        //obj select
+        $select = $this->getDefaultAdapter()->select();
+        //from contato
+        $select->from(array('tu' => $this->_name));
+
+        //join 
+        $select->joinInner(array('tr' => 'treinamento'), 'tr.id_treinamento = tu.id_treinamento', array('tu.id_turma', 'tr.tx_nome_treinamento', 'tu.dt_inicio_treinamento', 'tu.dt_termino_treinamento','tr.nr_carga_horaria','tr.tx_nome_instrutor','tr.tx_descricao'));
+
+        //ordenacao
+        $select->order('tx_nome_treinamento');
+
+        
+        if (!empty($params['data_vencimento_inicial'])) {
+            $select->where("tu.dt_termino_treinamento >= '{$params['data_vencimento_inicial']}'");
+        }
+        
+        if (!empty($params['data_vencimento_final'])) {
+            $select->where("tu.dt_termino_treinamento <= '{$params['data_vencimento_final']}'");
+        }
+        
+        //die($select);
+        return $select->query()->fetchAll();
+    }
 
 }
 

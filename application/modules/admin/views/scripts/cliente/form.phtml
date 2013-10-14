@@ -223,8 +223,17 @@
                     dataType:  'json', 
                     success: function(r){
                         if(r.tipo == 'sucesso'){
-                            //$('#div_mensagem').html(r.msg);
-                            window.location = r.url;
+                            $('#mensagemCliente').html(r.msg);                            
+                            $("#mensagemCliente").dialog({
+                                modal: true,
+                                buttons: {
+                                    Ok: function() {
+                                        $(this).dialog("close"); 
+                                        window.location = r.url;
+                                    }
+                                }
+                            });
+                            $('#mensagemCliente').dialog("open");                                                       
                         } else {
                             $('#mensagemCliente').html(r.msg);                            
                             $("#mensagemCliente").dialog({

@@ -90,7 +90,36 @@ class Application_Model_DbTable_Matricula extends Zend_Db_Table_Abstract {
         //die($select);
         return $select->query()->fetchAll();
     }
-
+    
+    //Método para buscar os clientes das turmas que completarão 1 ano
+    public function getAlunosToTurmasVencidas($params = null)
+    {
+        //obj select
+        $select = $this->getDefaultAdapter()->select();
+        
+        //from contato
+        $select->from(array('m' => $this->_name));                                                
+        
+        //join         
+        $select->joinInner(array('t' => 'turma'), 'm.id_turma = t.id_turma', array());       
+        $select->joinInner(array('a' => 'aluno'), 'm.id_aluno = a.id_aluno', array());
+        
+        $camposCliente = array('tx_cliente' => new Zend_Db_Expr("CASE WHEN cli.tx_nome_fantasia IS NOT NULL THEN cli.tx_nome_fantasia WHEN cli.tx_razao_social IS NOT NULL THEN cli.tx_razao_social ELSE cli.tx_nome END"),'cli.tx_email');
+        $select->joinInner(array('cli' => 'cliente'), 'a.id_cliente = cli.id_cliente', $camposCliente);
+        
+        
+        $select->group('cli.id_cliente');
+        //ordenacao               
+        $select->order('tx_cliente');
+                        
+        //filtros do formulario
+        if(!empty($params['id_turma'])) {
+            $select->where("t.id_turma = '{$params['id_turma']}'");
+        }                                       
+                
+        //die($select);
+        return $select->query()->fetchAll();
+    }
 }
 
 ?>
