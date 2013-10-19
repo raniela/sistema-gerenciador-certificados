@@ -111,6 +111,10 @@ class Application_Model_DbTable_CertificadoEmitido extends Zend_Db_Table_Abstrac
             $select->where("a.tx_rg = '{$params['tx_rg']}'");
         }
         
+        if(!empty($params['id_aluno'])) {
+            $select->where("a.id_aluno = '{$params['id_aluno']}'");
+        }
+        
         if(!empty($params['tx_cpf'])) {
             $select->where("a.tx_cpf = '{$params['tx_cpf']}'");
         }

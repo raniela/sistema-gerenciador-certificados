@@ -616,14 +616,14 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-slider .ui-slider-handle {
 	position: absolute;
-	z-index: 2;
+	z-index: 9999;
 	width: 1.2em;
 	height: 1.2em;
 	cursor: default;
 }
 .ui-slider .ui-slider-range {
 	position: absolute;
-	z-index: 1;
+	z-index: 9999;
 	font-size: .7em;
 	display: block;
 	border: 0;
@@ -791,6 +791,8 @@ body .ui-tooltip {
 .ui-widget .ui-widget {
 	font-size: 1em;
 }
+ 
+#ui-datepicker-div { z-index: 999999!important; }
 .ui-widget input,
 .ui-widget select,
 .ui-widget textarea,
@@ -799,6 +801,7 @@ body .ui-tooltip {
 	font-size: 1em;
 }
 .ui-widget-content {
+        z-index: 100;
 	border: 1px solid #dddddd;
 	background: #f2f5f7 url(images/ui-bg_highlight-hard_100_f2f5f7_1x100.png) 50% top repeat-x;
 	color: #362b36;
