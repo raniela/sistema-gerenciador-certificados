@@ -1,0 +1,69 @@
+<div class="container" style="margin-top: 50px">
+    <form class="form-horizontal well" action="#" method="post">
+        <fieldset>
+            <legend>
+                <?php echo $this->titulo; ?>                
+            </legend>
+
+            <div class="form-actions" style="padding-left: 20px!important; margin-top: 0px">                                
+                <fieldset style="margin-top: -40px">
+                    <h5 style="margin-top: 40px">Dados do Treinamento/Turma</h5>
+                    <hr style="margin-top: -10px">
+                
+                    <div class="control-group">
+                        <label class="control-label" for="pesquisar-nome_treinamento">Nome do Treinamento</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="text" name="pesquisar[nome_treinamento]" id="pesquisar-nome_treinamento" maxlength="45"/>
+                        </div>
+                    </div>
+                    <div style="margin-left: 72px">
+                        <label style="display: inline-block; margin-right: 16px" for="pesquisar-data_inicial">Data/Período</label>
+                        <input class="input-prepend input-medium data" style="margin-right: 20px" type="text" name="pesquisar[data_inicial]" id="pesquisar-data_inicial" value=""/>
+                        a
+                        <label style="display: inline-block; margin-right: 16px" for="pesquisar-data_final"></label>
+                        <input class="input-prepend input-medium data" style="margin-right: 25px; margin-left: 15px" type="text"  name="pesquisar[data_final]" id="pesquisar-data_final" value=""/>
+                    </div>                                                            
+                </fieldset>
+                
+                <div style="margin-bottom: -20px; margin-top: -0px" class="form-actions">
+                    <input class="btn btn-primary" id="btBuscarCertificadoEmitido" type="button" value="Buscar"/>
+                </div>
+            </div>
+        </fieldset>
+        <div id="div_certtificado" >
+
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+    $(function(){   
+        $('.dados_pessoa_fisica').hide();
+        //Altera a exibição dos campos no formulario conforme o tipo de cliente
+        $('#pesquisar-tx_tipo_cliente').change(function(){
+            if($('#pesquisar-tx_tipo_cliente').val() == 'F') {
+                $('.dados_pessoa_fisica').show();
+                $('.dados_pessoa_juridica').hide();
+            }
+            
+            if($('#pesquisar-tx_tipo_cliente').val() == 'J') {
+                $('.dados_pessoa_fisica').hide();
+                $('.dados_pessoa_juridica').show();
+            }                       
+        });
+        
+        
+        //$('#div_certtificado').load('<?php echo $this->baseUrl('admin/matricula/grid'); ?>');
+        $('#btBuscarCertificadoEmitido').click(function(){                       
+            nome_treinamento = urlencodeGet($('#pesquisar-nome_treinamento').val());
+            data_inicial = urlencodeGet($('#pesquisar-data_inicial').val());
+            data_final = urlencodeGet($('#pesquisar-data_final').val());
+            
+            $('#div_certtificado').load('<?php echo $this->baseUrl('aluno/certificado/grid-pesquisar'); ?>'+'/nome_treinamento/' + nome_treinamento + '/data_inicial/' + data_inicial + '/data_final/' + data_final);
+        });
+        
+    }); 
+    
+</script>
