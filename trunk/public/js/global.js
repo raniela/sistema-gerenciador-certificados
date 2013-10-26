@@ -217,14 +217,14 @@ $.blockUI.defaults = {
 function ShowMsgAguarde(){
     //$('#div-aguarde').css('display', 'block');
     $.blockUI({
-        css: { 
+        css: {            
             border: 'none', 
             padding: '15px', 
             backgroundColor: '#000', 
             '-webkit-border-radius': '10px', 
             '-moz-border-radius': '10px', 
             opacity: '0.5', 
-            color: '#fff' 
+            color: '#fff'            
         }
     }); 
 }

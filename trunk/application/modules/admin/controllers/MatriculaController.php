@@ -130,6 +130,68 @@ class Admin_MatriculaController extends Zend_Controller_Action {
                         
         $this->view->matriculas = $this->_helper->util->utf8Encode($matriculas);                                  
     }
+    
+    public function matriculaAlunosClienteAction() {
+        $this->view->titulo = "Matrículas de Alunos por Cliente";
+    }
+    
+    public function gridMatriculaGrupoClienteAction()
+    {
+        $this->getHelper('layout')->disableLayout();
+        
+        $id_cliente = $this->_getParam('id_cliente');
+        
+        $alunosCliente = $this->alunoDbTable->getAlunosCliente(array('id_cliente'=>$id_cliente));                                                        
+        
+        $this->view->alunos = $this->_helper->util->utf8Encode($alunosCliente);                                  
+    }
+    
+    public function salvarAlunosClienteAction() {
+        $this->getHelper('viewRenderer')->setNoRender();
+        $this->getHelper('layout')->disableLayout();
+        
+        $matricula = $this->_helper->util->utf8Decode($this->getRequest()->getPost('matricula'));         
+                
+        $this->adpter->beginTransaction();
+        try {                             
+            $id_turma = $matricula['id_turma'];
+            $novaMatricula['id_turma'] = $id_turma;
+            
+            foreach($matricula['id_alunos'] as $id_aluno) {
+                //$this->matriculaDbTable->delete("(id_aluno = $id_aluno) AND (id_turma = $id_turma)");
+                
+                $matriculaAluno = $this->matriculaDbTable->fetchRow("(id_aluno = $id_aluno) AND (id_turma = $id_turma)");
+                if(!empty($matriculaAluno)) {
+                    continue;
+                }
+                
+                $novaMatricula['id_aluno'] = $id_aluno;
+                $this->matriculaDbTable->insert($novaMatricula);
+            }                                                       
+            
+            /** commita */
+            $this->adpter->commit();                       
+                        
+            $this->_helper->json->sendJson(array(
+                'tipo' => 'sucesso',
+                'msg' => 'Alunos matriculados com sucesso!',
+                'url' => '/admin/matricula/index/'
+            ));
+        } catch (Exception $exc) {
+            if ($exc->getCode() == 23000) {
+                $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => "Esses registros possuem vínculos e não podem ser excluídos",
+                ));
+            } else {
+                $this->_helper->json->sendJson(array(
+                    'tipo' => 'erro',
+                    'msg' => "Ocorreu um erro ao tentar executar a operacao, contate o administrador!" . $exc,
+                ));
+            }                                       
+        }
+              
+    }
 }
 
 ?>
