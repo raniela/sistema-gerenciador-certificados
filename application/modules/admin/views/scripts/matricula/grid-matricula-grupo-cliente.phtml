@@ -1,0 +1,46 @@
+<fieldset style="margin-top: -40px">
+    <h5 style="margin-top: 40px">Dados dos Alunos do Cliente</h5>
+    <hr style="margin-top: -10px">        
+    
+    <table id="tblAlunos" class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Aluno</th>
+        <th>CPF</th>        
+        <th><center>Selecionar Todos<br/><input type="checkbox" id="selecionar_todos"></center></th>
+    </tr>
+    <?php foreach ($this->alunos as $k => $aluno): ?>
+        <tr>
+            <td>
+                <?php                     
+                    echo $aluno['tx_nome_aluno'];
+                ?>
+            </td>
+            <td>
+               <?php                     
+                    echo $aluno['tx_cpf'];
+                ?>
+            </td>                      
+            <td style="text-align: center">
+                <input type="checkbox" id="aluno_<?=$aluno['id_aluno']?>" class="alunoCliente" name="matricula[id_alunos][]" value="<?=$aluno['id_aluno']?>">                
+            </td>            
+        </tr>    
+    <?php endforeach; ?>    
+    </table>    
+</fieldset>   
+
+<div id="mensagemAlunosGrid"></div>
+
+<script>        
+    $(function(){                
+        $('#botaoSubmit').show();                
+        
+        $('#selecionar_todos').click(function (){
+            if($('#selecionar_todos').is(':checked')) {
+                $('.alunoCliente').prop('checked',true);
+            } else {
+                $('.alunoCliente').prop('checked',false);
+            }
+            
+        });
+    });
+</script>

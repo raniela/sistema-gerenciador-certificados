@@ -33,8 +33,8 @@
                 <label class="control-label" for="selecionar-cliente-tx_tipo_cliente">Tipo </label>
                 <div class="controls">
                     <select id="selecionar-cliente-tx_tipo_cliente" name="selecionar-cliente[tx_tipo_cliente]">                            
-                        <option selected value="F">Pessoa Física</option>
-                        <option value="J">Pessoa Jurídica</option>            
+                        <option value="F">Pessoa Física</option>
+                        <option selected value="J">Pessoa Jurídica</option>            
                     </select>
                 </div>
             </div>
@@ -82,7 +82,7 @@
         tx_cpf = urlencodeGet($.trim($('#selecionar-cliente-tx_cpf').val()));
         tx_tipo_cliente = urlencodeGet($.trim($('#selecionar-cliente-tx_tipo_cliente').val()));
         
-        if((tx_tipo_cliente == 'F' && (tx_cpf != '' || tx_nome.length > 3)) || (tx_tipo_cliente == 'J' && (tx_cnpj != '' || tx_razao_social.length > 3))) {            
+        if((tx_tipo_cliente == 'F' && (tx_cpf != '' || tx_nome.length > 2)) || (tx_tipo_cliente == 'J' && (tx_cnpj != '' || tx_razao_social.length > 2))) {            
             $(this).attr('disabled',true);
             url = '<?php echo $this->baseUrl('/admin/cliente'); ?>/pesquisar-cliente/tx_tipo_cliente/'+tx_tipo_cliente+'/tx_cpf/'+tx_cpf+'/tx_nome/'+tx_nome+'/tx_cnpj/'+tx_cnpj+'/tx_razao_social/'+tx_razao_social;
             ShowMsgAguarde();
@@ -111,7 +111,7 @@
             autoOpen: false
         });                      
         
-        $('.dados_pessoa_juridica').hide();
+        $('.dados_pessoa_fisica').hide();
         
         //Altera a exibição dos campos no formulario conforme o tipo de cliente
         $('#selecionar-cliente-tx_tipo_cliente').change(function(){

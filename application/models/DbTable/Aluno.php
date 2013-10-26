@@ -44,4 +44,26 @@ class Application_Model_DbTable_Aluno extends Zend_Db_Table_Abstract{
                
         return $select->query()->fetchAll();
     }
+    
+    //Método para buscar os alunos de um determinado cliente,
+    //utilizado para realizar a matricula por grupo de alunos de um cliente
+    public function getAlunosCliente($params = null)
+    {
+        //obj select
+        $select = $this->getDefaultAdapter()->select();
+        
+        //from contato
+        $select->from(array('a' => $this->_name), array('id_aluno','tx_nome_aluno','tx_cpf'));                                                
+        
+        //ordenacao
+        $select->order('a.tx_nome_aluno');
+        $select->order('a.tx_cpf');
+        
+        //Fitro do paramêtro do método
+        if(!empty($params['id_cliente'])) {
+            $select->where("a.id_cliente = '{$params['id_cliente']}'");
+        }                                                       
+        
+        return $select->query()->fetchAll();
+    }
 }
