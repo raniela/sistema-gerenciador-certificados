@@ -79,6 +79,8 @@
         
         $('#form_treinamento').validate({
             submitHandler: function(form) {
+                tinyMCE.get("tx_descricao").save();
+                tinyMCE.get("tx_conteudo_programatico").save();
                 jQuery(form).ajaxSubmit({
                     dataType:  'json', 
                     success: function(r){
