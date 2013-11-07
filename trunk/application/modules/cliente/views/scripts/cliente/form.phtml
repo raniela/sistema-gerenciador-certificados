@@ -1,0 +1,241 @@
+<div class="container" style="margin-top: 50px">
+    <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
+    <form id="form_cliente" class="form-horizontal well" action="<?php echo $this->baseUrl('/admin/cliente/salvar'); ?>" method="post">
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>
+            <input type="hidden" name="cliente[id_cliente]" id="cliente-id_cliente"/>
+
+            <div class="control-group dados_pessoa_juridica">
+                <label class="control-label" for="cliente-tx_cnpj">CNPJ*</label>
+                <div class="controls">
+                    <input readonly="readonly" class="input-medium cnpj validarCNPJ required" type="text" name="cliente[tx_cnpj]" id="cliente-tx_cnpj" maxlength="18"/>
+                </div>
+            </div>
+
+            <div class="dados_pessoa_juridica" style="margin-left: 51px; margin-bottom: 20px">
+                <label style="display: inline-block; margin-right: 16px" for="cliente-tx_nome_fantasia">Nome Fantasia*</label>
+                <input class="input-prepend required input-large" style="margin-right: 25px" type="text" name="cliente[tx_nome_fantasia]" id="cliente-tx_nome_fantasia" maxlength="60"/>
+                <label style="display: inline-block; margin-right: 16px" for="cliente-tx_razao_social">Razão Social*</label>
+                <input class="input-prepend required input-large" style="margin-right: 25px" type="text" name="cliente[tx_razao_social]" id="cliente-tx_razao_social" maxlength="60"/>
+            </div>
+
+
+
+            <div class="dados_pessoa_juridica" style="margin-left: 32px; margin-bottom: 20px">
+                <label style="display: inline-block; margin-right: 16px" for="cliente-tx_inscricao_estadual">Inscrição Estadual*</label>
+                <input class="input-prepend required input-medium numeric" style="margin-right: 25px" type="text" name="cliente[tx_inscricao_estadual]" id="cliente-tx_inscricao_estadual" maxlength="14"/>
+                <label style="display: inline-block; margin-right: 16px" for="cliente-tx_inscricao_municipal">Inscrição Municipal*</label>
+                <input class="input-prepend required input-medium numeric" style="margin-right: 25px" type="text" name="cliente[tx_inscricao_municipal]" id="cliente-tx_inscricao_municipal" maxlength="15"/>
+            </div>
+
+            <div class="control-group dados_pessoa_juridica">
+                <label class="control-label" for="cliente-tx_nome_contato">Contato Responsável*</label>
+                <div class="controls">
+                    <input class="input-xlarge required" type="text" name="cliente[tx_nome_contato]" id="cliente-tx_nome_contato" maxlength="45"/>
+                </div>
+            </div>
+
+            <div class="control-group dados_pessoa_fisica">
+                <label class="control-label" for="cliente-tx_nome">Nome*</label>
+                <div class="controls">
+                    <input class="input-xlarge required" type="text" name="cliente[tx_nome]" id="cliente-tx_nome" maxlength="45"/>
+                </div>
+            </div>
+
+            <?php if (empty($this->cliente)) { ?>
+                <div class="control-group dados_pessoa_fisica">
+                    <label class="control-label" for="cliente-tx_cliente_aluno">Cliente é o Aluno?*</label>
+                    <div class="controls">
+                        <select id="cliente-tx_cliente_aluno" name="cliente[tx_cliente_aluno]" class="required input-small" >                        
+                            <option selected value="S">Sim</option>
+                            <option value="N">Não</option>            
+                        </select>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <div class="dados_pessoa_fisica" style="margin-left: 131px; margin-bottom: 20px">
+                <label style="display: inline-block; margin-right: 16px" for="cliente-tx_rg">RG*</label>
+                <input class="input-prepend required input-medium" style="margin-right: 25px" type="text" name="cliente[tx_rg]" id="cliente-tx_rg" maxlength="9"/>
+                <label style="display: inline-block; margin-right: 16px" for="cliente-tx_cpf">CPF*</label>
+                <input class="input-prepend input-medium required cpf validarCPF" style="margin-right: 25px" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
+            </div>
+
+            <div class="control-group dados_pessoa_fisica">
+                <label class="control-label" for="cliente-tx_profissao">Profissão</label>
+                <div class="controls">
+                    <input class="input-xlarge" type="text" name="cliente[tx_profissao]" id="cliente-tx_profissao" maxlength="45"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="cliente-tx_email">Email</label>
+                <div class="controls">
+                    <input class="input-xlarge email" type="text" name="cliente[tx_email]" id="cliente-tx_email" maxlength="65"/>
+                </div>
+            </div>                        
+
+            <div style="margin-left: 105px">
+                <label style="display: inline-block; margin-right: 15px" for="cliente-tx_telefone_fixo">Tel. Fixo</label>
+                <input class="input-prepend telefone input-medium" style="margin-right: 25px" type="text" name="cliente[tx_telefone_fixo]" id="cliente-tx_telefone_fixo"/>
+                <label style="display: inline-block; margin-right: 15px" for="cliente-tx_telefone_celular">Tel. Celular</label>
+                <input class="input-prepend telefone input-medium" style="margin-right: 25px" type="text" name="cliente[tx_telefone_celular]" id="cliente-tx_telefone_celular"/>
+            </div>
+
+            <fieldset>
+                <h5 style="margin-top: 30px">Endereço Completo do Cliente</h5>
+                <hr style="margin-top: -10px">
+                <input type="hidden" name="endereco_real[id_endereco]" id="endereco_real-id_endereco"/>
+                <input type="hidden" name="endereco_real[tx_tipo_endereco]" id="endereco_real-tx_tipo_endereco" value="R"/>
+
+
+                <div style="margin-left: 83px; margin-bottom: 20px">
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_real-tx_logradouro">Logradouro</label>
+                    <input class="input-prepend input-xlarge" style="margin-right: 25px" type="text" name="endereco_real[tx_logradouro]" id="endereco_real-tx_logradouro" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_real-tx_numero">Número</label>
+                    <input class="input-prepend input-mini" style="margin-right: 25px" type="text" name="endereco_real[tx_numero]" id="endereco_real-tx_numero" maxlength="5"/>
+                </div>
+
+                <div style="margin-left: 120px; margin-bottom: 20px">
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_real-tx_bairro">Bairro</label>
+                    <input class="input-prepend input-xlarge" style="margin-right: 47px" type="text" name="endereco_real[tx_bairro]" id="endereco_real-tx_bairro" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_real-tx_cep">CEP</label>
+                    <input class="input-prepend input-medium cep" style="margin-right: 25px" type="text" name="endereco_real[tx_cep]" id="endereco_real-tx_cep" maxlength="9"/>
+                </div>
+
+                <div style="margin-left: 113px">
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_real-tx_cidade">Cidade</label>
+                    <input class="input-prepend input-xlarge" style="margin-right: 32px" type="text" name="endereco_real[tx_cidade]" id="endereco_real-tx_cidade" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_real-id_estado">Estado</label>
+                    <?php echo $this->formSelect('endereco_real[id_estado]', $this->endereco_real['id_estado'], array('input-prepend'), $this->dataComboEstados); ?>
+                </div>
+
+            </fieldset>    
+
+            <fieldset>
+                <h5 style="margin-top: 30px">Endereço de Correspondência do Cliente</h5>
+                <hr style="margin-top: -10px">
+
+                <input type="hidden" name="endereco_correspondencia[id_endereco]" id="endereco_correspondencia-id_endereco"/>
+                <input type="hidden" name="endereco_correspondencia[tx_tipo_endereco]" id="endereco_correspondencia-tx_tipo_endereco" value="C"/>
+
+                <div class="control-group"> 
+                    <div class="controls">
+                        <input class="btn" id="btUsarEnderecoCompleto" type="button" value="Usar Endereço Completo"/>
+                    </div>
+                </div>
+
+                <div style="margin-left: 83px; margin-bottom: 20px">
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_correspondencia-tx_logradouro">Logradouro</label>
+                    <input class="input-prepend input-xlarge" style="margin-right: 25px" type="text" name="endereco_correspondencia[tx_logradouro]" id="endereco_correspondencia-tx_logradouro" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_correspondencia-tx_numero">Número</label>
+                    <input class="input-prepend input-mini" style="margin-right: 25px" type="text" name="endereco_correspondencia[tx_numero]" id="endereco_correspondencia-tx_numero" maxlength="5"/>
+                </div>
+
+                <div style="margin-left: 120px; margin-bottom: 20px">
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_correspondencia-tx_bairro">Bairro</label>
+                    <input class="input-prepend input-xlarge" style="margin-right: 47px" type="text" name="endereco_correspondencia[tx_bairro]" id="endereco_correspondencia-tx_bairro" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_correspondencia-tx_cep">CEP</label>
+                    <input class="input-prepend input-medium cep" style="margin-right: 25px" type="text" name="endereco_correspondencia[tx_cep]" id="endereco_correspondencia-tx_cep" maxlength="9"/>
+                </div>
+
+                <div style="margin-left: 113px">
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_correspondencia-tx_cidade">Cidade</label>
+                    <input class="input-prepend input-xlarge" style="margin-right: 32px" type="text" name="endereco_correspondencia[tx_cidade]" id="endereco_correspondencia-tx_cidade" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 18px" for="endereco_correspondencia-id_estado">Estado</label>
+                    <?php echo $this->formSelect('endereco_correspondencia[id_estado]', $this->endereco_correspondencia['id_estado'], array('input-prepend'), $this->dataComboEstados); ?>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <input class="btn btn-primary" id="btEnviar" type="submit" value="Salvar"/>
+                <input class="btn" id="btVoltar" onclick="window.back()" type="button" value="Voltar"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div id="mensagemCliente">    
+</div>
+
+<script>    
+    
+    var dataForm = <?php echo Zend_Json::encode(array('cliente' => $this->cliente, 'endereco_correspondencia' => $this->endereco_correspondencia, 'endereco_real' => $this->endereco_real)); ?>;      
+    $(function(){
+        $('#form_cliente').populate(dataForm);
+        
+        //Altera a exibição dos campos no formulario conforme o tipo de cliente
+        $('#cliente-tx_tipo_cliente').change(function(){
+            if($('#cliente-tx_tipo_cliente').val() == 'F') {
+                $('.dados_pessoa_fisica').show();
+                $('.dados_pessoa_juridica').hide();
+            }
+            
+            if($('#cliente-tx_tipo_cliente').val() == 'J') {
+                $('.dados_pessoa_fisica').hide();
+                $('.dados_pessoa_juridica').show();
+            }
+            
+            if($('#cliente-tx_tipo_cliente').val() == '') {
+                $('.dados_pessoa_fisica').hide();
+                $('.dados_pessoa_juridica').hide();
+            }
+        });
+        if($('#cliente-tx_tipo_cliente').val() == 'F') {
+            $('.dados_pessoa_fisica').show();
+            $('.dados_pessoa_juridica').hide();
+        }
+
+        if($('#cliente-tx_tipo_cliente').val() == 'J') {
+            $('.dados_pessoa_fisica').hide();
+            $('.dados_pessoa_juridica').show();
+        }
+
+        if($('#cliente-tx_tipo_cliente').val() == '') {
+            $('.dados_pessoa_fisica').hide();
+            $('.dados_pessoa_juridica').hide();
+        }
+        
+        $('#mensagemCliente').dialog({
+            autoOpen: false
+        });  
+        
+        $('#btUsarEnderecoCompleto').click(function(){
+            $('#endereco_correspondencia-tx_logradouro').val($('#endereco_real-tx_logradouro').val());
+            $('#endereco_correspondencia-tx_numero').val($('#endereco_real-tx_numero').val());
+            $('#endereco_correspondencia-tx_bairro').val($('#endereco_real-tx_bairro').val());
+            $('#endereco_correspondencia-tx_cep').val($('#endereco_real-tx_cep').val());
+            $('#endereco_correspondencia-tx_cidade').val($('#endereco_real-tx_cidade').val());
+            $('#endereco_correspondencia-id_estado').val($('#endereco_real-id_estado').val());
+            
+        });
+        
+        $('#form_cliente').validate({
+            submitHandler: function(form) {
+                jQuery(form).ajaxSubmit({
+                    dataType:  'json', 
+                    success: function(r){
+                        if(r.tipo == 'sucesso'){
+                            //$('#div_mensagem').html(r.msg);
+                            window.location = r.url;
+                        } else {
+                            $('#mensagemCliente').html(r.msg);                            
+                            $("#mensagemCliente").dialog({
+                                modal: true,
+                                buttons: {
+                                    Ok: function() {
+                                        $(this).dialog("close");                                        
+                                    }
+                                }
+                            });
+                            $('#mensagemCliente').dialog("open");                            
+                        }
+                    } 
+                });
+            } 
+        });
+
+
+    });
+        
+</script>

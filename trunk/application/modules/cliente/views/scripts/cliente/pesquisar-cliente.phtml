@@ -1,0 +1,74 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome/Razão Social</th>
+        <th>CPF/CNPJ</th>        
+        <th>Ações</th>
+    </tr>
+    <?php foreach ($this->dataGrid as $k => $cliente): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php 
+                    if($cliente['tx_tipo_cliente'] == 'F') {
+                        echo $cliente['tx_nome'];
+                    } else {
+                        echo $cliente['tx_razao_social'];
+                    }
+                ?>
+            </td>
+            <td>
+                <?php 
+                    if($cliente['tx_tipo_cliente'] == 'F') {
+                        echo $cliente['tx_cpf'];
+                    } else {
+                        echo $cliente['tx_cnpj'];
+                    }
+                ?>
+            </td>            
+            <td>                                                      
+                <button class="btn selecionar-cliente" 
+                    type="button" 
+                    tx_tipo_cliente="<?=$cliente['tx_tipo_cliente']?>"                                
+                    id_cliente="<?=$cliente['id_cliente']?>"
+                    tx_nome="<?=$cliente['tx_nome']?>"
+                    tx_razao_social="<?=$cliente['tx_razao_social']?>"
+                    tx_cpf="<?=$cliente['tx_cpf']?>"
+                    tx_cnpj="<?=$cliente['tx_cnpj']?>">
+                        SELECIONAR
+                </button>                                 
+            </td>
+            
+        </tr>    
+    <?php endforeach; ?>    
+</table>    
+
+<?php if (count($this->dataGrid) > 0): ?>
+    <script>
+        $(document).ready(function(){                        
+            $('.selecionar-cliente').click(function() {
+                /** captura os campos do aluno para a chamada de callBack*/
+                                                
+                id_cliente = $(this).attr('id_cliente');
+                tx_tipo_cliente = $(this).attr('tx_tipo_cliente');
+                tx_nome = $(this).attr('tx_nome');
+                tx_razao_social = $(this).attr('tx_razao_social');
+                tx_cpf = $(this).attr('tx_cpf');
+                tx_cnpj = $(this).attr('tx_cnpj');
+                
+                dataCliente =  jQuery.parseJSON('{' 
+                    + '"id_cliente":"' + id_cliente+ '"' 
+                    + ',"tx_tipo_cliente":"' + tx_tipo_cliente+ '"'
+                    + ',"tx_nome":"' + tx_nome+ '"'
+                    + ',"tx_razao_social":"' + tx_razao_social+ '"'
+                    + ',"tx_cpf":"' + tx_cpf+ '"'
+                    + ',"tx_cnpj":"' + tx_cnpj+ '"'
+                    + '}');
+                
+                /** a funcao de callBack é escrita no phtml que está chamando essa modal, ou seja, 
+                    apenas chamo uma função que espero existir na pagina onde está renderizada essa modal */
+                callBackPesquisarCliente(dataCliente);
+                closeModalPesquisaCliente();
+                return false;	                                                              
+            });                                            
+        });
+    </script>
+<?php endif; ?>
