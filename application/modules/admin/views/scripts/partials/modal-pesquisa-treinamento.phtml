@@ -1,0 +1,85 @@
+<div id="dialog-pesquisa-treinamento" title="PESQUISA DE TREINAMENTO" style="display:none; padding:0px;">            
+    <!-- INICIO dos campos de busca -->
+    <div class="form-actions" style="padding-left: 20px!important">
+        <div class="control-group">
+            <label class="control-label" for="nome_treinamento">Nome do Treinamento</label>
+            <div class="controls">
+                <input class="input-xlarge" type="text" name="selecionar-treinamento[tx_nome_treinamento]" id="selecionar-treinamento-tx_nome_treinamento" maxlength="18"/>
+            </div>
+        </div>
+
+        <input class="btn btn-primary" id="btLocalizarTreinamento" onclick="localizarTreinamento()" type="button" value="Localizar"/>
+    </div>
+    <!-- FIM dos campos de busca -->                  
+    <fieldset style="min-height:425px">
+        <div id='div-grid-pesquisar-treinamento'></div>
+    </fieldset>
+</div>
+
+<div id="avisoPesquisaTreinamento" title="ATENÇÃO">    
+</div>            
+
+<script>
+    function configModalPesquisaTreinamento(){                
+        /** configura a modal */
+        $("#dialog-pesquisa-treinamento").dialog({
+            autoOpen: false,
+            height: '600',
+            width: '800',
+            modal: true,
+            resizable: false,
+            closeOnEscape: true,
+            position: ['top', 'center']
+        });
+    }
+    
+    function closeModalPesquisaTreinamento(){			
+        /** elimina a modal da memória */
+        $("#dialog-pesquisa-treinamento").dialog("close");
+        /** fecha a modal ativando o click do botão de fechar */
+        $('#dialog-pesquisa-treinamento').prev('.ui-dialog-titlebar-close').click();               
+    }
+
+    function openModalPesquisaTreinamento(){
+        configModalPesquisaTreinamento();
+        $("#dialog-pesquisa-treinamento").dialog("open");
+    }
+    function localizarTreinamento() {                
+        tx_nome_treinamento = urlencodeGet($.trim($('#selecionar-treinamento-tx_nome_treinamento').val()));
+        
+        if((tx_nome_treinamento.length >= 3)) {            
+            $(this).attr('disabled',true);
+            url = '<?php echo $this->baseUrl('/admin/treinamento'); ?>/pesquisar-treinamento/tx_nome/'+tx_nome_treinamento;
+            ShowMsgAguarde();
+            $('#div-grid-pesquisar-treinamento').load(url, function(data){
+                $('#btLocalizarTreinamento').attr('disabled',false);
+                CloseMsgAguarde();
+            });
+        } else {
+            $('#avisoPesquisaTreinamento').html('Insira no mínimo 3 caracteres no Nome do Treinamento para realizar a busca!');                
+            $('#avisoPesquisaTreinamento').dialog({
+                modal: true,
+                buttons: {
+                    Ok: function() {
+                        $(this).dialog("close");                            
+                    }
+                }
+            });                                
+            $('#avisoPesquisaTreinamento').dialog("open");
+        }
+    }
+    
+    
+    
+    $(document).ready(function(){
+        $('#avisoPesquisaTreinamento').dialog({
+            autoOpen: false
+        });                      
+        
+        $('#dialog-pesquisa-treinamento input').keypress(function(event){
+            if(event.which == 13){				
+                $('#btLocalizarTreinamento').click();
+            }
+        });               
+    });
+</script>

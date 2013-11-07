@@ -1,0 +1,57 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>Instrutor</th>
+        <th>Carga Horária</th>        
+        <th>Ações</th>
+    </tr>
+    <?php foreach ($this->dataGrid as $k => $treinamento): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php echo $treinamento['tx_nome_treinamento']; ?>
+            </td>
+            <td>
+                <?php echo $treinamento['tx_nome_instrutor']; ?>
+            </td>
+            <td>
+                <?php echo $treinamento['nr_carga_horaria'] . ' horas'; ?>
+            </td>    
+            <td>                                                      
+                <button class="btn selecionar-treinamento" 
+                        type="button" 
+                        id_treinamento="<?= $treinamento['id_treinamento'] ?>"
+                        tx_nome_treinamento="<?= $treinamento['tx_nome_treinamento'] ?>"
+                        nr_carga_horaria="<?= $treinamento['nr_carga_horaria'] ?>">
+                        SELECIONAR
+            </button>                                 
+        </td>
+
+    </tr>    
+<?php endforeach; ?>    
+</table>    
+
+<?php if (count($this->dataGrid) > 0): ?>
+    <script>
+        $(document).ready(function(){                        
+            $('.selecionar-treinamento').click(function() {
+                /** captura os campos do aluno para a chamada de callBack*/
+                                                                
+                id_treinamento = $(this).attr('id_treinamento');
+                nr_carga_horaria = $(this).attr('nr_carga_horaria');
+                tx_nome_treinamento = $(this).attr('tx_nome_treinamento');
+                                
+                dataTreinamento =  jQuery.parseJSON('{' 
+                    + '"id_treinamento":"' + id_treinamento + '"' 
+                    + ',"nr_carga_horaria":"' + nr_carga_horaria + '"'
+                    + ',"tx_nome_treinamento":"' + tx_nome_treinamento+ '"'
+                    + '}');
+                                
+                /** a funcao de callBack é escrita no phtml que está chamando essa modal, ou seja, 
+                    apenas chamo uma função que espero existir na pagina onde está renderizada essa modal */
+                callBackPesquisarTreinamento(dataTreinamento);
+                closeModalPesquisaTreinamento();
+                return false;	                                                              
+            });                                            
+        });
+    </script>
+<?php endif; ?>
