@@ -39,17 +39,18 @@
                 <h5 style="margin-top: 40px">Dados do Aluno</h5>
                 <hr style="margin-top: -10px">         
                 <div style="margin-left: 100px; margin-bottom: 20px">
-                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_nome_aluno">Nome*</label>
-                    <input class="input-prepend input-large required" style="margin-right: 30px" type="text" name="aluno[tx_nome_aluno]" id="aluno-tx_nome_aluno" maxlength="45"/>
-                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_cargo">Profissão</label>
-                    <input class="input-prepend input-medium" style="margin-right: 25px" type="text" name="aluno[tx_cargo]" id="aluno-tx_cargo" maxlength="45"/>
-                </div>
-                
-                <div style="margin-left: 118px">
-                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_rg">RG*</label>
-                    <input class="input-prepend input-medium required" style="margin-right: 117px" type="text" name="aluno[tx_rg]" id="aluno-tx_rg" maxlength="9"/>
                     <label style="display: inline-block; margin-right: 10px" for="aluno-tx_cpf">CPF*</label>
                     <input class="input-prepend input-medium required cpf validarCPF" style="margin-right: 25px" type="text" name="aluno[tx_cpf]" id="aluno-tx_cpf" maxlength="14"/>
+                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_nome_aluno">Nome*</label>
+                    <input class="input-prepend input-large required" style="margin-right: 30px" type="text" name="aluno[tx_nome_aluno]" id="aluno-tx_nome_aluno" maxlength="45"/>
+
+                </div>
+                
+                <div style="margin-left: 108px">
+                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_rg">RG*</label>
+                    <input class="input-prepend input-medium required" style="margin-right: 7px" type="text" name="aluno[tx_rg]" id="aluno-tx_rg" maxlength="9"/>
+                    <label style="display: inline-block; margin-right: 10px" for="aluno-tx_cargo">Profissão</label>
+                    <input class="input-prepend input-medium" style="margin-right: 25px" type="text" name="aluno[tx_cargo]" id="aluno-tx_cargo" maxlength="45"/>
                 </div>
 
             </fieldset>             
@@ -72,13 +73,33 @@ echo $this->render('partials/modal-pesquisa-cliente.phtml');
 
 <script>    
     var dataForm = <?php echo Zend_Json::encode(array('aluno' => $this->aluno)); ?>;      
-    
+    var tx_rg = "";
+    var tx_profissao = "";
     function callBackPesquisarCliente(dataCliente) {        
         $('#aluno-id_cliente').val(dataCliente.id_cliente);
         if(dataCliente.tx_tipo_cliente == 'F') {
             $('#dados-cliente_tx_tipo').html('Pessoa Física');
             $('#dados-cliente_tx_nome_razao_social').html(dataCliente.tx_nome);
-            $('#dados-cliente_tx_cpf_cnpj').html(dataCliente.tx_cpf);            
+            $('#dados-cliente_tx_cpf_cnpj').html(dataCliente.tx_cpf); 
+            tx_rg = dataCliente.tx_rg;
+            tx_profissao = dataCliente.tx_profissao;
+            $('#mensagemAluno').html("Deseja utilizar os mesmos dados do Cliente para o Aluno?");                            
+            $("#mensagemAluno").dialog({
+                modal: true,
+                buttons: {
+                    "Sim": function() {
+                        $('#aluno-tx_cpf').val($('#dados-cliente_tx_cpf_cnpj').html());
+                        $('#aluno-tx_nome_aluno').val($('#dados-cliente_tx_nome_razao_social').html());                        
+                        $('#aluno-tx_rg').val(tx_rg);
+                        $('#aluno-tx_cargo').val(tx_profissao);
+                        $(this).dialog("close");                                        
+                    },
+                    "Não": function() {
+                        $(this).dialog("close");                                        
+                    }
+                }
+            });
+            $('#mensagemAluno').dialog("open");
         } else {
             $('#dados-cliente_tx_tipo').html('Pessoa Jurídica');
             $('#dados-cliente_tx_nome_razao_social').html(dataCliente.tx_razao_social);
@@ -102,9 +123,26 @@ echo $this->render('partials/modal-pesquisa-cliente.phtml');
             autoOpen: false
         });                  
         
-<?php if (!empty($this->cliente)) { ?>
-            callBackPesquisarCliente(<?php echo Zend_Json::encode($this->cliente) ?>);
-<?php } ?>
+<?php if (!empty($this->cliente)) { 
+?>
+        $('#aluno-id_cliente').val('<?=$this->cliente['id_cliente']?>');
+<?php        
+        if($this->cliente['tx_tipo_cliente'] == 'F') {
+?>
+            $('#dados-cliente_tx_tipo').html('Pessoa Física');
+            $('#dados-cliente_tx_nome_razao_social').html('<?=$this->cliente['tx_nome']?>');
+            $('#dados-cliente_tx_cpf_cnpj').html('<?=$this->cliente['tx_cpf']?>'); 
+            //callBackPesquisarCliente(<?php //echo Zend_Json::encode($this->cliente) ?>);
+<?php 
+        } else {
+?>
+        $('#dados-cliente_tx_tipo').html('Pessoa Jurídica');
+        $('#dados-cliente_tx_nome_razao_social').html('<?=$this->cliente['tx_razao_social']?>');
+        $('#dados-cliente_tx_cpf_cnpj').html('<?=$this->cliente['tx_cnpj']?>');
+<?php        
+        }
+    } 
+?>
             
         $('#form_aluno').validate({
             submitHandler: function(form) {

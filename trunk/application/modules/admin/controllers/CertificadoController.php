@@ -614,7 +614,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Certificados gerados com sucesso!',
-                'url' => '/admin/certificado/index/'
+                'url' => '/admin/certificado/pesquisar/'
             ));
         } catch (Exception $exc) {
             if ($exc->getCode() == 23000) {

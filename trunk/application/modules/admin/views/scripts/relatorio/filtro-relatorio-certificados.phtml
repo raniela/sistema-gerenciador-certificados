@@ -13,11 +13,12 @@
                     </div>
                 </div>                
                 <div style="margin-bottom: -20px; margin-top: -0px" class="form-actions">
-                    <input class="btn btn-primary" id="btGerarRelatorioCertificados" type="button" value="Gerar Relatório"/>
+                    <input class="btn btn-primary" id="btListarAlunosCertificados" type="button" value="Gerar Relatório"/>
                 </div>
             </div>
             <!-- FIM dos campos de busca -->            
-        </fieldset>                
+        </fieldset>
+        <div id="divResAluno"></div>
     </form>
 </div>
 
@@ -27,6 +28,12 @@
             tx_nome_aluno = urlencodeGet($('#tx_nome_aluno').val());
             
             window.open('<?php echo $this->baseUrl('admin/relatorio/relatorio-certificados/tx_nome_aluno/'); ?>' + tx_nome_aluno);
-        });                
+        });
+        
+        $('#btListarAlunosCertificados').click(function(){            
+            tx_nome_aluno = urlencodeGet($('#tx_nome_aluno').val());            
+                                              
+            $('#divResAluno').load('<?php echo $this->baseUrl('admin/relatorio/listar-relatorio-certificados/tx_nome_aluno/'); ?>' + tx_nome_aluno);
+        });
     });     
 </script>

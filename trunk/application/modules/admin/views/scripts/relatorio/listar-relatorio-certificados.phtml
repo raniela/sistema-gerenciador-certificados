@@ -1,0 +1,54 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Cargo</th>
+        <th>Cliente</th>                
+        <th>Ações</th>
+    </tr>
+
+    <tr class="alt" >
+        <?php foreach ($this->paginator as $k => $aluno): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php
+                echo $aluno['tx_nome_aluno'];
+                ?>
+            </td>
+            <td>
+                <?php                
+                echo $aluno['tx_cpf'];
+                ?>
+            </td>
+            <td>
+                <?php 
+                if(empty($aluno['tx_cargo'])) {
+                    echo "&nbsp;";
+                } else {
+                    echo $aluno['tx_cargo']; 
+                }    
+                ?>
+            </td>
+            <td>
+                <?php
+                
+                echo $aluno['tx_cliente'];
+                ?>
+            </td>                        
+            <td>                               
+                <a class="btImprimir" target="_blank" href="<?php echo $this->baseUrl('/admin/relatorio/relatorio-certificados') ?>/id_aluno/<?php echo $aluno['id_aluno'] ?>">
+                    <img src="/img/pdf-icon.jpg" title="Imprimir Certificado" />
+                </a>                           
+            </td>
+        </tr>    
+    <?php endforeach; ?>
+
+</table>
+
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'my_pagination_control.phtml'); ?>
+<script>        
+    $(function(){       
+        //tx_nome_aluno = urlencodeGet($('#tx_nome_aluno').val());            
+        //window.open('<?php echo $this->baseUrl('admin/relatorio/relatorio-certificados/tx_nome_aluno/'); ?>' + tx_nome_aluno);                        
+    });    
+</script>

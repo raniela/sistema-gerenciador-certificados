@@ -114,6 +114,7 @@ class Admin_ClienteController extends Zend_Controller_Action {
             $cliente['tx_rg'] = null;
             $cliente['tx_cpf'] = null;
             $cliente['tx_profissao'] = null;
+            $cliente['tx_cliente_aluno'] =  'N';
             
             if(empty($cliente['id_cliente'])) {
                 $clienteExistente = $this->clienteDbTable->fetchRow("tx_cnpj = '{$cliente['tx_cnpj']}'");
@@ -134,9 +135,7 @@ class Admin_ClienteController extends Zend_Controller_Action {
             ));
         } else {
             $this->adpter->beginTransaction();
-            try {
-                
-                
+            try {                                
                 if (!empty($cliente['id_cliente'])) {
                     $id_cliente = $cliente['id_cliente'];                                        
                     $this->clienteDbTable->update($cliente, "id_cliente = {$id_cliente}");
@@ -184,27 +183,43 @@ class Admin_ClienteController extends Zend_Controller_Action {
                     if(empty($endereco_correspondencia['id_estado'])) {
                         $endereco_correspondencia['id_estado'] = null;
                     }
-                    $this->enderecoDbTable->insert($endereco_correspondencia);
-                    
-                    if($cliente['tx_cliente_aluno'] == 'S') {
+                    $this->enderecoDbTable->insert($endereco_correspondencia);                                        
+                }            
+
+                if($cliente['tx_cliente_aluno'] == 'S') {
+                    $alunoExistente = $this->alunoDbTable->fetchRow("tx_cpf = '{$cliente['tx_cpf']}'");
+                    if(empty($alunoExistente)) {
+                        $login = str_replace(".", "", $cliente['tx_cpf']);
+                        $login = str_replace("-", "", $login); 
+                        
                         $usuario_aluno['tx_nome'] = $cliente['tx_nome'];
                         $usuario_aluno['tx_login'] = "ALUNO_".$login;
                         $usuario_aluno['tx_senha'] = '12345';
                         $usuario_aluno['tx_email'] = $cliente['tx_email'];                            
                         $usuario_aluno['tx_tipo_usuario'] = 3;
                         $id_usuario_aluno = $this->usuarioDbTable->insert($usuario_aluno);
-                        
+
                         $aluno['id_cliente'] = $id_cliente;
                         $aluno['id_usuario'] = $id_usuario_aluno;
                         $aluno['tx_nome_aluno'] = $cliente['tx_nome'];
                         $aluno['tx_rg'] = $cliente['tx_rg'];
                         $aluno['tx_cpf'] = $cliente['tx_cpf'];
                         $aluno['tx_cargo'] = $cliente['tx_profissao'];
-                        
-                        $this->alunoDbTable->insert($aluno);
-                    }
-                }            
 
+                        $this->alunoDbTable->insert($aluno);
+                    } else {
+                        $alunoExistente = $alunoExistente->toArray();
+
+                        $aluno['id_cliente'] = $id_cliente;                        
+                        $aluno['tx_nome_aluno'] = $cliente['tx_nome'];
+                        $aluno['tx_rg'] = $cliente['tx_rg'];
+                        $aluno['tx_cpf'] = $cliente['tx_cpf'];
+                        $aluno['tx_cargo'] = $cliente['tx_profissao'];
+
+                        $this->alunoDbTable->update($aluno, "id_aluno = '{$alunoExistente['id_aluno']}'");
+                    }
+                }
+                
                 /** commita */
                 $this->adpter->commit();
 

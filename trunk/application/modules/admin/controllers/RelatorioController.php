@@ -69,6 +69,26 @@ class Admin_RelatorioController extends Zend_Controller_Action {
 //        print_r($this->view->alunos);
 //        die();
     }
+    
+    public function listarRelatorioCertificadosAction() {
+        //desabilita layout
+        $this->getHelper('layout')->disableLayout();
+        
+        $params = $this->_helper->util->utf8Decode($this->getAllParams());
+             
+        
+        $alunos = $this->alunoDbTable->getDataGrid($params);            
+        $alunos = $this->_helper->util->utf8Encode($alunos);        
+        //print_r($alunos);die();
+        $paginator = Zend_Paginator::factory($alunos);
+        $paginator->setCurrentPageNumber($this->_getParam('page'));
+        $paginator->setDefaultItemCountPerPage(10);
+        
+        $this->view->paginator = $paginator;                                
+//        echo "<pre>";
+//        print_r($this->view->alunos);
+//        die();
+    }
 }
 
 ?>

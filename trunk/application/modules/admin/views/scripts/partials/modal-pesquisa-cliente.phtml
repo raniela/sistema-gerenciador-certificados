@@ -1,6 +1,16 @@
 <div id="dialog-pesquisa-cliente" title="PESQUISA DE CLIENTE" style="display:none; padding:0px;">            
         <!-- INICIO dos campos de busca -->
         <div class="form-actions" style="padding-left: 20px!important">
+            <div class="control-group">
+                <label class="control-label" for="selecionar-cliente-tx_tipo_cliente">Tipo </label>
+                <div class="controls">
+                    <select id="selecionar-cliente-tx_tipo_cliente" name="selecionar-cliente[tx_tipo_cliente]">                            
+                        <option value="F">Pessoa Física</option>
+                        <option selected value="J">Pessoa Jurídica</option>            
+                    </select>
+                </div>
+            </div>
+            
             <div class="control-group dados_pessoa_juridica">
                 <label class="control-label" for="selecionar-cliente-tx_razao_social">Razão Social</label>
                 <div class="controls">
@@ -27,17 +37,7 @@
                 <div class="controls">
                     <input class="input-xlarge cpf" type="text" name="selecionar-cliente[tx_cpf]" id="selecionar-cliente-tx_cpf" maxlength="14"/>
                 </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="selecionar-cliente-tx_tipo_cliente">Tipo </label>
-                <div class="controls">
-                    <select id="selecionar-cliente-tx_tipo_cliente" name="selecionar-cliente[tx_tipo_cliente]">                            
-                        <option value="F">Pessoa Física</option>
-                        <option selected value="J">Pessoa Jurídica</option>            
-                    </select>
-                </div>
-            </div>
+            </div>         
 
             <input class="btn btn-primary" id="btLocalizarCliente" onclick="localizarCliente()" type="button" value="Localizar"/>
         </div>
