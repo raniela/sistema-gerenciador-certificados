@@ -18,6 +18,10 @@ class Application_Model_DbTable_Aluno extends Zend_Db_Table_Abstract{
         //from contato
         $select->from(array('a' => $this->_name));                                                
         
+        //join 
+        $camposCliente = array('tx_cliente' => new Zend_Db_Expr("CASE WHEN c.tx_nome_fantasia IS NOT NULL THEN c.tx_nome_fantasia WHEN c.tx_razao_social IS NOT NULL THEN c.tx_razao_social ELSE c.tx_nome END"));
+        $select->joinInner(array('c' => 'cliente'), 'a.id_cliente = c.id_cliente',$camposCliente);
+        
         //ordenacao
         $select->order('a.tx_nome_aluno');
         $select->order('a.tx_cpf');

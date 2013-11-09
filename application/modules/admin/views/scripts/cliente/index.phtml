@@ -9,6 +9,16 @@
 
             <!-- INICIO dos campos de busca -->
             <div class="form-actions" style="padding-left: 20px!important; margin-top: 0px">
+                <div class="control-group">
+                    <label class="control-label" for="tx_tipo_cliente">Tipo </label>
+                    <div class="controls">
+                        <select id="cliente-tx_tipo_cliente" name="cliente[tx_tipo_cliente]">                            
+                            <option selected value="F">Pessoa Física</option>
+                            <option value="J">Pessoa Jurídica</option>            
+                        </select>
+                    </div>
+                </div>
+                
                 <div class="dados_pessoa_juridica" style="margin-left: 72px; margin-bottom: 30px">
                     <label style="display: inline-block; margin-right: 14px" for="cliente-tx_razao_social">Razão Social</label>
                     <input class="input-prepend" style="margin-right: 25px" type="text" name="cliente[tx_razao_social]" maxlength="60" id="cliente-tx_razao_social"/>
@@ -22,16 +32,7 @@
                     <label style="display: inline-block; margin-right: 10px" for="cliente-tx_cpf">CPF</label>
                     <input class="input-prepend cpf validarCPF" style="margin-right: 25px" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
                 </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="tx_tipo_cliente">Tipo </label>
-                    <div class="controls">
-                        <select id="cliente-tx_tipo_cliente" name="cliente[tx_tipo_cliente]">                            
-                            <option selected value="F">Pessoa Física</option>
-                            <option value="J">Pessoa Jurídica</option>            
-                        </select>
-                    </div>
-                </div>
+                
                 <div style="margin-bottom: -20px; margin-top: -20px" class="form-actions">
                     <input class="btn btn-primary" id="btBuscarCliente" type="button" value="Buscar"/>
                 </div>

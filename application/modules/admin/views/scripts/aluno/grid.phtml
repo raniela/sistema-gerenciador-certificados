@@ -2,7 +2,8 @@
     <tr>
         <th>Nome</th>
         <th>CPF</th>
-        <th>Cargo</th>        
+        <th>Cargo</th>
+        <th>Cliente</th>                
         <th>Ações</th>
     </tr>
 
@@ -15,16 +16,30 @@
                 ?>
             </td>
             <td>
-                <?php
+                <?php                
                 echo $aluno['tx_cpf'];
                 ?>
-            </td>            
-            <td><?php echo $aluno['tx_cargo']; ?></td>            
+            </td>
+            <td>
+                <?php 
+                if(empty($aluno['tx_cargo'])) {
+                    echo "&nbsp;";
+                } else {
+                    echo $aluno['tx_cargo']; 
+                }    
+                ?>
+            </td>
+            <td>
+                <?php
+                
+                echo $aluno['tx_cliente'];
+                ?>
+            </td>                        
             <td>
                 <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/aluno/form') ?>/id/<?php echo $aluno['id_aluno'] ?>">
                     <img src="/img/edit-icon.gif" title="Editar registro" />
                 </a>
-                <a class="btExcluir" href="./aluno/excluir/id/<?php echo $aluno['id_aluno'] ?>">
+                <a class="btExcluir" href="<?php echo $this->baseUrl('/aluno/excluir') ?>/id/<?php echo $aluno['id_aluno'] ?>">
                     <img src="/img/delete-icon.gif" title="Excluir Registro" />
                 </a>
             </td>

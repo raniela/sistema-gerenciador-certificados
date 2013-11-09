@@ -79,6 +79,7 @@ class Application_Model_DbTable_Matricula extends Zend_Db_Table_Abstract {
         $select->joinInner(array('cli' => 'cliente'), 'a.id_cliente = cli.id_cliente', $camposCliente);
         
         //ordenacao       
+        $select->order('tx_cliente');
         $select->order('a.tx_nome_aluno');
                         
         //filtros do formulario

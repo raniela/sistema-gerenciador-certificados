@@ -32,6 +32,8 @@
                     tx_nome="<?=$cliente['tx_nome']?>"
                     tx_razao_social="<?=$cliente['tx_razao_social']?>"
                     tx_cpf="<?=$cliente['tx_cpf']?>"
+                    tx_rg="<?=$cliente['tx_rg']?>"
+                    tx_profissao="<?=$cliente['tx_profissao']?>"
                     tx_cnpj="<?=$cliente['tx_cnpj']?>">
                         SELECIONAR
                 </button>                                 
@@ -52,7 +54,9 @@
                 tx_nome = $(this).attr('tx_nome');
                 tx_razao_social = $(this).attr('tx_razao_social');
                 tx_cpf = $(this).attr('tx_cpf');
+                tx_rg = $(this).attr('tx_rg');
                 tx_cnpj = $(this).attr('tx_cnpj');
+                tx_profissao = $(this).attr('tx_profissao');
                 
                 dataCliente =  jQuery.parseJSON('{' 
                     + '"id_cliente":"' + id_cliente+ '"' 
@@ -60,7 +64,9 @@
                     + ',"tx_nome":"' + tx_nome+ '"'
                     + ',"tx_razao_social":"' + tx_razao_social+ '"'
                     + ',"tx_cpf":"' + tx_cpf+ '"'
+                    + ',"tx_rg":"' + tx_rg+ '"'
                     + ',"tx_cnpj":"' + tx_cnpj+ '"'
+                    + ',"tx_profissao":"' + tx_profissao+ '"'
                     + '}');
                 
                 /** a funcao de callBack é escrita no phtml que está chamando essa modal, ou seja, 

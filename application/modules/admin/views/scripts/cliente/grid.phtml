@@ -30,9 +30,23 @@
                 ?>
             </td>
             <td>
-                <?php echo $cliente['tx_telefone_fixo'] . "<br/>" . $cliente['tx_telefone_celular']; ?>
+                <?php 
+                if($cliente['tx_telefone_fixo'] == "" && $cliente['tx_telefone_celular'] == "" ) {
+                    echo "&nbsp;";
+                } else {
+                    echo $cliente['tx_telefone_fixo'] . "<br/>" . $cliente['tx_telefone_celular']; 
+                }
+                ?>
             </td>
-            <td><?php echo $cliente['tx_email']; ?></td>
+            <td>
+                <?php 
+                if($cliente['tx_email'] == "") {
+                    echo "&nbsp;";
+                } else {
+                    echo $cliente['tx_email']; 
+                }
+                ?>
+            </td>
             <td>
                 <?php 
                     if($cliente['tx_tipo_cliente'] == 'F') {

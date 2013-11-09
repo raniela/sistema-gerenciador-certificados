@@ -57,7 +57,8 @@ ob_start();
             foreach($this->turmas as $turma) {
     ?>
         <div style="text-align: justify; width: 100%; font-size: 12px;">
-            <b>Nome do Treinamento: </b><?=$turma['tx_nome_treinamento']?> - <b>Carga Hor&aacute;ria: </b><?=$turma['nr_carga_horaria']?> Hora(s)
+            <b>Nome do Treinamento: </b><?=$turma['tx_nome_treinamento']?> - <b>Carga Hor&aacute;ria: </b><?=$turma['nr_carga_horaria']?> Hora(s) - <b>Per&iacute;odo: </b>
+            <?php echo $this->String($turma['dt_inicio_treinamento'])->reverseDate();?> &agrave; <?php echo $this->String($turma['dt_termino_treinamento'])->reverseDate();?>
             <br/>
             <b>Instrutor: </b><?=$turma['tx_nome_instrutor']?>
             <br/>

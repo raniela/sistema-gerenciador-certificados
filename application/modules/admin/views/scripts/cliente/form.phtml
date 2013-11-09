@@ -12,8 +12,14 @@
                         <option value="F">Pessoa Física</option>
                         <option value="J">Pessoa Jurídica</option>            
                     </select>
-                </div>
+                    <label style="display: inline-block; margin-right: 16px;padding-left:63px" class=" dados_pessoa_juridica" for="cliente-tx_cnpj">CNPJ*</label>                    
+                    <input class="dados_pessoa_juridica input-medium cnpj validarCNPJ required" type="text" name="cliente[tx_cnpj]" id="cliente-tx_cnpj" maxlength="18"/>
+                    
+                    <label style="display: inline-block; margin-right: 16px;padding-left: 42px" class="dados_pessoa_fisica" for="cliente-tx_cpf">CPF*</label>
+                    <input class="input-prepend input-medium required cpf validarCPF dados_pessoa_fisica" style="margin-right: 25px" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
+                </div>                                                                        
             </div>
+            
             <div class="dados_pessoa_juridica" style="margin-left: 51px; margin-bottom: 20px">
                 <label style="display: inline-block; margin-right: 16px" for="cliente-tx_nome_fantasia">Nome Fantasia*</label>
                 <input class="input-prepend required input-large" style="margin-right: 25px" type="text" name="cliente[tx_nome_fantasia]" id="cliente-tx_nome_fantasia" maxlength="60"/>
@@ -21,17 +27,17 @@
                 <input class="input-prepend required input-large" style="margin-right: 25px" type="text" name="cliente[tx_razao_social]" id="cliente-tx_razao_social" maxlength="60"/>
             </div>
 
-            <div class="control-group dados_pessoa_juridica">
+<!--            <div class="control-group dados_pessoa_juridica">
                 <label class="control-label" for="cliente-tx_cnpj">CNPJ*</label>
                 <div class="controls">
                     <input class="input-medium cnpj validarCNPJ required" type="text" name="cliente[tx_cnpj]" id="cliente-tx_cnpj" maxlength="18"/>
                 </div>
-            </div>
+            </div>-->
 
-            <div class="dados_pessoa_juridica" style="margin-left: 32px; margin-bottom: 20px">
+            <div class="dados_pessoa_juridica" style="margin-left: 29px; margin-bottom: 20px">
                 <label style="display: inline-block; margin-right: 16px" for="cliente-tx_inscricao_estadual">Inscrição Estadual*</label>
                 <input class="input-prepend required input-medium numeric" style="margin-right: 25px" type="text" name="cliente[tx_inscricao_estadual]" id="cliente-tx_inscricao_estadual" maxlength="14"/>
-                <label style="display: inline-block; margin-right: 16px" for="cliente-tx_inscricao_municipal">Inscrição Municipal*</label>
+                <label style="display: inline-block; margin-right: 16px;padding-left: 21px" for="cliente-tx_inscricao_municipal">Inscrição Municipal*</label>
                 <input class="input-prepend required input-medium numeric" style="margin-right: 25px" type="text" name="cliente[tx_inscricao_municipal]" id="cliente-tx_inscricao_municipal" maxlength="15"/>
             </div>
 
@@ -43,13 +49,16 @@
             </div>
 
             <div class="control-group dados_pessoa_fisica">
+                
                 <label class="control-label" for="cliente-tx_nome">Nome*</label>
                 <div class="controls">
                     <input class="input-xlarge required" type="text" name="cliente[tx_nome]" id="cliente-tx_nome" maxlength="45"/>
+                    <label style="display: inline-block; margin-right: 16px" for="cliente-tx_rg">RG*</label>
+                    <input class="input-prepend required input-medium" style="margin-right: 25px" type="text" name="cliente[tx_rg]" id="cliente-tx_rg" maxlength="9"/>
                 </div>
             </div>
 
-            <?php if (empty($this->cliente)) { ?>
+            <?php //if (empty($this->cliente)) { ?>
                 <div class="control-group dados_pessoa_fisica">
                     <label class="control-label" for="cliente-tx_cliente_aluno">Cliente é o Aluno?*</label>
                     <div class="controls">
@@ -59,14 +68,14 @@
                         </select>
                     </div>
                 </div>
-            <?php } ?>
+            <?php //} ?>
 
-            <div class="dados_pessoa_fisica" style="margin-left: 131px; margin-bottom: 20px">
+<!--            <div class="dados_pessoa_fisica" style="margin-left: 131px; margin-bottom: 20px">
                 <label style="display: inline-block; margin-right: 16px" for="cliente-tx_rg">RG*</label>
                 <input class="input-prepend required input-medium" style="margin-right: 25px" type="text" name="cliente[tx_rg]" id="cliente-tx_rg" maxlength="9"/>
                 <label style="display: inline-block; margin-right: 16px" for="cliente-tx_cpf">CPF*</label>
                 <input class="input-prepend input-medium required cpf validarCPF" style="margin-right: 25px" type="text" name="cliente[tx_cpf]" id="cliente-tx_cpf" maxlength="14"/>
-            </div>
+            </div>-->
 
             <div class="control-group dados_pessoa_fisica">
                 <label class="control-label" for="cliente-tx_profissao">Profissão</label>
@@ -128,7 +137,7 @@
 
                 <div class="control-group"> 
                     <div class="controls">
-                        <input class="btn" id="btUsarEnderecoCompleto" type="button" value="Usar Endereço Completo"/>
+                        <input class="btn" id="btUsarEnderecoCompleto" type="button" value="Replicar 'Endereço Completo'"/>
                     </div>
                 </div>
 
@@ -167,8 +176,7 @@
 
 <script>    
     var dataForm = <?php echo Zend_Json::encode(array('cliente' => $this->cliente, 'endereco_correspondencia' => $this->endereco_correspondencia, 'endereco_real' => $this->endereco_real)); ?>;      
-    $(function(){
-    
+    $(function(){    
         $('#form_cliente').populate(dataForm);
         
         //Altera a exibição dos campos no formulario conforme o tipo de cliente
@@ -203,6 +211,12 @@
             $('.dados_pessoa_juridica').hide();
         }
         
+        if($('#cliente-id_cliente').val() != "" ) {
+            $('#cliente-tx_tipo_cliente').attr('readonly', true);
+            $('#cliente-tx_tipo_cliente').attr('disabled', true);
+            $('#cliente-tx_cpf').attr('readonly', true);
+        }
+        
         $('#mensagemCliente').dialog({
             autoOpen: false
         });  
@@ -219,6 +233,7 @@
         
         $('#form_cliente').validate({
             submitHandler: function(form) {
+                $('#cliente-tx_tipo_cliente').attr('disabled', false);
                 jQuery(form).ajaxSubmit({
                     dataType:  'json', 
                     success: function(r){
