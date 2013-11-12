@@ -26,10 +26,10 @@
             </td>
             <td>
                 <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/usuario/form') ?>/id/<?php echo $usuarios['id_usuario'] ?>">
-                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                    <img src="<?php echo $this->baseUrl('/img/edit-icon.gif') ?>" title="Editar registro" />
                 </a>
                 <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/usuario/excluir') ?>/id/<?php echo $usuarios['id_usuario'] ?>">
-                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                    <img src="<?php echo $this->baseUrl('/img/delete-icon.gif') ?>" title="Excluir Registro" />
                 </a>
             </td>
         </tr>    
@@ -107,7 +107,7 @@
                     
                 },
                 Cancel: function() {
-                    $('#div_usuario').load('/usuario/grid/');
+                    $('#div_usuario').load('<?php echo $this->baseUrl('admin/usuario/grid'); ?>');
                     $( this ).dialog( "close" );
                     
                 }

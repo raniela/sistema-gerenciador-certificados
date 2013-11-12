@@ -103,7 +103,7 @@ class Admin_TurmaController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Salvo com sucesso!',
-                'url' => '/admin/turma/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/turma/index/'
             ));
         } catch (Exception $exc) {
             $this->_helper->json->sendJson(array(
@@ -124,7 +124,7 @@ class Admin_TurmaController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Excluído com sucesso!',
-                'url' => '/admin/turma/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/turma/index/'
             ));
         } catch (Exception $exc) {
 

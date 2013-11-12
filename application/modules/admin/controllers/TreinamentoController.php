@@ -86,7 +86,7 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Salvo com sucesso!',
-                'url' => '/admin/treinamento/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/treinamento/index/'
             ));
         } catch (Exception $exc) {
             $this->_helper->json->sendJson(array(
@@ -107,7 +107,7 @@ class Admin_TreinamentoController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Excluído com sucesso!',
-                'url' => '/admin/treinamento/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/treinamento/index/'
             ));
         } catch (Exception $exc) {
 

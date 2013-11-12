@@ -37,10 +37,10 @@
             </td>                        
             <td>
                 <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/aluno/form') ?>/id/<?php echo $aluno['id_aluno'] ?>">
-                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                    <img src="<?php echo $this->baseUrl('/img/edit-icon.gif'); ?>" title="Editar registro" />
                 </a>
                 <a class="btExcluir" href="<?php echo $this->baseUrl('/aluno/excluir') ?>/id/<?php echo $aluno['id_aluno'] ?>">
-                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                    <img src="<?php echo $this->baseUrl('/img/delete-icon.gif'); ?>" title="Excluir Registro" />
                 </a>
             </td>
         </tr>    

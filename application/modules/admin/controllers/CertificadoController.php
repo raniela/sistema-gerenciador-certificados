@@ -168,7 +168,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
                 $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
                     'msg' => 'Salvo com sucesso!',
-                    'url' => '/admin/certificado/index/'
+                    'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/certificado/index/'
                 ));
             } catch (Exception $exc) {
                 /** executa rollback */
@@ -240,7 +240,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
                     'msg' => 'Registro excluído com sucesso!',
-                    'url' => '/admin/cliente/index/'
+                    'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/cliente/index/'
             ));                        
            
         } catch (Exception $exc) {
@@ -614,7 +614,7 @@ class Admin_CertificadoController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Certificados gerados com sucesso!',
-                'url' => '/admin/certificado/pesquisar/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/certificado/pesquisar/'
             ));
         } catch (Exception $exc) {
             if ($exc->getCode() == 23000) {

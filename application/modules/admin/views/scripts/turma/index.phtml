@@ -1,5 +1,5 @@
 <div class="container" style="margin-top: 50px">
-    <form class="form-horizontal well" action="/admin/turma/form" method="post">
+    <form class="form-horizontal well" action="#" method="post">
         <fieldset>
             <legend>
                 <?php echo $this->titulo; ?>
@@ -41,7 +41,7 @@
     
 
         $('#nova_turma').on("click", function(event){
-            window.location = "/admin/turma/form";
+            window.location = "<?php echo $this->baseUrl('/admin/turma/form'); ?>";
         });
        
         $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>');
