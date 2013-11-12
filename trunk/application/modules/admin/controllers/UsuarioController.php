@@ -105,7 +105,7 @@ class Admin_UsuarioController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Salvo com sucesso!',
-                'url' => '/admin/usuario/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/usuario/index/'
             ));
         } catch (Exception $exc) {
             $this->_helper->json->sendJson(array(
@@ -126,7 +126,7 @@ class Admin_UsuarioController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Excluído com sucesso!',
-                'url' => '/admin/usuario/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/usuario/index/'
             ));
         } catch (Exception $exc) {
 

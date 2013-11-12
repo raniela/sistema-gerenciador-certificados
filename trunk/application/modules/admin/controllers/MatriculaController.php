@@ -56,7 +56,7 @@ class Admin_MatriculaController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Excluído com sucesso!',
-                'url' => '/admin/matricula/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/matricula/index/'
             ));
         } catch (Exception $exc) {
 
@@ -98,7 +98,7 @@ class Admin_MatriculaController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Alunos matriculados com sucesso!',
-                'url' => '/admin/matricula/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/matricula/index/'
             ));
         } catch (Exception $exc) {
             if ($exc->getCode() == 23000) {
@@ -175,7 +175,7 @@ class Admin_MatriculaController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Alunos matriculados com sucesso!',
-                'url' => '/admin/matricula/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/matricula/index/'
             ));
         } catch (Exception $exc) {
             if ($exc->getCode() == 23000) {

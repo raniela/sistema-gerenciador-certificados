@@ -14,10 +14,10 @@
             <td><?php echo $treinamentos['tx_nome_instrutor'] ?></td>
             <td>
                 <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/treinamento/form') ?>/id/<?php echo $treinamentos['id_treinamento'] ?>">
-                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                    <img src="<?php echo $this->baseUrl('/img/edit-icon.gif') ?>" title="Editar registro" />
                 </a>
                 <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/treinamento/excluir') ?>/id/<?php echo $treinamentos['id_treinamento'] ?>">
-                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                    <img src="<?php echo $this->baseUrl('/img/delete-icon.gif') ?>" title="Excluir Registro" />
                 </a>
             </td>
         </tr>    
@@ -95,7 +95,7 @@
                     
                 },
                 Cancel: function() {
-                    $('#div_treinamento').load('/treinamento/grid/');
+                    $('#div_treinamento').load('<?php echo $this->baseUrl('/admin/treinamento/grid/') ?>');
                     $( this ).dialog( "close" );
                     
                 }

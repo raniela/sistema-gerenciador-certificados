@@ -115,7 +115,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
                 $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
                     'msg' => 'Salvo com sucesso!',
-                    'url' => '/admin/aluno/index/'
+                    'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/aluno/index/'
                 ));
             } catch (Exception $exc) {
                 /** executa rollback */
@@ -151,7 +151,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                     'tipo' => 'sucesso',
                     'msg' => 'Registro excluído com sucesso!',
-                    'url' => '/admin/cliente/index/'
+                    'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/cliente/index/'
             ));                        
            
         } catch (Exception $exc) {
@@ -331,7 +331,7 @@ class Admin_AlunoController extends Zend_Controller_Action {
             $this->_helper->json->sendJson(array(
                 'tipo' => 'sucesso',
                 'msg' => 'Alunos salvos com sucesso!',
-                'url' => '/admin/aluno/index/'
+                'url' => Zend_Controller_Front::getInstance()->getBaseUrl().'/admin/aluno/index/'
             ));
         } catch (Exception $exc) {
             /** executa rollback */

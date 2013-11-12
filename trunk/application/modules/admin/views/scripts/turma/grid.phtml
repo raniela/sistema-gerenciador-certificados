@@ -14,10 +14,10 @@
             <td><?php echo $this->String($turmas['dt_termino_treinamento'])->reverseDate(); ?></td>
             <td>
                 <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/turma/form') ?>/id/<?php echo $turmas['id_turma'] ?>">
-                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                    <img src="<?php echo $this->baseUrl('/img/edit-icon.gif') ?>" title="Editar registro" />
                 </a>
                 <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/turma/excluir') ?>/id/<?php echo $turmas['id_turma'] ?>">
-                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                    <img src="<?php echo $this->baseUrl('/img/delete-icon.gif') ?>" title="Excluir Registro" />
                 </a>
             </td>
         </tr>    
@@ -95,7 +95,7 @@
                     
                 },
                 Cancel: function() {
-                    $('#div_turma').load('/turma/grid/');
+                    $('#div_turma').load('<?php echo $this->baseUrl('admin/turma/grid'); ?>');
                     $( this ).dialog( "close" );
                     
                 }

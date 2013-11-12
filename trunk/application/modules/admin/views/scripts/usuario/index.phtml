@@ -1,5 +1,5 @@
 <div class="container" style="margin-top: 50px">
-    <form class="form-horizontal well" action="/admin/usuario/form" method="post">
+    <form class="form-horizontal well" action="<?php echo $this->baseUrl('admin/usuario/form'); ?>" method="post">
         <fieldset>
             <legend>
                 <?php echo $this->titulo; ?>
@@ -51,7 +51,7 @@
         //$( "input[type=submit], button" ).button();
        
         $('#novo_usuario').on("click", function(event){
-            window.location = "/admin/usuario/form";
+            window.location = "<?php echo $this->baseUrl('admin/usuario/form'); ?>";
         });
        
         $('#div_usuario').load('<?php echo $this->baseUrl('admin/usuario/grid'); ?>');
