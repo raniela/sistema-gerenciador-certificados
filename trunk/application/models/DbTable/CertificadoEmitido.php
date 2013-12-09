@@ -142,6 +142,80 @@ class Application_Model_DbTable_CertificadoEmitido extends Zend_Db_Table_Abstrac
         return $select->query()->fetchAll();
     }
     
+    public function getDataGridPesquisarCertificado($params = null)
+    {
+        //obj select
+        $select = $this->getDefaultAdapter()->select();
+        
+        //from contato
+        $select->from(array('ce' => $this->_name));                                                
+        
+        //join 
+        $select->joinInner(array('c' => 'certificado'), 'ce.id_certificado = c.id_certificado', array('*'));
+        $select->joinInner(array('m' => 'matricula'), 'ce.id_matricula = m.id_matricula', array());
+        $select->joinInner(array('t' => 'turma'), 'm.id_turma = t.id_turma', array('id_turma','dt_inicio_treinamento','dt_termino_treinamento'));
+        $select->joinInner(array('tr' => 'treinamento'), 't.id_treinamento = tr.id_treinamento', array('*'));
+        $select->joinInner(array('a' => 'aluno'), 'm.id_aluno = a.id_aluno', array('*'));
+        
+        $camposCliente = array('tx_cliente' => new Zend_Db_Expr("CASE WHEN cli.tx_nome_fantasia IS NOT NULL THEN cli.tx_nome_fantasia WHEN cli.tx_razao_social IS NOT NULL THEN cli.tx_razao_social ELSE cli.tx_nome END"));
+        $select->joinInner(array('cli' => 'cliente'), 'a.id_cliente = cli.id_cliente', $camposCliente);
+        
+        //ordenacao
+        $select->order('ce.dt_emissao_certificado DESC');
+        $select->order('a.tx_nome_aluno');
+        
+        //limit de 100 registros para não sobrecarregar a listagem
+        if(!empty($params['limit'])) {
+            $select->limit($params['limit']);
+        } else {
+            $select->limit(100);
+        }
+        
+        //filtros do formulario
+        if(!empty($params['id_certificado_emitido'])) {
+            $select->where("ce.id_certificado_emitido = '{$params['id_certificado_emitido']}'");
+        }                                       
+        
+        if(!empty($params['nr_registro_certificado'])) {
+            $select->where("ce.nr_registro_certificado = '{$params['nr_registro_certificado']}'");
+        }
+        
+        if (!empty($params['data_inicial']) && empty($params['data_final'])) {
+            $select->where("t.dt_inicio_treinamento >= '{$params['data_inicial']}'");
+        }
+
+        if (!empty($params['data_final']) && empty($params['data_inicial'])) {
+            $select->where("t.dt_termino_treinamento <= '{$params['data_final']}' OR t.dt_inicio_treinamento <= '{$params['data_final']}'");
+        }
+
+        if (!empty($params['data_inicial']) && !empty($params['data_final'])) {
+            $select->where("(t.dt_inicio_treinamento >= '{$params['data_inicial']}' AND t.dt_inicio_treinamento <= '{$params['data_final']}') OR (t.dt_termino_treinamento >= '{$params['data_inicial']}')");
+        }
+        
+        if(!empty($params['nome_treinamento'])) {
+            $select->where("UPPER(tr.tx_nome_treinamento) LIKE UPPER('%{$params['nome_treinamento']}%')");
+        }               
+        
+        if(!empty($params['tx_nome_aluno'])) {
+            $select->where("UPPER(a.tx_nome_aluno) LIKE UPPER('%{$params['tx_nome_aluno']}%')");
+        }
+        
+        if(!empty($params['tx_rg'])) {
+            $select->where("a.tx_rg = '{$params['tx_rg']}'");
+        }
+        
+        if(!empty($params['id_aluno'])) {
+            $select->where("a.id_aluno = '{$params['id_aluno']}'");
+        }
+       
+        if(!empty($params['id_cliente'])) {
+            $select->where("cli.id_cliente = '{$params['id_cliente']}'");
+        }
+        
+        //die($select);
+        return $select->query()->fetchAll();
+    }
+    
     //Método para buscar os dados de impressão de um certificado
     public function getDataToImpressaoCertificado($params = null)
     {
