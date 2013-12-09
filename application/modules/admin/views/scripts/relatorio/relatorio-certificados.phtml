@@ -66,9 +66,9 @@ ob_start();
             $certificadosEmitidos = $aluno['certificados_emitidos'];
             $widthTreinamento = 'width: 170px';            
             $widthCargaHoraria = 'width: 70px';
-            $widthInstrutor = 'width: 170px';
+            $widthInstrutor = 'width: 150px';
             $widthDataEmissao = 'width: 80px';
-            $widthNumRegistro = 'width: 70px';
+            $widthNumRegistro = 'width: 160px';
         ?>
             <table border='1' style='border:1px solid #000000; border-collapse:collapse; font-size:9px;'>
                 <thead>
@@ -115,19 +115,19 @@ ob_start();
                             $somaCargaHoraria+=$certificado['nr_carga_horaria'];
                 ?>
                         <tr>
-                            <td style="text-align: left;background-color:<?php echo $cor ?>">
+                            <td style="text-align: left;background-color:<?php echo $cor ?>;<?=$widthTreinamento?>">
                                 <?= $certificado['tx_nome_treinamento']; ?>
                             </td>
-                            <td style="text-align: center;background-color:<?php echo $cor ?>">
+                            <td style="text-align: center;background-color:<?php echo $cor ?>;<?=$widthCargaHoraria?>">
                                 <?= $certificado['nr_carga_horaria']; ?>
                             </td>
-                            <td style="text-align: left;background-color:<?php echo $cor ?>">
+                            <td style="text-align: left;background-color:<?php echo $cor ?>;<?=$widthInstrutor?>">
                                 <?= $certificado['tx_nome_instrutor']; ?>
                             </td>
-                            <td style="text-align: center;background-color:<?php echo $cor ?>">
+                            <td style="text-align: center;background-color:<?php echo $cor ?>;<?=$widthDataEmissao?>">
                                 <?= $this->String($certificado['dt_emissao_certificado'])->reverseDate(); ?>
                             </td>
-                            <td style="text-align: left;background-color:<?php echo $cor ?>">
+                            <td style="text-align: left;background-color:<?php echo $cor ?>;<?=$widthNumRegistro?>">
                                 <?= $certificado['nr_registro_certificado']; ?>
                             </td>
                         </tr>
