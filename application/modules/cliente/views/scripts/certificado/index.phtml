@@ -1,0 +1,52 @@
+<div class="container" style="margin-top: 50px">
+    <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
+    <form class="form-horizontal well" action="#" method="post">        
+        <fieldset>
+            <legend><?php echo $this->titulo; ?>
+                <button id="novo_modelo" style="float: right; margin-top: 2px" class="btn btn-primary" type="button">Novo Modelo</button>
+            </legend>                        
+            
+            <!-- INICIO dos campos de busca -->
+            <div class="form-actions" style="padding-left: 20px!important">
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_nome_modelo">Nome do Modelo</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="certificado[tx_nome_modelo]" id="certificado-tx_nome_modelo" maxlength="30"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="certificado-tx_titulo">Título do Modelo</label>
+                    <div class="controls">
+                        <input class="input-xlarge" type="text" name="certificado[tx_titulo]" id="certificado-tx_titulo" maxlength="45"/>
+                    </div>
+                </div>
+                                
+                <input class="btn btn-primary" id="btBuscarCertificado" type="button" value="Buscar"/>
+            </div>
+            <!-- FIM dos campos de busca -->            
+        </fieldset>
+        
+        <div id="divResCertificado"></div>
+    </form>
+
+
+</div>
+
+<script>
+    $(function(){                                             
+        $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');
+        $('#btBuscarCertificado').click(function(){            
+            tx_nome_modelo = urlencodeGet($('#certificado-tx_nome_modelo').val());            
+            tx_titulo = urlencodeGet($('#certificado-tx_titulo').val());                        
+            
+            $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>'+'/tx_nome_modelo/' + tx_nome_modelo + '/tx_titulo/' + tx_titulo);
+        });
+        
+        //Carrega formulario de novo aluno com jquery
+        $('#novo_modelo').click(function(){
+            window.location = '/admin/certificado/form';
+        });
+    }); 
+    
+</script>

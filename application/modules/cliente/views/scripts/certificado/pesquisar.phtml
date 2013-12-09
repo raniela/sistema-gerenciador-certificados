@@ -1,0 +1,83 @@
+<div class="container" style="margin-top: 50px">
+    <form class="form-horizontal well" action="#" method="post">
+        <fieldset>
+            <legend>
+                <?php echo $this->titulo; ?>                
+            </legend>
+
+            <div class="form-actions" style="padding-left: 20px!important; margin-top: 0px">
+                <fieldset style="margin-top: -40px">
+                    <h5 style="margin-top: 40px">Dados do Aluno</h5>
+                    <hr style="margin-top: -10px">
+                
+                    <div style="margin-left: 121px; margin-bottom: 30px">
+                        <label style="display: inline-block; margin-right: 14px" for="pesquisar-tx_nome_aluno">Nome</label>
+                        <input class="input-xlarge required" style="margin-right: 25px" type="text" name="pesquisar[tx_nome_aluno]" id="pesquisar-tx_nome_aluno" maxlength="45"/>                        
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label" for="pesquisar-nr_registro_certificado">Nº Registro Certificado</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="text" name="pesquisar[nr_registro_certificado]" id="pesquisar-nr_registro_certificado" maxlength="32"/>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-left: 141px">
+                        <label style="display: inline-block; margin-right: 10px" for="pesquisar-tx_rg">RG</label>
+                        <input class="input-prepend input-medium required" style="margin-right: 117px" type="text" name="pesquisar[tx_rg]" id="pesquisar-tx_rg" maxlength="9"/>
+                        <label style="display: inline-block; margin-right: 10px" for="pesquisar-tx_cpf">CPF</label>
+                        <input class="input-prepend input-medium required cpf validarCPF" style="margin-right: 25px" type="text" name="pesquisar[tx_cpf]" id="pesquisar-tx_cpf" maxlength="14"/>
+                    </div>
+                                        
+                </fieldset>
+                
+                <fieldset style="margin-top: -40px">
+                    <h5 style="margin-top: 40px">Dados do Treinamento/Turma</h5>
+                    <hr style="margin-top: -10px">
+                
+                    <div class="control-group">
+                        <label class="control-label" for="pesquisar-nome_treinamento">Nome do Treinamento</label>
+                        <div class="controls">
+                            <input class="input-xlarge" type="text" name="pesquisar[nome_treinamento]" id="pesquisar-nome_treinamento" maxlength="45"/>
+                        </div>
+                    </div>
+                    <div style="margin-left: 72px">
+                        <label style="display: inline-block; margin-right: 16px" for="pesquisar-data_inicial">Data/Período</label>
+                        <input class="input-prepend input-medium data" style="margin-right: 20px" type="text" name="pesquisar[data_inicial]" id="pesquisar-data_inicial" value=""/>
+                        a
+                        <label style="display: inline-block; margin-right: 16px" for="pesquisar-data_final"></label>
+                        <input class="input-prepend input-medium data" style="margin-right: 25px; margin-left: 15px" type="text"  name="pesquisar[data_final]" id="pesquisar-data_final" value=""/>
+                    </div>                                                            
+                </fieldset>
+                
+                <div style="margin-bottom: -20px; margin-top: -0px" class="form-actions">
+                    <input class="btn btn-primary" id="btBuscarCertificadoEmitido" type="button" value="Buscar"/>
+                </div>
+            </div>
+        </fieldset>
+        <div id="div_certtificado" >
+
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+    $(function(){   
+        
+        $('#btBuscarCertificadoEmitido').click(function(){            
+            tx_nome_aluno = urlencodeGet($('#pesquisar-tx_nome_aluno').val());
+            nr_registro_certificado = urlencodeGet($('#pesquisar-nr_registro_certificado').val());
+            tx_rg = urlencodeGet($('#pesquisar-tx_rg').val());
+            tx_cpf= urlencodeGet($('#pesquisar-tx_cpf').val());
+            nome_treinamento = urlencodeGet($('#pesquisar-nome_treinamento').val());
+            data_inicial = urlencodeGet($('#pesquisar-data_inicial').val());
+            data_final = urlencodeGet($('#pesquisar-data_final').val());
+            
+            $('#div_certtificado').load('<?php echo $this->baseUrl('cliente/certificado/grid-pesquisar'); ?>'+'/tx_nome_aluno/' + tx_nome_aluno + '/nr_registro_certificado/' + nr_registro_certificado + '/tx_rg/' + tx_rg + '/tx_cpf/' + tx_cpf + '/nome_treinamento/' + nome_treinamento + '/data_inicial/' + data_inicial + '/data_final/' + data_final);
+        });
+        
+    }); 
+    
+</script>

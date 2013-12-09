@@ -1,0 +1,228 @@
+<div class="container" style="margin-top: 50px">
+    <div id="div_mensagem"><?php echo ($this->msg != null) ? $this->msg[0] : "" ?></div>
+    <form id="form_certificados_alunos" class="form-horizontal well" action="<?php echo $this->baseUrl('/admin/certificado/salvar-certificados-gerados'); ?>" method="post">
+        <fieldset>
+            <legend><?php echo $this->titulo; ?></legend>
+            <input type="hidden" name="matricula[id_turma]" id="matricula-id_turma"/>            
+            <input type="hidden" name="matricula[id_certificado]" id="matricula-id_certificado"/> 
+
+            <fieldset style="margin-top: -40px">
+                <h5 style="margin-top: 40px">Dados do Certificado</h5>
+                <hr style="margin-top: -10px">
+                <div align="right" class="control-group">
+                    <input class="btn btn-primary" id="btModalModeloCertificado" type="button" value="Buscar Modelo de Certificado"/>
+                    <input class="btn" id="btLimparModeloCertificado" type="button" value="Limpar"/>
+                </div>
+                
+                <div style="margin-top: -50px" class="control-group">
+                    <label class="control-label" for="">Nome do Modelo</label>
+                    <div class="controls">
+                        <span class="help-block-modelo label" id="dados-tx_nome_modelo"></span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="">Título</label>
+                    <div class="controls">
+                        <span class="help-block-modelo label" id="dados-tx_titulo"></span>
+                    </div>
+                </div>              
+            </fieldset>
+            
+            <fieldset style="margin-top: -40px">
+                <h5 style="margin-top: 40px">Dados da Turma</h5>
+                <hr style="margin-top: -10px">
+                <div align="right" class="control-group">
+                    <input class="btn btn-primary" id="btModalTurma" type="button" value="Buscar Turma"/>
+                    <input class="btn" id="btLimparTurma" type="button" value="Limpar"/>
+                </div>
+                
+                <div style="margin-top: -50px" class="control-group">
+                    <label class="control-label" for="">Treinamento</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-tx_nome_treinamento"></span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="">Período</label>
+                    <div class="controls">
+                        <span class="help-block label" id="dados-data_turma"></span>
+                    </div>
+                </div>              
+            </fieldset>                        
+            
+            <div id="divResAlunosMatriculados"></div>
+            
+            <div class="form-actions" style="display: none" id="botaoSubmit">
+                <input class="btn btn-primary" id="btEnviar" type="submit" value="Salvar Certificados"/>                                
+            </div>
+        </fieldset>
+    </form>    
+</div>
+
+<?php    
+    echo $this->render('partials/modal-pesquisa-turma.phtml');
+?>
+
+<?php    
+    echo $this->render('partials/modal-pesquisa-certificado.phtml');
+?>
+
+<div id="mensagemMatricula">    
+</div>
+
+<script>            
+    function callBackPesquisarTurma(dataTurma) {                
+        ShowMsgAguarde();
+        $('#matricula-id_turma').val(dataTurma.id_turma);
+        $('#dados-tx_nome_treinamento').html(dataTurma.tx_nome_treinamento);
+        dataInicio = reverseDate(dataTurma.dt_inicio_treinamento);
+        dataFim = reverseDate(dataTurma.dt_termino_treinamento);
+        $('#dados-data_turma').html(dataInicio + " à " + dataFim);
+	
+        if(dataTurma.id_turma == '') {
+            CloseMsgAguarde();
+             $('#mensagemMatricula p').html("Um erro ocorreu, por favor, busque novamente a Turma e clique em Selecionar");                
+             $('#mensagemMatricula').dialog({
+                 buttons: {
+                     "Ok": function() {
+                         $(this).dialog("close");                            
+                     }
+                 }
+             });
+             $('#mensagemMatricula').dialog("open"); 
+        } else {
+             $('#divResAlunosMatriculados').load('<?php echo $this->baseUrl('admin/certificado/grid-matricula-turma'); ?>'+'/id_turma/' + dataTurma.id_turma);
+        }
+        
+        CloseMsgAguarde();       
+    }
+    
+    function callBackPesquisarCertificado(dataCertificado) {                
+        ShowMsgAguarde();
+        $('#matricula-id_certificado').val(dataCertificado.id_certificado);
+        $('#dados-tx_nome_modelo').html(dataCertificado.tx_nome_modelo);        
+        $('#dados-tx_titulo').html(dataCertificado.tx_titulo);	                
+        CloseMsgAguarde();       
+    }
+    
+    $(function(){                           
+        $('#btLimparTurma').click(function() {
+            $('.help-block').html('');
+            $('#matricula-id_turma').val('');
+        });
+        
+        $('#btLimparModeloCertificado').click(function() {
+            $('.help-block-modelo').html('');
+            $('#matricula-id_certificado').val('');
+        });
+        
+        
+        
+        $('#btLimparTurma').click(function() {
+            $('.help-block').html('');
+            $('#matricula-id_turma').val('');
+        });
+        
+        $('#btModalTurma').click(function() {
+            openModalPesquisaTurma();
+        });
+        
+        $('#btModalModeloCertificado').click(function() {
+            openModalPesquisaCertificado();
+        });
+        
+        $('#mensagemMatricula').dialog({
+            autoOpen: false
+        });                                  
+            
+        $('#form_certificados_alunos').validate({
+            submitHandler: function(form) {
+                $('.danger').removeClass('warning');
+                salva = true;
+                if($('#matricula-id_turma').val() == '') {
+                    salva = false;
+                    $('#mensagemMatricula').html("Selecione a Turma que os Alunos serãos matriculados");                            
+                    $("#mensagemMatricula").dialog({
+                        modal: true,
+                        buttons: {
+                            Ok: function() {
+                                $(this).dialog("close");                                        
+                            }
+                        }
+                    });
+                    $('#mensagemMatricula').dialog("open");
+                } else {
+                    if($('#matricula-id_certificado').val() == '') {
+                        salva = false;
+                        $('#mensagemMatricula').html("Selecione o Modelo de Certificado que será utilizado");                            
+                        $("#mensagemMatricula").dialog({
+                            modal: true,
+                            buttons: {
+                                Ok: function() {
+                                    $(this).dialog("close");                                        
+                                }
+                            }
+                        });
+                        $('#mensagemMatricula').dialog("open");
+                    } else {                    
+                        encontrou = false;
+                        $('.id_aluno').each(function () {
+                            if($(this).length > 0) {
+                               encontrou = true; 
+                            }
+                        });
+                        if(encontrou == false) {
+                            salva = false;
+                            $('#mensagemMatricula').html("Deve existir pelo menos um Aluno para gerar os certificados!");
+                            $("#mensagemMatricula").dialog({
+                                modal: true,
+                                buttons: {
+                                    Ok: function() {
+                                        $(this).dialog("close");                                        
+                                    }
+                                }
+                            });
+                            $('#mensagemMatricula').dialog("open");
+                            return;
+                        }
+                        if(salva) {
+                            jQuery(form).ajaxSubmit({
+                                dataType:  'json', 
+                                success: function(r){
+                                    if(r.tipo == 'sucesso'){
+                                        $('#mensagemMatricula').html(r.msg);                            
+                                        $("#mensagemMatricula").dialog({
+                                            modal: true,
+                                            buttons: {
+                                                Ok: function() {
+                                                    $(this).dialog("close");
+                                                    window.location = r.url;
+                                                }
+                                            }
+                                        });
+                                        $('#mensagemMatricula').dialog("open");
+                                        //$('#div_mensagem').html(r.msg);                                    
+                                    } else {
+                                        $('#mensagemMatricula').html(r.msg);                            
+                                        $("#mensagemMatricula").dialog({
+                                            modal: true,
+                                            buttons: {
+                                                Ok: function() {
+                                                    $(this).dialog("close");                                        
+                                                }
+                                            }
+                                        });
+                                        $('#mensagemMatricula').dialog("open");                            
+                                    }
+                                } 
+                            });
+                        }
+                    }
+                }
+            } 
+        });
+    });
+        
+</script>

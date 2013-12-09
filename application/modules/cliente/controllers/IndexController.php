@@ -7,7 +7,7 @@ class Cliente_IndexController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $this->view->titulo = "modulo cliente";
+        $this->view->titulo = "Módulo do Cliente";
     }
 
 }

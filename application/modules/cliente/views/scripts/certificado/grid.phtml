@@ -1,0 +1,119 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>Título</th>        
+        <th>Ações</th>        
+    </tr>
+
+    <tr class="alt" >
+        <?php foreach ($this->paginator as $k => $certificado): ?>
+        <tr class="<?php echo ($k % 2 == 0) ? 'alt' : '' ?>">
+            <td>
+                <?php                     
+                    echo $certificado['tx_nome_modelo'];                    
+                ?>
+            </td>
+            <td>
+                <?php                     
+                    echo $certificado['tx_titulo'];                    
+                ?>
+            </td>                        
+            <td>
+                <a class="linkEditar" href="<?php echo $this->baseUrl('/admin/certificado/form')?>/id/<?php echo $certificado['id_certificado'] ?>">
+                    <img src="/img/edit-icon.gif" title="Editar registro" />
+                </a>
+                <a class="btExcluir" href="<?php echo $this->baseUrl('/admin/certificado/excluir') ?>/id/<?php echo $certificado['id_certificado'] ?>">
+                    <img src="/img/delete-icon.gif" title="Excluir Registro" />
+                </a>
+            </td>
+        </tr>    
+    <?php endforeach; ?>
+
+</table>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'my_pagination_control.phtml'); ?>
+
+<div id="confirmacao">
+    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Deseja realmente excluir esse Certificado?
+</div>
+
+<div id="erroCert">
+    Erro    
+</div>
+
+<div id="sucessoCert">
+    Sucesso    
+</div>
+
+<script>
+    var url = "";
+    $(function(){       
+                
+        $( "#sucessoCert" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+        
+        $( "#erroCert" ).dialog({
+            modal: true,
+            autoOpen: false
+        });
+                
+        $('.btExcluir').click(function(){
+            
+            url = $(this).attr('href');
+            $("#confirmacao").dialog("open");
+            
+            return false;
+        });
+                
+        $("#confirmacao").dialog({
+            resizable: false,
+            height:250,
+            width:500,
+            modal: true,
+            autoOpen: false,
+                
+            buttons: {
+                "Ok": function() {
+                    $.get(url, null, function(retorno){
+                        if(retorno.tipo == 'sucesso'){
+                            $('#sucessoCert').html(retorno.msg);
+                            
+                            $('#sucessoCert').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#sucessoCert').dialog("open");    
+                            $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');                                
+                        } else {
+                            $('#erroCert').html(retorno.msg);                            
+                            $('#erroCert').dialog({
+                                buttons: {
+                                    Ok: function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                            $('#erroCert').dialog("open");
+                            $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');
+                        }                    
+                    }, 'json');
+                    $( this ).dialog("close");
+                    
+                },
+                "Cancel": function() {
+                    $('#divResCertificado').load('<?php echo $this->baseUrl('admin/certificado/grid'); ?>');
+                    $( this ).dialog( "close" );
+                        
+                }
+                    
+            }
+                
+        });
+        
+    })
+    
+</script>

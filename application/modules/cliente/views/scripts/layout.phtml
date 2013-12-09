@@ -44,13 +44,10 @@
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li>
-                                <a href="/cliente/cliente/form" onclick="">Dados Cadastrais</a>
+                                <a href="/cliente/cliente/form" onclick="">Meus Dados</a>
                             </li>
                             <li>
-                                <a href="" onclick="">Cursos Realizados</a>
-                            </li>
-                            <li>
-                                <a href="" onclick="">Certificados</a>
+                                <a href="/cliente/certificado/pesquisar" onclick="">Pesquisar Certificados</a>
                             </li>
                         </ul>
                         <ul class="nav pull-right">
@@ -64,7 +61,7 @@
                                     <a>Logado como: 
                                         <?php
                                         $usuario = Zend_Auth::getInstance()->getIdentity();
-                                        echo $usuario->tx_nome;
+                                        echo utf8_encode($usuario->tx_nome);
                                         ?>
                                     </a>
                                 <li>
